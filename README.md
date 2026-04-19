@@ -99,6 +99,35 @@ help
 quit
 ```
 
+## Bot Arena
+
+Launch multiple bot practitioners in a shared world:
+
+```sh
+swift run gehenna-arena --bots 4 --ticks 200
+swift run gehenna-arena --bots 8 --ticks 500 --verbose
+swift run gehenna-arena --bots 12 --ticks 1000 --report 100
+```
+
+The arena creates N bot practitioners with different strategies:
+
+- **Scholar** — explores, reads carefully, rituals with preparation
+- **Reckless** — performs rituals constantly, blood offerings, pushes the Veil
+- **Social** — focuses on NPC relationships, builds trust in the village
+- **Explorer** — moves between all 5 sites, looks everywhere
+- **Balanced** — mix of everything
+
+All bots share the same world, the same sites, the same NPCs. When one bot
+scars a site, every other bot sees the damage. When one bot builds trust with
+an NPC, they warm to all practitioners. When a reckless bot pushes blood
+rituals at the Burning Ground, the Veil thins for everyone.
+
+Watch for:
+- Sites reaching 100% scarring
+- NPCs refusing contact after too many rumors
+- Rupture events in the journal
+- The Veil maxing out at 100%
+
 A first successful ritual path:
 
 1. Run `ritual`.
