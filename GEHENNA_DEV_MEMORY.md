@@ -121,6 +121,8 @@ This is how a noob can change a server without being "powerful."
 
 The scalable future is not one monolithic real-time scene. It is thousands of practitioners connected to persistent shared cosmology.
 
+Swift remains the intended implementation language for the authoritative engine and server path. The project should preserve a SwiftPM-first package that develops cleanly on macOS and deploys cleanly to Linux. Linux x86_64, Linux ARM64, and production-class ARM64 hosts such as AWS Graviton are intended targets, but ARM64 Linux/Graviton support must be verified before being claimed.
+
 Architecture target:
 
 ```text
@@ -198,6 +200,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Decision**: Added `README.md`, `CHANGELOG.md`, and `.gitignore`.
 - **Rationale**: A crawler, bot, or human should be able to clone the repo and immediately know how to build, test, play, and continue development.
 - **Implication**: README is now part of the release surface. Keep its "live/not live yet" sections accurate.
+
+### SwiftPM Portable Server Path
+- **Decision**: Added `docs/DEPLOYMENT.md` and documented the intended Swift/Linux/ARM64 server path.
+- **Rationale**: GEHENNA should remain a compiled, typed, portable simulation engine: macOS for local development, Linux for server deployment, ARM64 as a first-class architecture target.
+- **Implication**: Keep `GehennaEngine` free of Apple-only APIs. Treat AWS Graviton as an intended production-class target, not a verified target, until Linux ARM64 CI or deployment smoke tests exist.
 
 ### Public License and Repository Signals
 - **Decision**: Added MIT licensing, a trademark/canon notice, and `.github/repository-metadata.yml` with the public description and discovery topics.
