@@ -17,6 +17,10 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - NPC temporal drift and approach/flee posture.
 - Design handoff files for future agents and collaborators.
 - README quickstart for clone/build/play/dev.
+- `gehenna-arena` bot arena executable: headless shared-world simulation with multiple bot practitioners.
+- `WorldShard` actor: shared world authority for multiplayer command serialization.
+- `PlayerCommand` enum: non-interactive command model for bot and server use.
+- `PractitionerSession`: per-player state separation from shared world state.
 
 ### Changed
 

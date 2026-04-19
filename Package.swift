@@ -16,12 +16,18 @@ let package = Package(
         .executable(
             name: "gehenna",
             targets: ["GehennaCLI"]),
+        .executable(
+            name: "gehenna-arena",
+            targets: ["GehennaArena"]),
     ],
     targets: [
         .target(
             name: "GehennaEngine"),
         .executableTarget(
             name: "GehennaCLI",
+            dependencies: ["GehennaEngine"]),
+        .executableTarget(
+            name: "GehennaArena",
             dependencies: ["GehennaEngine"]),
         .testTarget(
             name: "GehennaEngineTests",
