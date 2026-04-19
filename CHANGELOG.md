@@ -31,6 +31,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - Site trace fading and director event gating now use deterministic local scheduling instead of process randomness.
 - Shared-world ritual journal entries now include practitioner attribution without double-counting rituals.
 - README now labels Ridge content as a prototype canon seed, not a complete historical canon.
+- README now describes Linux as an expected SwiftPM target, not a macOS-only requirement.
 
 ### Verified
 
