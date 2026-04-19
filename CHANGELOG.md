@@ -23,6 +23,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - `PractitionerSession`: per-player state separation from shared world state.
 - Canon data roadmap documenting the gap between the current Ridge seed and the intended historically grounded reference canon.
 - GitHub Actions CI workflow for macOS and Linux Swift builds.
+- Deployment direction documenting SwiftPM portability, Linux server targets, and future ARM64/Graviton verification.
 
 ### Changed
 

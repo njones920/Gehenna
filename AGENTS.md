@@ -7,6 +7,7 @@ This repo contains the early Swift implementation of GEHENNA, based on the Codex
 - `GEHENNA_CODEX v3.md` is the current authoritative design reference.
 - `GEHENNA_DESIGN_HISTORY.md` reconciles Codex Two and v3 for implementation context.
 - `docs/CANON_DATA_ROADMAP.md` records the historical data gap and the intended canon expansion path.
+- `docs/DEPLOYMENT.md` records the SwiftPM/Linux/server deployment direction.
 - `docs/archive/GEHENNA_CODEX_TWO.txt` is superseded historical context. Do not use it as implementation authority.
 - The current implementation is an engine/CLI prototype, not the full vertical slice.
 
@@ -37,6 +38,7 @@ Prefer small, testable steps that move toward:
 - Region/site ownership boundaries suitable for future actors or shards.
 - Deterministic ritual resolution with replayable inputs, pre-state, seed/envelope, result, and post-effects.
 - Expression Layer that renders state but never decides simulation truth.
+- SwiftPM portability across macOS development and Linux server targets. Keep Apple-only APIs out of the engine.
 
 Do not rush to graphics, combat, or conventional MMO avatar mechanics before the CLI proves grammar, consequence, and world autonomy.
 

@@ -69,6 +69,11 @@ The package currently uses Foundation and SwiftPM only. The Apple platform
 targets in `Package.swift` are deployment minimums for Apple builds, not an
 intentional exclusion of Linux.
 
+The intended server path is Linux-first and ARM64-friendly. macOS is the local
+development path; Linux x86_64, Linux ARM64, and production-class ARM64 hosts
+such as AWS Graviton are intended deployment targets once verified. See
+`docs/DEPLOYMENT.md`.
+
 Check Swift:
 
 ```sh
@@ -152,7 +157,8 @@ Read in this order:
 2. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
 3. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
 4. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
-5. `AGENTS.md` — coding-agent collaboration rules.
+5. `docs/DEPLOYMENT.md` — Swift/Linux/server deployment direction.
+6. `AGENTS.md` — coding-agent collaboration rules.
 
 Archived provenance:
 
