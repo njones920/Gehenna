@@ -114,10 +114,13 @@ A first successful ritual path:
 Read in this order:
 
 1. `GEHENNA_CODEX v3.md` — authoritative design.
-2. `GEHENNA_DESIGN_HISTORY.md` — v2/v3 concordance and implementation-facing interpretation.
+2. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
 3. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
 4. `AGENTS.md` — coding-agent collaboration rules.
-5. `GEHENNA_CODEXv2.txt` — historical source document.
+
+Archived provenance:
+
+- `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the 420 release.
 
 ## Development Direction
 

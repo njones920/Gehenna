@@ -1,8 +1,8 @@
 # GEHENNA Design And History
 
-This file reconciles the two Codex documents in this repository and records how the current implementation should understand them.
+This file reconciles the active v3 Codex with the archived Codex Two document and records how the current implementation should understand them.
 
-It does not replace either source document. It exists so future collaborators and coding agents can orient quickly without flattening the project's lineage.
+It does not replace the active source document. It exists so future collaborators and coding agents can orient quickly without flattening the project's lineage.
 
 ## Document Hierarchy
 
@@ -12,18 +12,18 @@ Authoritative design:
 
 Historical source:
 
-- `GEHENNA_CODEXv2.txt`
+- `docs/archive/GEHENNA_CODEX_TWO.txt`
 
 Working handoff:
 
 - `AGENTS.md`
 - `GEHENNA_DEV_MEMORY.md`
 
-Use v3 as the source of truth for design decisions. Use v2 to understand what the design grew from, what language was preserved, and which commitments predate the v3 additions.
+Use v3 as the source of truth for design decisions. Use Codex Two only to understand what the design grew from, what language was preserved, and which commitments predate the v3 additions.
 
 ## Provenance
 
-The v2 document is the original complete Codex in this repository. It already contains the core GEHENNA thesis:
+Codex Two is the original complete Codex in this repository. It already contains the core GEHENNA thesis:
 
 - a physics engine for ancient cosmology disguised as a game
 - the practitioner as an unauthorized operator of cosmic infrastructure
@@ -36,11 +36,11 @@ The v2 document is the original complete Codex in this repository. It already co
 - open engine, official canon, self-hosting, public API
 - Ridge of Elah as the vertical-slice proof
 
-The v3 document is the newer, finalized Codex. It preserves the v2 spine while regularizing the document into Markdown and adding a significant new design layer around programmatic access, AI-mediated play, and persistent identity/accountability.
+The v3 document is the newer, finalized Codex. It preserves the Codex Two spine while regularizing the document into Markdown and adding a significant new design layer around programmatic access, AI-mediated play, and persistent identity/accountability.
 
-Treat v3 as a refinement and extension of v2, not as a repudiation of it.
+Treat v3 as a refinement and extension of Codex Two, not as a repudiation of it.
 
-## Stable Core Across v2 And v3
+## Stable Core Across Codex Two And v3
 
 These ideas are invariant. A feature that contradicts them is off-direction.
 
@@ -145,7 +145,7 @@ The fourth criterion is the heart of the design.
 
 ## What v3 Adds Or Clarifies
 
-v3 is mostly congruent with v2, but it adds material that should shape future architecture.
+v3 is mostly congruent with Codex Two, but it adds material that should shape future architecture.
 
 ### Programmatic Access
 
@@ -362,11 +362,10 @@ Do not skip directly to a graphical MMORPG. That would risk building the wrong s
 
 ## Preservation Notes
 
-Keep both Codex files.
+Keep Codex Two archived.
 
-Do not rewrite v2 into v3 or delete v2. It is useful as historical evidence that the core commitments predate the v3 additions.
+Do not rewrite Codex Two into v3 or delete it. It is useful as historical evidence that the core commitments predate the v3 additions, but it is not implementation authority.
 
 Do not treat this file as a new design authority over v3. This file is a concordance and implementation-facing memory.
 
 If a future v4 Codex appears, update this file to describe the transition rather than silently changing the hierarchy.
-
