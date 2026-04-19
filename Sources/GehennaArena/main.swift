@@ -384,7 +384,7 @@ struct GehennaArena {
         }
 
         print()
-        print("  The world remembers everything. The scars are permanent.")
+        print("  The world remembers everything. The scars remain until someone repairs them.")
         print()
     }
 

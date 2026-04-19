@@ -3,7 +3,7 @@
 // Sites accumulate history through use — they become more powerful and more volatile.
 // The site is mandatory. Without a site, there is no boundary to cross.
 //
-// Sites remember. Scarring is permanent. Traces fade. Disturbance cools.
+// Sites remember. Scarring is durable. Traces fade. Disturbance cools.
 // The practitioner who uses a site repeatedly transforms it.
 
 import Foundation
@@ -45,8 +45,8 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
 
     // -- Site History (accumulated over play) --
 
-    /// Cumulative permanent site damage from rituals, mutations, and taboo acts.
-    /// Scarring never fully heals. It is the stone's memory.
+    /// Cumulative durable site damage from rituals, mutations, and taboo acts.
+    /// Scarring heals only under quiet conditions or through deliberate purification.
     public var scarring: Double
 
     /// Site-specific suspicion beyond regional. Kfar Shalem builds this fast.
@@ -153,7 +153,29 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
             activeTraces.removeFirst()
         }
 
-        // Scarring never heals. That is the point.
+        // Scarring heals only when the site is quiet and clean enough to recover.
+        if activeTraces.isEmpty && witnessExposure < 0.05 && corruption < 0.2 {
+            scarring = max(0.0, scarring - scarringRecoveryRate)
+            veilThinness = max(baseVeilThinnessFloor, veilThinness - veilRecoveryRate)
+            sanctity = min(1.0, sanctity + sanctityRecoveryRate)
+        }
+    }
+
+    /// Deliberate restoration work. Future healer/firefighter play should call this.
+    public mutating func purifySite(strength: Double = 0.1) {
+        let clampedStrength = max(0.0, min(1.0, strength))
+        guard clampedStrength > 0 else { return }
+
+        scarring = max(0.0, scarring - clampedStrength * 0.35)
+        corruption = max(0.0, corruption - clampedStrength * 0.5)
+        veilThinness = max(baseVeilThinnessFloor, veilThinness - clampedStrength * 0.2)
+        sanctity = min(1.0, sanctity + clampedStrength * 0.25)
+        witnessExposure = max(0.0, witnessExposure - clampedStrength * 0.2)
+        localSuspicion = max(0.0, localSuspicion - clampedStrength * 0.1)
+
+        if !activeTraces.isEmpty && clampedStrength >= 0.25 {
+            activeTraces.removeFirst(min(activeTraces.count, Int(clampedStrength * 4)))
+        }
     }
 
     /// Whether the site shows visible signs of recent activity.
@@ -167,8 +189,8 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         scarring > 0.1
     }
 
-    /// Local Veil modifier from permanent scarring.
-    /// Scarred sites have a permanently thinner Veil — consequence is structural.
+    /// Local Veil modifier from durable scarring.
+    /// Scarred sites have a thinner Veil until restored — consequence is structural but healable.
     public var localVeilModifier: Double {
         scarring * 0.15
     }
@@ -199,5 +221,27 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
     /// Stable-enough local salt for deterministic director scheduling.
     public var stableEventSalt: Int {
         name.unicodeScalars.reduce(0) { $0 + Int($1.value) }
+    }
+
+    private var scarringRecoveryRate: Double {
+        switch type {
+        case .springCaveMouth: return 0.003
+        case .ancestorShrine: return 0.002
+        case .burialCave, .ossuaryNiche: return 0.001
+        case .battlefield, .wadiBed: return 0.0007
+        case .collapsingTemple: return 0.0005
+        case .topheth: return 0.0002
+        }
+    }
+
+    private var veilRecoveryRate: Double { scarringRecoveryRate * 0.5 }
+    private var sanctityRecoveryRate: Double { scarringRecoveryRate * 0.25 }
+
+    private var baseVeilThinnessFloor: Double {
+        switch type {
+        case .springCaveMouth: return 0.25
+        case .topheth: return 0.45
+        default: return 0.1
+        }
     }
 }

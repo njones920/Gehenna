@@ -124,7 +124,7 @@ an NPC, they warm to all practitioners. When a reckless bot pushes blood
 rituals at the Burning Ground, the Veil thins for everyone.
 
 Watch for:
-- Sites reaching 100% scarring
+- Sites approaching catastrophic scarring
 - NPCs refusing contact after too many rumors
 - Rupture events in the journal
 - The Veil maxing out at 100%

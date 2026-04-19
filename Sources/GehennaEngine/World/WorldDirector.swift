@@ -81,7 +81,7 @@ public struct WorldDirector: Sendable {
             events.append(siteEvent)
         }
 
-        // 4. Site memory — permanent scarring narration
+        // 4. Site memory — durable scarring narration
         if events.count < maxEventsPerEval,
            let memoryEvent = checkSiteMemory(currentSite) {
             events.append(memoryEvent)
@@ -196,7 +196,7 @@ public struct WorldDirector: Sendable {
         guard shouldEmit(clockTick: site.siteTickCount, salt: site.stableEventSalt, interval: 5) else { return nil }
 
         let descriptions: [SiteType: String] = [
-            .burialCave: "The cave walls are darker where you worked before. The stain is permanent. The stone remembers.",
+            .burialCave: "The cave walls are darker where you worked before. The stone remembers.",
             .battlefield: "A patch of earth on the ridge refuses to grow anything. That is where you performed the ritual. The ground knows.",
             .topheth: "The Burning Ground was always scarred. But the new scars are yours, and they are deeper.",
             .collapsingTemple: "A crack in the temple floor has widened since your ritual. The ruin is settling into what you made of it.",
