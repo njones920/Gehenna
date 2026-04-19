@@ -164,6 +164,18 @@ Archived provenance:
 
 - `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the 420 release.
 
+## Art Direction
+
+Early reference art and prompt guidance live under `art/`.
+
+- `art/reference/` preserves the first visual anchors.
+- `art/prompts/` records reusable concept prompts and negative prompts.
+- `art/concepts/` is reserved for generated or curated concept art.
+
+The visual target is historically grounded ancient-cosmology horror: ritual
+sites, material culture, site memory, specific dead people, and consequence.
+Avoid generic fantasy hellscape imagery.
+
 ## Development Direction
 
 Near-term work should improve world autonomy, not add generic RPG surface area.

@@ -205,13 +205,16 @@ Implemented:
 - terminal CLI loop
 - tests covering core behavior
 
+Partially implemented in the 420 seed:
+
+- active world autonomy — WorldClock, WorldDirector, site-local state, and bot arena exist; the world acts between commands but does not yet have full cascade or rumor propagation
+- event journal — append-only journal with source, severity, site/NPC IDs, tags, and queries by site/tick/severity/tag/NPC; not yet persisted
+- site-local state — scarring, traces, suspicion, witness exposure, and disturbance tracking are live; site-local timelines are thin
+
 Not yet implemented, or only skeletal:
 
-- active world autonomy
-- event journal as source of truth
 - persistence
-- site-local timelines and robust site state
-- rumor engine
+- rumor engine (seeding exists, no mutation or chains)
 - witness system
 - taboo shock/cascade system
 - clean-channel/noob catalyst system
@@ -219,10 +222,10 @@ Not yet implemented, or only skeletal:
 - stable canon IDs for root identities
 - public API
 - identity/accountability layer
-- Expression Layer runtime
+- Expression Layer runtime (director uses authored templates only)
 - evidence chain
 - Oracle Network intake
-- real multiplayer
+- networked multiplayer
 
 ## Current Design Diagnosis
 
