@@ -21,6 +21,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - `WorldShard` actor: shared world authority for multiplayer command serialization.
 - `PlayerCommand` enum: non-interactive command model for bot and server use.
 - `PractitionerSession`: per-player state separation from shared world state.
+- Canon data roadmap documenting the gap between the current Ridge seed and the intended historically grounded reference canon.
 
 ### Changed
 
@@ -29,6 +30,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - `look`, `cast`, and NPC conversation advance local world time.
 - Site trace fading and director event gating now use deterministic local scheduling instead of process randomness.
 - Shared-world ritual journal entries now include practitioner attribution without double-counting rituals.
+- README now labels Ridge content as a prototype canon seed, not a complete historical canon.
 
 ### Verified
 

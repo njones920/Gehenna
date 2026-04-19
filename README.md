@@ -36,7 +36,7 @@ What is live:
 - Ritual configuration and deterministic resolution pipeline.
 - Seven ritual inputs: Remains, Site, True Name, Life Artifact, Memory Trace, Libation, Timing.
 - Coherence, Resonance, Conflict, Apotropaic Rule, Mutation checks, tiering, personality, and manifestation.
-- Ridge of Elah vertical-slice content.
+- Ridge of Elah vertical-slice content as a small prototype canon seed.
 - WorldClock for command/travel/rest time advancement.
 - Site-local memory: scarring, traces, suspicion, witness exposure.
 - WorldDirector v1 for unsolicited world narration.
@@ -51,6 +51,7 @@ What is not live yet:
 - Persistence.
 - Public API.
 - Networked multiplayer server.
+- Deep historically grounded canon dataset.
 - Identity/accountability layer.
 - Full rumor chains.
 - Taboo shock and clean-channel catalyst systems.
@@ -146,7 +147,8 @@ Read in this order:
 1. `GEHENNA_CODEX v3.md` — authoritative design.
 2. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
 3. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
-4. `AGENTS.md` — coding-agent collaboration rules.
+4. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
+5. `AGENTS.md` — coding-agent collaboration rules.
 
 Archived provenance:
 
@@ -159,13 +161,14 @@ Near-term work should improve world autonomy, not add generic RPG surface area.
 Priority sequence:
 
 1. Persistence for world/site/profile/Codex/journal state.
-2. Stronger site-local timelines.
-3. Rumor engine with propagation and mutation.
-4. Witness system.
-5. Spirit persistence and relationship memory.
-6. Taboo shock cascades.
-7. Clean-channel/noob catalyst events.
-8. Ridge of Elah proof playthrough.
+2. Stable canon IDs and historically grounded canon data expansion.
+3. Stronger site-local timelines.
+4. Rumor engine with propagation and mutation.
+5. Witness system.
+6. Spirit persistence and relationship memory.
+7. Taboo shock cascades.
+8. Clean-channel/noob catalyst events.
+9. Ridge of Elah proof playthrough.
 
 Preserve the core rule: the Expression Layer renders state; it does not decide simulation truth.
 
