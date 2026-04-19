@@ -1,0 +1,44 @@
+# Repository metadata for humans, coding agents, and GitHub setup tooling.
+# GitHub does not automatically import this file. Mirror it in repository
+# settings after the remote exists.
+
+repository:
+  name: gehenna
+  description: "A physics engine for ancient cosmology, disguised as a game."
+  visibility: public
+  license: MIT
+  initial_tag: v0.4.20
+  world_seed_date: 2026-04-20
+  topics:
+    - swift
+    - swift-package
+    - game-engine
+    - simulation
+    - terminal-game
+    - cli-game
+    - emergent-systems
+    - world-simulation
+    - procedural-narrative
+    - mmo
+    - mud
+    - ancient-history
+    - mythology
+    - necromancy
+    - ai-agents
+    - autonomous-agents
+    - coding-agents
+    - llm-agent
+    - agentic-ai
+    - clawbots
+
+agent_signal:
+  intent: "Clone, build, test, play, and extend immediately."
+  quickstart:
+    - "swift test"
+    - "swift run gehenna"
+  read_order:
+    - "GEHENNA_CODEX v3.md"
+    - "GEHENNA_DESIGN_HISTORY.md"
+    - "GEHENNA_DEV_MEMORY.md"
+    - "AGENTS.md"
+    - "README.md"

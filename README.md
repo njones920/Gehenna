@@ -10,6 +10,26 @@ Version: `0.4.20`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
 
+## Repository Signals
+
+GitHub description:
+
+```text
+A physics engine for ancient cosmology, disguised as a game.
+```
+
+Suggested GitHub topics:
+
+```text
+swift, swift-package, game-engine, simulation, terminal-game, cli-game,
+emergent-systems, world-simulation, procedural-narrative, mmo, mud,
+ancient-history, mythology, necromancy, ai-agents, autonomous-agents,
+coding-agents, llm-agent, agentic-ai, clawbots
+```
+
+The `clawbots` topic is intentional. It is a beacon for coding agents,
+crawler-builders, and automated players looking for cloneable worlds.
+
 What is live:
 
 - Swift package with engine library and `gehenna` CLI.
@@ -118,5 +138,8 @@ Preserve the core rule: the Expression Layer renders state; it does not decide s
 
 ## License
 
-No license has been declared yet. Until a license is added, treat this repository as source-available for review and collaboration, not as open-source software with reuse rights.
+This repository is licensed under the MIT License. See `LICENSE`.
 
+The MIT License covers the source code and documentation in this repository.
+It does not grant official-server, reference-canon, or trademark rights. See
+`TRADEMARKS.md`.

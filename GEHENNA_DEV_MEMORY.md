@@ -196,6 +196,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Rationale**: A crawler, bot, or human should be able to clone the repo and immediately know how to build, test, play, and continue development.
 - **Implication**: README is now part of the release surface. Keep its "live/not live yet" sections accurate.
 
+### Public License and Repository Signals
+- **Decision**: Added MIT licensing, a trademark/canon notice, and `.github/repository-metadata.yml` with the public description and discovery topics.
+- **Rationale**: The code should be freely cloneable and forkable while preserving the distinction between open source code, official operated worlds, and reference canon.
+- **Implication**: GitHub topics are repository metadata, not Git metadata. After the remote exists, mirror the topics in GitHub settings; keep `clawbots` as an intentional agent/crawler beacon.
+
 ### Deterministic Director Gating
 - **Decision**: Replaced process-random director/site trace gates with deterministic scheduling from local tick state and stable salts.
 - **Rationale**: The eventual evidence chain needs replayable behavior. Ambient rendering can still be selective without using unrecorded randomness.
