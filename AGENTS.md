@@ -5,8 +5,8 @@ This repo contains the early Swift implementation of GEHENNA, based on the Codex
 ## Source Of Truth
 
 - `GEHENNA_CODEX v3.md` is the current authoritative design reference.
-- `GEHENNA_CODEXv2.txt` is historical context. Use it only to understand lineage or confirm what changed.
-- `GEHENNA_DESIGN_HISTORY.md` reconciles v2 and v3 for implementation context.
+- `GEHENNA_DESIGN_HISTORY.md` reconciles Codex Two and v3 for implementation context.
+- `docs/archive/GEHENNA_CODEX_TWO.txt` is superseded historical context. Do not use it as implementation authority.
 - The current implementation is an engine/CLI prototype, not the full vertical slice.
 
 ## Project Direction

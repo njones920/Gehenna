@@ -1,10 +1,10 @@
 # GEHENNA Dev Memory
 
-Last updated: 2026-04-18
+Last updated: 2026-04-19
 
 Related orientation:
 
-- `GEHENNA_DESIGN_HISTORY.md` reconciles the v2 and v3 Codex documents and records the current implementation-facing interpretation.
+- `GEHENNA_DESIGN_HISTORY.md` reconciles Codex Two and v3 while treating `GEHENNA_CODEX v3.md` as the active design authority.
 
 ## Current Assessment
 
@@ -200,6 +200,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Decision**: Added MIT licensing, a trademark/canon notice, and `.github/repository-metadata.yml` with the public description and discovery topics.
 - **Rationale**: The code should be freely cloneable and forkable while preserving the distinction between open source code, official operated worlds, and reference canon.
 - **Implication**: GitHub topics are repository metadata, not Git metadata. After the remote exists, mirror the topics in GitHub settings; keep `clawbots` as an intentional agent/crawler beacon.
+
+### Codex Two Archived
+- **Decision**: Moved the superseded Codex Two text document to `docs/archive/GEHENNA_CODEX_TWO.txt`.
+- **Rationale**: The root should make the current hierarchy obvious: v3 is the active Codex, and it leads the 420 release.
+- **Implication**: Agents should not treat Codex Two as a competing spec. Read it only for provenance after v3 and `GEHENNA_DESIGN_HISTORY.md`.
 
 ### Deterministic Director Gating
 - **Decision**: Replaced process-random director/site trace gates with deterministic scheduling from local tick state and stable salts.

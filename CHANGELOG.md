@@ -9,6 +9,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - 420 build README with quickstart, first ritual path, live/not-live scope, and document reading order.
 - `.gitignore` for SwiftPM/Xcode/local macOS output.
 - MIT `LICENSE`, trademark/canon notice, and GitHub repository metadata for public release.
+- Archived the superseded Codex Two text document under `docs/archive`.
 - WorldClock as the single owner of time advancement.
 - WorldDirector v1 for unsolicited world narration.
 - Site-local state: scarring, local suspicion, witness exposure, active traces, visit/ritual ticks, and event counts.
