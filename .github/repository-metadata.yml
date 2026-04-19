@@ -40,5 +40,7 @@ agent_signal:
     - "GEHENNA_CODEX v3.md"
     - "GEHENNA_DESIGN_HISTORY.md"
     - "GEHENNA_DEV_MEMORY.md"
+    - "docs/CANON_DATA_ROADMAP.md"
+    - "docs/DEPLOYMENT.md"
     - "AGENTS.md"
     - "README.md"
