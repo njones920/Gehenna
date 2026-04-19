@@ -939,19 +939,36 @@ struct SiteStateTests {
         #expect(site.scarring > firstScarring)
     }
 
-    @Test("Scarring never heals")
-    func scarringNeverHeals() {
+    @Test("Scarring heals only after traces and witness exposure cool")
+    func scarringHealsAfterCooling() {
         var site = RitualSite(name: "Test", type: .burialCave, affinity: .earth)
         site.recordRitualPerformed()
         site.recordRitualPerformed()
         let scarring = site.scarring
 
-        // Tick 100 times — scarring should not decrease
+        site.tickSiteState()
+        #expect(site.scarring == scarring)
+
+        // Tick many times — traces and witness exposure cool before scars recover.
         for _ in 0..<100 {
             site.tickSiteState()
         }
 
-        #expect(site.scarring == scarring)
+        #expect(site.scarring < scarring)
+    }
+
+    @Test("Purification repairs site scarring and corruption")
+    func purificationRepairsSiteScarring() {
+        var site = RitualSite(name: "Test", type: .burialCave, affinity: .earth)
+        site.recordMutation()
+        site.recordMutation()
+        let scarring = site.scarring
+        let corruption = site.corruption
+
+        site.purifySite(strength: 0.5)
+
+        #expect(site.scarring < scarring)
+        #expect(site.corruption < corruption)
     }
 
     @Test("Active traces fade over time")

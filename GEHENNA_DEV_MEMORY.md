@@ -174,10 +174,10 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Rationale**: Follows the design principle: "The Expression Layer renders. It must not decide simulation truth." The director reads world state and narrates what is already true. It never mutates state.
 - **Implication**: Future LLM generation should only replace the template text selection, not the condition evaluation logic.
 
-### Site State with Permanent Scarring
-- **Decision**: `RitualSite` now tracks `scarring` (permanent, never heals), `localSuspicion` (decays slowly), `activeTraces` (fade over ticks), `witnessExposure` (cools), and `recentEventCount` (decays each tick). Scarred sites have a `localVeilModifier` that permanently thins the Veil.
-- **Rationale**: "Consequence is content." Sites must remember what was done there. The asymmetry (permanent scarring, slow suspicion decay, fast trace fading) creates temporal texture.
-- **Implication**: Persistence must save site state. The Veil modifier feeds back into the resolution pipeline through `effectiveVeilThinness`.
+### Site State with Healable Scarring
+- **Decision**: `RitualSite` tracks `scarring` as durable damage, not absolute permanence. It recovers only under quiet/clean conditions or through deliberate `purifySite` restoration. `localSuspicion`, `activeTraces`, `witnessExposure`, and `recentEventCount` still cool independently.
+- **Rationale**: "Consequence is content," but repair is also content. Healable scarring creates a healer/firefighter role and makes restoration a real player strategy instead of reducing every shared world to entropy maximization.
+- **Implication**: Persistence must save site state. The Veil modifier feeds back into the resolution pipeline through `effectiveVeilThinness`; future healer systems should call `purifySite` and record restoration events in the journal.
 
 ### NPC Temporal Drift
 - **Decision**: NPCs have `tickState()` for per-tick processing: rumor-based suspicion decays very slowly, trust drifts toward neutral. Added `wouldApproach` and `wouldFlee` computed properties.
@@ -234,4 +234,4 @@ The Expression Layer renders. It must not decide simulation truth.
 - No Visible Numbers as a final UI principle (with pragmatic flexibility during prototyping).
 - WorldClock as single time owner.
 - WorldDirector renders, never decides.
-- Site scarring is permanent — consequence is structural.
+- Site scarring is durable but healable — consequence creates work for healers.

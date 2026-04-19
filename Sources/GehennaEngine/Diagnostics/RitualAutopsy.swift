@@ -193,7 +193,7 @@ public struct RitualAutopsy: Sendable {
         case (.hostile, .adept):
             return "Hostile resolution. The conflict axis is a tool — used deliberately, it accesses outcomes that safe configurations cannot."
         case (.mutation, .adept):
-            return "Mutation produced. The Veil tore. The site is permanently altered. This is not a mistake — it is a consequence."
+            return "Mutation produced. The Veil tore. The site is altered. This is not a mistake — it is a consequence."
         case (.failure, .adept):
             return "Authority gate failed. Check purity state and contagion levels before attempting again."
 
