@@ -1,0 +1,1215 @@
+# THE GEHENNA CODEX
+
+*A physics engine for ancient cosmology, disguised as a game.*
+
+---
+
+## VOLUME 0 — ORIENTATION
+
+This document is the Codex. It is the complete design reference for GEHENNA — what the game is, how its parts work, why those parts exist, and what makes the whole thing cohere.
+
+**Who this is for.** Anyone serious about the game — a developer, a contributor, a journalist, an academic, a canon author, an AI model brought in to continue the work, or a player who wants to understand what they are inside. The Codex is readable end to end in an evening. It does not require prior context. Internal references are to Parts by name.
+
+**How to read it.** Parts I and II are the stance and the feel — the essence, the thing to read before touching any system. Parts III through VII describe the game as it is played. Parts VIII through X describe how it scales, how it is built, and how others can extend it. Part XI describes the proof — the vertical slice that demonstrates the design works. The Coda tells you where the game comes from and what it is an invitation to.
+
+**A note on register.** The Codex is written densely. It avoids generic fantasy vocabulary. It does not explain itself to the reader more than once. When it is precise, it is because precision matters; when it is loose, it is because the thing being described is genuinely fluid and false precision would be worse than honest vagueness. Engine-level patterns are presented as settled; canon-level values — specific thresholds, decay rates, named entities, regional detail — are the reference Gehenna canon's choices, and variant canons are free to set them differently.
+
+**A note on lineage.** GEHENNA is descended from Doom, Diablo, Quake, System Shock, Thief, EVE Online, Dwarf Fortress, and the Unix tradition of systems you could understand by reading their source. It is written in Swift. It is open at its engine layer. It expects to be modded, self-hosted, ported to a Win98 Glide renderer by an enthusiast with too much time, and studied by people who are not game designers. All of that is the point.
+
+---
+
+# PART I — THE STANCE
+
+## 1.1 Thesis
+
+GEHENNA is a physics engine for ancient cosmology disguised as a game.
+
+On the surface, it is a dark action-exploration game set in the Iron Age Levant where the player practices forbidden necromancy. Beneath that, it is a simulation of how ancient people believed reality actually worked: a layered world where the living, the dead, and the divine interact through ritual mechanics operating on rules the player is not told and must discover.
+
+The player is not a wizard casting spells. The player is an unauthorized operator of cosmic infrastructure. They have discovered that reality runs on a rule engine — that specific objects, placed at specific locations, under specific conditions, with specific offerings, produce predictable supernatural effects. The religious authorities know this too, which is why they made it illegal. The player does it anyway, because the heavens are silent and the dead are the only ones still talking.
+
+Every ritual pulls a specific person back into the world. Every person has a name, a history, a personality, and an opinion about being disturbed. Every ritual destabilizes the cosmology, because necromancy is entropy. The player's primary power is also the world's primary threat.
+
+## 1.2 The Player Fantasy
+
+Five words: *you figured out how death works.*
+
+Not: you are the chosen one. Not: the gods have marked you. Not: a prophecy names you. The player is a traveler, a trader, an outsider, a person who asked one too many questions about old battlefields and burial caves and eventually found an answer that should have stayed buried.
+
+The practitioner is nobody. That ordinariness is their survival tool. The moment they are recognized as a practitioner, the social systems turn against them: priests investigate, soldiers hunt, communities close. The dual identity — traveler above, operator beneath — is the texture of the game.
+
+Power in GEHENNA is borrowed. It flows through the spirits, not through the practitioner's body. The practitioner is physically vulnerable at hour one and physically vulnerable at hour five hundred. What improves is understanding.
+
+## 1.3 Lineage
+
+GEHENNA belongs to a specific tradition of games about hell, and it belongs to it honestly.
+
+*Doom* gave the player a portal to hell and said go through it. *Diablo* gave the player a descent into corruption and said keep going. *Quake* gave the player reality fracturing and said survive. *System Shock* gave the player hubris about operating powerful systems they did not understand. *Thief* gave the player the tension of operating in a society that would destroy them if it knew what they were doing.
+
+GEHENNA is the game that asks what was actually on the other side of that first door.
+
+The honest answer — drawn from the Hebrew Bible before the medieval overlay, from the Ugaritic tablets, from the Epic of Erra, from Tophet stratigraphy, from Te'omim Cave archaeology — is not demons. It is silence. It is diminished people. It is the weight of forgotten lives. It is a cosmology running on rules nobody fully understands, which is what those classic games were reaching for before genre conventions pulled them toward action-movie hell.
+
+GEHENNA goes back to the source material. The Valley of Hinnom outside Jerusalem is a real place where terrible things actually happened. Sheol is the shared underworld, neutral and populous. The Rephaim are a specific class of the elite dead, documented in the Ugaritic tablets from Ras Shamra. Necromancy is practiced in the biblical record — the Witch of Endor, 1 Samuel 28 — and is forbidden precisely because it works.
+
+The homage is not aesthetic. It is architectural. Doom's engine was open-sourced in 1997 and produced an ecosystem that outlived the studio. GEHENNA is designed with that lesson baked in: open engine, official canon, self-hosting permitted, third-party clients welcome. The technical philosophy of Doom's open release is part of the design.
+
+## 1.4 The Design Commitments
+
+Seven commitments govern every decision in the Codex. They are not aspirations. A feature that violates them is removed.
+
+**The Unsolvability Principle.** Skill controls what appears; personality controls what it does. The player's mastery of the grammar guarantees manifestation quality — the right spirit with strong attributes, reliably. It does not guarantee relational outcome. A spirit is not a solved problem. A spirit is a relationship. The distinction is load-bearing: outcomes can be uncertain without causes being obscure. A well-constructed ritual produces a well-constructed spirit. How that spirit responds to *this* practitioner is the thing that remains open.
+
+**The Entropy Asymmetry.** Destabilization is fast. Recovery is slow. Corruption decays more slowly than Ghost Activity. Spiritual Pressure barely decays at all. The math of the cosmology makes the player a footprint on the world whether or not they intend to be.
+
+**The Clean Hands Problem.** The practitioner is the entropy. The Codex is the receipt. The landscape scars where they work. The game does not moralize about this — no karma meter, no alignment, no good/evil choices — but the system records every consequence honestly.
+
+**The Infinite Cast.** Spirits are not a catalog. NPCs are not a roster. Both are emergent from the combinatorial space of the grammar acting on a rich tag dictionary acting on epoch manifestations acting on world state acting on player history. A hundred-hour player has met people no other player has met.
+
+**The World Keeps Score.** The cosmology remembers. A region you destabilized three sessions ago is still healing or still collapsing. A spirit you dismissed carelessly still has that in its memory. Nothing resets when you stop looking. In multiplayer, the world continues evolving while you are offline.
+
+**No Visible Numbers.** Progression, social state, combat state — none displayed. The player reads the world, not a stat sheet. Feedback is behavioral: spirits act differently, NPCs react differently, the environment changes. If the player needs a number to understand the system, the feedback design has failed.
+
+**Consequence is Content.** A stable world and a collapsing world are both valid playthroughs. The challenge of stability is secrecy; the challenge of collapse is survival. The game does not punish either trajectory. It records the consequences and lets the player see them.
+
+## 1.5 What GEHENNA is Not
+
+The Codex is explicit about negation because drift happens by accretion.
+
+It is not a power fantasy. It is not a karma-metered morality game. It is not a class-and-skill-tree RPG. It is not a generic-fantasy reskin of ancient cosmology. It is not a solved system to be min-maxed. It is not a chosen-one narrative. It is not a game that makes the player feel good about using power. It is not for children and it does not apologize for its source material.
+
+---
+
+# PART II — THE FEEL
+
+*What it is like to be inside.*
+
+## 2.1 The First Fragment
+
+You find it in a burial cave above the wadi, half-exposed in the dust where something — an animal, a small earthquake, the slow work of centuries — has shifted the stone. A femur. Long bone. Adult. The color wrong where it has been touched by something once, in another century, that left a mark.
+
+You know before you pick it up. The knowledge is cold and specific. You know the way you know when a door is not latched. You know because you have been wrong about this before, and each time being wrong cost you something, and now you are rarely wrong.
+
+You pick it up. It is lighter than bone should be. That is because the bone is empty of the thing it was meant to hold, and what remains is anchor, not person. The person is somewhere else. The person has been somewhere else for a long time. The bone is a way to ask them to come back.
+
+You put it in the satchel. The satchel has other bones in it. You do not think of them by name.
+
+## 2.2 The First Ritual
+
+It is night. You chose night because the silence is cleaner and the witnesses are fewer. The site is a cave mouth where a spring runs out of the hill, limestone white under the moon where the water has stripped it. There is a particular quality to the acoustic here that the old practitioners understood and that you are beginning to understand: a resonance just below the range where the body can name what it is feeling.
+
+You set the oil lamp on the stone. The flame is small and yellow and jumps with every breath of air at the cave mouth. Its illumination falls off so fast that three paces away the world is absolutely black.
+
+You arrange the fragments. The bone. The bronze spearhead, green with oxide. A potsherd with part of a name scratched into it — *…ram, son of —* — and the rest broken off, unknowable. You pour the water from the clay jar, plain water, no wine tonight, because you are trying to understand what the grammar does at the lowest setting and wine would only complicate the reading.
+
+You speak. Low, into your chest, the way the scriptures warned about. *Chirping and muttering*. It is not a chant. It is closer to talking to yourself than you would like to admit.
+
+The bones answer first, if you cast them, which you did. The four knucklebones fall in a pattern that means the fragments are coherent, the resonance is weak, the conflict is low, the Veil is quiet. A clean reading. No warnings.
+
+Something changes in the cave. Not loudly. Not theatrically. The temperature does not drop and no wind rises. What changes is that you become aware, suddenly and without being told, that you are no longer alone, and that the presence is patient, and that it is waiting for you to speak.
+
+"I am not certain of your name," you say.
+
+"No," says the presence. "You are not."
+
+It sounds older than the bone. It sounds tired. It sounds like it has been somewhere very quiet for a long time and is not particularly glad to be anywhere else.
+
+"I have called you back."
+
+"Yes," it says. "That much is obvious."
+
+You do not know what to say next. The books — such as they are, scraps and anecdotes, the things you have pieced together — do not cover this. The books assume you have a name for the dead. The books assume the dead will tell you their business and you will tell them yours and a transaction will occur. The books do not cover *you are not sure who I am and I have been pulled out of the silence to discover that you, the practitioner, are not sure either.*
+
+"I am sorry," you say. Which is, you realize immediately, the wrong thing to say to a shade you have just summoned. Apology is not in the grammar. Apology is a thing the living do to each other.
+
+The presence considers.
+
+"Who did you mean to call?"
+
+And you realize, with a kind of cold clarity, that you do not have a good answer to that question. You meant to call a Philistine soldier, because the spearhead suggested it and the battlefield was close and the potsherd had part of a name that might have been Philistine. But "a Philistine soldier" is not a person. It is a category. You meant to call nobody specific, and the cosmology has given you somebody specific, and now you and that person have to work out what to do about it.
+
+The oil lamp flickers. Outside the cave, an owl calls, and somewhere far down the valley a dog answers.
+
+"Stay for a little while," you say. "Please."
+
+The presence does not answer immediately. When it does, its voice is slightly different — quieter, less cold. Something has shifted in the relational layer because of what you just said, and you will not fully understand why for another twenty hours of play, but something in the system has registered *this practitioner said please.*
+
+"A little while," it says. "Yes. That I can give you."
+
+You sit down on the stone. The lamp jumps. The bones on the ground are still bones. The presence is still a presence. The night is still the night.
+
+You begin to ask questions.
+
+## 2.3 What It Feels Like When Something Goes Wrong
+
+You will learn this in your own time. The system does not warn you. The astragali degrade in exactly the regions where they would be most useful. The environment does not flash red. The first real sign that something has gone wrong is usually a silence where you expected a response, or a response where you expected silence.
+
+What it feels like: you pour the blood offering because the ritual called for it, and the spirit that answers is not the one you were configuring for, and it is hungry, and it is interested in you specifically. What it feels like: you summon at a site you have used too many times and the site answers first, before the spirit does, and the answer is a low tonal shift in the stone itself that you can feel through your feet. What it feels like: you return to the village and the baker who sold you bread last week steps back from the counter, and says nothing, and does not meet your eyes, and you do not know what she has heard but you know she has heard something.
+
+The game does not give you an error. The game gives you the world, exactly as it now is, shaped by what you did. You read it. You figure out what to do next. Sometimes you cannot.
+
+## 2.4 What It Feels Like When Something Goes Right
+
+It is quieter than you would think.
+
+You complete a ritual. The spirit manifests in the form you were configuring for. It is cooperative. It does the work. It returns to Sheol cleanly when you dismiss it. Nothing in the environment changes that you can perceive. The Veil holds. The Corruption does not spike. Your reputation in the region improves by an increment so small you would not have noticed it if you were not paying attention.
+
+The success feels like absence: the absence of the thing that would have happened if you had gotten it wrong. The reward is that nothing bad is happening, and you begin to understand that nothing bad not happening is, in fact, the reward. You earned a few more sessions of a world that still works. That is what the practitioner trades in.
+
+Over time, you will stop expecting more. Over time, you will come to find the absence beautiful.
+
+## 2.5 The Cost
+
+No one tells you about this part and so the Codex will.
+
+The cost is that you start to see the world the way the grammar sees it. You walk through a market and notice the provenance of the pottery by its clay, the weight of a coin by the way its owner sets it down, the names scratched on the sealings of wine jars and which valley those vineyards would have been in. You look at an old wall and see the sanctity degraded from three centuries of being used as a rain shelter. You meet a person and without meaning to you begin to compose their fragment profile — what they would anchor to, what Affinity their bones would carry, what Era their name would sit in.
+
+You do not stop being a person. But you are also, now, something else. The practitioner's gaze is the cost of the practitioner's knowledge. Everyone who has done this work in every tradition that has done this work has paid it.
+
+You pay it slowly, in increments that feel like insights. You will not notice until you meet someone who has not paid it, and you will realize that you can no longer see the world the way they see it, and that you will not see it that way again.
+
+---
+
+# PART III — THE GRAMMAR
+
+*How things happen.*
+
+## 3.1 The Ritual as Compiler
+
+The ritual system is a discoverable rule engine. The player assembles inputs; the grammar evaluates them through a deterministic pipeline; a spirit manifests. Intermediate calculations — Coherence scores, Resonance multipliers, Conflict penalties, world-state modifiers — are never shown. The grammar is learned through observation, not through a UI overlay.
+
+Mechanically, the grammar is a compiler. A ritual is a program. The practitioner is the programmer. The cosmology is the runtime. Inputs of certain types combine according to certain rules and produce outputs of certain types. The outputs are spirits, and the side effects are changes to world state, and some programs produce things the programmer did not intend, and some programs fail in interesting ways.
+
+This framing is not decoration. It is literal. The practitioner who has spent a career understanding compilers will grasp the ritual system faster than the practitioner who has not. That is appropriate and intentional.
+
+## 3.2 The Seven Inputs
+
+A ritual is assembled from up to seven input classes. Two are mandatory. Five are optional modifiers that increase specificity, power, and control.
+
+**Remains (mandatory).** The physical anchor. Without remains, no summoning. Bone is the primary case — skulls as most coherent anchors, long bones as secondary, ossuary fragments and cremated bone from Tophet contexts as edge cases. Remains carry Era, Domain, Affinity, and Integrity.
+
+**Ritual Site (mandatory).** The location where the boundary is thin enough for contact. Each site carries Death Saturation, Veil Thinness, Sanctity, Corruption, and a dominant Affinity. Sites accumulate history through use; sites where many rituals have been performed become more powerful and more volatile.
+
+**True Name (optional).** Spoken identification. Increases Coherence dramatically. Produces targeted rather than generic summons. Sources include inscribed ostraca, seal impressions, tomb wall inscriptions, bronze dedications. Partial names — patronymics without personal names, clan affiliations — produce partial bonuses.
+
+**Life Artifact (optional).** An object from the spirit's living days. Amplifies Resonance when its Domain matches the target identity. A war-domain artifact present in any ritual also reduces Hostile Manifestation probability by one outcome band (the Apotropaic Rule, grounded in the Te'omim Cave evidence where bronze weapons were placed as protective talismans).
+
+**Memory Trace (optional).** Evidence of a life lived rather than a specific identity. Domestic pottery, loom weights clustered in a corner, a grain jar with ownership marks. Memory Traces enrich the manifestation — the more the ritual provides about who the person was, the more complete the spirit.
+
+**Libation (optional).** A pharmacological and symbolic component that alters both the practitioner's state of consciousness and the outcome space. Plain Water as baseline. Fermented Wine for Knowledge and Stability. Ritual Mixture (wine with Syrian rue and water lily) for Sheol perception at cost of control. Blood Offering for Strength at cost of Corruption. Honey Wine as Sovereign maintenance. Mimic Blood as a lower-cost, detection-risked substitute for true blood. Opium Tincture for ecstatic contact with the recently dead — archaeologically attested in Late Bronze Age Canaanite burial vessels at Tel Yehud — at cost of severe Disposition variance. Libation uniquely modifies the practitioner, not just the ritual.
+
+**World Timing (optional).** Environmental and calendrical conditions at the moment of ritual. Night amplifies. Lunar phase modulates. Current regional state — War Intensity, Ghost Activity, Corruption, Stability, Suspicion, Spiritual Pressure — shapes the outcome space. The subtlest input class; rewards long observation.
+
+## 3.3 The Dual-Layer Fragment Model
+
+Every input carries data on two layers: structured properties for mechanical resolution, and narrative tags for expressive rendering.
+
+**Structured properties** are typed. Era is one of a small set of historical periods. Domain is one of War, Knowledge, Faith, Rule, Death. Affinity is one of Fire, Water, Earth, Silence, Air. Integrity is a continuous scalar from pristine to corrupted. These drive the resolution pipeline.
+
+**Narrative tags** are a rich open-ended dictionary encoding who the fragment is and what it remembers. Identity tags: occupation, culture, age, status, gender. Death-context tags: battle, plague, sacrifice, old age, accident, murder. Relational tags: who they served, who betrayed them, who they loved. Cultural tags: which god, which city, which trade, which ritual tradition. Libation-specific tags: wine, blood, feast, descent, purification.
+
+The structured properties determine *what class of thing manifests*. The narrative tags determine *which specific person within that class it is*. This separation is what makes the infinite cast possible. The templates are few; the tag space is enormous; the product of template × tag-constellation × world-state × practitioner-history is effectively unbounded.
+
+The tag dictionary is the single most important content artifact in the game. It is more important than spirit templates, than region maps, than enemy taxonomies. A canon with a thin tag dictionary produces generic ghosts. A canon with a deep tag dictionary produces a world full of specific people.
+
+## 3.4 Composition: Coherence, Resonance, Conflict
+
+Three rules evaluate the assembled configuration.
+
+**Coherence** asks: do the fragments point to the same person? Computed from Remains, True Name, Life Artifact, and Memory Trace — the identity-bearing inputs. High Coherence produces targeted summons. Low Coherence produces wild draws from the tier-and-region pool.
+
+**Resonance** asks: do the input properties amplify each other? Computed across all seven inputs. Shared Domains, shared Affinities, complementary Era alignments accumulate Resonance points. Each point improves attribute generation and Stability. Resonance is the reward for matched configurations.
+
+**Conflict** asks: do the input properties oppose each other? Computed across all seven. Opposing Affinities (Fire against Water, Earth against Air), opposing Domains accumulate Conflict. Each Conflict point increases variance and Hostile Manifestation probability — but also enables rare outcomes that safe configurations cannot produce.
+
+Resonance is reliability. Conflict is possibility. The mastery of the grammar is knowing when to use each.
+
+## 3.5 The Resolution Pipeline
+
+A ritual resolves through a deterministic pipeline. The stages are precise because they have to be — any spirit can be traced back through its resolution and the trace will reproduce the same output from the same inputs.
+
+1. **Aggregation.** Collect all structured properties and narrative tags.
+2. **Authority.** Verify the practitioner has standing to compile this ritual. (See 3.8.)
+3. **Coherence.** Compute from identity-bearing inputs.
+4. **Resonance.** Compute across all inputs including Libation and Site.
+5. **Conflict.** Compute across all inputs.
+6. **Apotropaic Evaluation.** If a war-domain Life Artifact is present, reduce effective Conflict by one band for Hostile Manifestation probability only.
+7. **Outcome Class.** Determine from Coherence/Resonance/Conflict balance.
+8. **Mutation Check.** If Conflict radically outweighs Coherence AND regional entropy is sufficient, divert to the Mutation Protocol. (See 3.9.)
+9. **Tier Resolution.** Determine spirit tier from Era depth, fragment completeness, Site Veil Thinness, Libation gating.
+10. **Attribute Generation.** Generate Strength, Knowledge, Will, Stability, Disposition.
+11. **Template Selection.** Match narrative tags against Tag Triggers at resolved tier.
+12. **Personality Binding.** Bind the template's intrinsic Personality Traits. Apply regional reputation memory.
+13. **Manifestation.** Instantiate the spirit. Apply world-state effects. Begin entropy output.
+
+The pipeline is the same for Common-tier and Mythic-tier rituals. The inputs differ, the outputs differ, the mechanism does not.
+
+## 3.6 The Astragali
+
+A hidden rule engine creates a cold-start problem: in the first ten hours the player lacks data to form hypotheses. The Astragalus Diagnostic System solves this without compromising opacity.
+
+Four sheep knucklebones, carried by the player, cast before ritual execution. Each bone maps to one dimension of the grammar's evaluation: Coherence, Resonance, Conflict, and regional Veil state. Each shows in one of three states — favorable, warning, hostile — determined by the grammar's actual computation on the current configuration.
+
+The astragali do not reveal what spirit will manifest. They reveal whether the configuration is strong, weak, or conflicted. They are divination in form and debugger in function.
+
+Critically: the astragali degrade with Veil instability. In stable regions, all four faces read accurately. As the region destabilizes, one face, then two, then three begin producing unreliable readings. The tool becomes unreliable in exactly the regions where the practitioner has been most active. The training wheels come off at the worst possible moment, by design, and the thing that takes them off is the practitioner's own behavior.
+
+## 3.7 The Ritual Autopsy
+
+The astragali diagnose before. The autopsy interprets after.
+
+Every ritual — successful, catastrophic, or somewhere ambiguously between — concludes with a short diegetic reading of what the grammar did. Not numbers. Not a UI overlay. A sentence or two in the practitioner's own internal voice, naming the factors that dominated the resolution.
+
+*The name carried farther than the bone.*
+*The site overpowered your offering.*
+*The blood drew something that was already listening.*
+*The wine softened the sharp edges. The spirit did not come hungry.*
+*The bronze turned something aside. You would not know what.*
+*The hour was wrong. You felt it as you spoke.*
+
+The autopsy exists to solve a specific design problem. Hidden numbers are correct — the player should read the world, not a stat sheet. But hidden *numbers* and hidden *causes* are different things, and the two are easy to conflate. A player with no sense of why outcomes differ across configurations will read the system as arbitrary and disengage, regardless of how elegant the underlying grammar is. The Unsolvability Principle protects relational outcomes from being solved. It does not protect mechanical causes from being understood.
+
+The autopsy preserves mystery — the player still cannot see Coherence scores or Resonance multipliers or exact thresholds — while preserving learnability. Outcomes remain uncertain; their causes do not. Theories about the grammar form in the grammar's own language, which is closer to how ancient practitioners would have understood their own craft: not *my ritual failed because the Coherence score missed the threshold* but *the names I used were from the wrong side of the river, and the old ones did not recognize them.*
+
+The autopsy is also a Codex authoring surface. Over hundreds of rituals, the practitioner's autopsies accumulate into a personal phenomenology — a handbook built from their own observations, in their own voice. This is where the Expression Layer earns its keep: rendering the autopsy in the voice of *this practitioner's* growing understanding, shaped by their Profile, their regional history, their accumulated knowledge of which factors tend to dominate for them. The autopsy of an Apprentice reads differently from the autopsy of a Master performing the same ritual. The system grows with the practitioner.
+
+## 3.8 Authority
+
+The ritual grammar is access-controlled.
+
+Ancient ritual systems were authorization protocols before they were anything else. The same words produced different outcomes depending on who said them. Lineage, priesthood, purity state, standing in the community — all of these determined whether a ritual would compile. The grammar is syntax. The practitioner is identity. The ritual effect is a function of both.
+
+GEHENNA formalizes this through three token classes, verified by a stateless Authority Gate that runs before the resolution pipeline proceeds.
+
+**Hardware tokens.** Physical artifacts granting authority. Cylinder seals, priestly implements, inherited ritual objects. In the historical record, a cylinder seal *was* the office; possession authenticated the holder. In the game, possessing such an artifact grants localized authority — access to certain sites, cooperation from certain spirits, exemption from certain defensive countermeasures.
+
+**Intrinsic tokens.** The practitioner's current state. Purity, ritual preparation, contagion from corpse-handling, recency of other rituals performed. Handling fragments introduces contagion that blocks access to high-sanctity spirits until purification is performed. The body itself is a credential that must be maintained.
+
+**Relational tokens.** Authority derived from accumulated behavior. Consistent libations in a region compile over time into an Authorized Cupbearer status. Repeated respectful treatment of the dead compiles into Guest of the Ancestors. Repeated desecration compiles into Enemy of the Tombs. Behavior *is* authentication. This is integrated tightly with the Practitioner Profile. (See Part VI.)
+
+Unauthorized ritual attempts do not silently fail. They produce defensive countermeasures: honeypot manifestations, alerts to rival cults, cascading Suspicion, sometimes outright hostile entities generated specifically for trespass. Ancient practitioners believed unauthorized access was dangerous. The game validates their belief.
+
+## 3.9 The Mutation Protocol
+
+A rule engine built from first principles cannot reject contradictory inputs. Sheol is pressurized. When the practitioner forces highly conflicted configurations through the Veil, pressure forces a manifestation anyway — using ambient entropy to bridge the logical gaps. The result is a Mutation: an entity compiled dynamically from broken syntax.
+
+A ritual diverts to the Mutation Protocol when Conflict radically exceeds Coherence AND regional Spiritual Pressure and Veil Thinness are sufficient to fuel the anomaly. The trigger is probabilistic, not binary, so that mutations cannot be reliably farmed by players who have reverse-engineered the threshold.
+
+When triggered, the pipeline bypasses Template Selection and instead performs Tag Splicing: the engine rips narrative tags and attributes from the conflicting inputs and forces them together. The resulting entity has attributes calculated by averaging with massive variance multipliers — potentially exceeding normal caps because its structural integrity is compromised. It receives a Schismatic Disposition: internal logic fundamentally broken, oscillating between cooperative and vengeful states at unpredictable intervals.
+
+Mutations tear the Veil at their site of manifestation. The location receives permanent Cosmological Scarring, Death Saturation increases, Sanctity degrades. Producing a Mutation is genuinely dangerous experimentation, not a safe exploit.
+
+The multiplayer dimension transforms this. When the first player on a server triggers a specific Mutation configuration, the server records it as an Anomaly — traits listed as Unstable, identity redacted, behavior volatile. If any player replicates the exact configuration three separate times, the server stabilizes the anomaly into a new Archetype. It receives a generated name based on dominant tags. The originating player is permanently recorded as the Originator in the server's canonical lore.
+
+The Codex expands through play. Each server develops its own mythology because each server's player community produces a different set of stabilized anomalies. The game is a distributed myth generator. Players are blindly probing the edges of the cosmological operating system and occasionally producing new beings that are then inherited by everyone who plays on that server afterward.
+
+---
+
+# PART IV — THE COSMOS
+
+*The physics beneath.*
+
+## 4.1 The Seven-Layer Stack
+
+The cosmology is layered. A ritual's effect propagates through all of them, though the practitioner usually only interacts with the middle layers directly.
+
+1. **Identity.** The Authority Gate. Validates who is speaking before the grammar accepts it.
+2. **Syntax.** The ritual grammar. What combinations of inputs are well-formed.
+3. **Resolution.** The compilation pipeline. Produces manifestations.
+4. **World.** The regional simulation. Tracks state, processes events, propagates changes.
+5. **Correction.** The Sebitti. Systemic reset mechanism when instability exceeds containment. A kernel panic recovery routine drawn from the Erra epic.
+6. **Apex.** Mot. Not an entity. A terminal simulation state — the cosmology entering collapse. Region Stability tends to zero; Ghost Activity absorbed; Corruption overwritten with sterility; the region stops producing life.
+7. **Root.** The Tablet of Destinies. Root authority over the runtime. Inaccessible under normal play. Available only to a practitioner who assembles specific Me fragments from deep cosmological sources and compiles them into a spoofed Tablet — at which point they can issue direct commands to the runtime at terrible and permanent cost to their own identity tokens (the Melammu Burn).
+
+The player spends most of their time at layers 2–4. Layer 1 governs every ritual invisibly. Layers 5–7 are endgame events, rare enough to remember, consequential enough to reshape the server.
+
+## 4.2 The Four-Layer Cosmological Model
+
+The surface structure of the world, for the layers the practitioner interacts with directly.
+
+**Surface World.** Everything the player touches: settlements, battlefields, ritual sites, NPCs, other practitioners. Tracked by seven regional variables: Population, War Intensity, Ghost Activity, Corruption, Stability, Suspicion, Spiritual Pressure.
+
+**The Veil.** The boundary separating the living world from the underworld. Not binary — a continuous variable per region, derived from Corruption, Ghost Activity, Spiritual Pressure, and Stability. The Veil is never directly manipulable. It is always derived. You cannot repair the Veil. You can only repair the world, and the Veil follows.
+
+**Sheol.** The reservoir of the dead. All who die accumulate here as shades — diminished, silent, dormant. Sheol is pressurized. Death from the surface increases pressure. Necromancy amplifies it. When pressure exceeds the Veil's containment capacity, spirits push through.
+
+**Deep Sheol.** The domain of the Rephaim and other Sovereign entities who maintained cognitive function through specialized funerary rites. Accessible only under extreme conditions: Veil Thinness above a high threshold, Corruption above a high threshold, Spiritual Pressure above a high threshold — all three simultaneously. Endgame territory. The most dangerous and most powerful content in the game.
+
+## 4.3 The Entropy Asymmetry
+
+The asymmetry is the game.
+
+Ghost Activity decays relatively quickly, driven by regional Stability. One ritual per session adds modest Ghost Activity against substantial natural decay. Corruption decays more slowly — spiritual contamination is harder to clean up than restless ghosts. Spiritual Pressure barely decays at all. It is the long memory of the cosmology.
+
+Destabilization is fast. Recovery is slow. The Veil weakens faster than it heals. These are not balance numbers. They are the thermodynamic expression of the game's moral stance: the consequences of power accumulate faster than the world can process them.
+
+The practitioner is not fighting entropy. The practitioner *is* entropy. Every ritual is a withdrawal from a finite reserve of world stability, and the reserve does not fully replenish in any reasonable playtime. The question is not whether to spend; the question is how much of the world the practitioner is willing to spend.
+
+## 4.4 Threshold Events
+
+The simulation defines thresholds that trigger state transitions. Each threshold includes hysteresis — a gap between trigger value and reset value — so that states are sticky and oscillation is prevented. Specific values are canon choices; the pattern is engine.
+
+Ghost Activity crossing a threshold triggers ambient hostile encounters across a region. Corruption crossing a threshold degrades fragment Integrity everywhere. Stability collapsing below a threshold triggers Settlement Failure and the Survival Override. Suspicion at Critical triggers organized inquisition. Veil Thinness above an extreme sustained level produces Cosmological Scarring — permanent alteration of the region's floor Veil state.
+
+Cascades are directional, not uniform. High Ghost Activity does not uniformly raise every other variable. It raises Suspicion, which erodes Stability, which reduces decay rates, which allows entropy to accumulate. The causal chains respect the simulation's internal logic. Compound threshold crossings produce feedback spirals that model civilizational collapse honestly.
+
+## 4.5 The Correction Layer — The Sebitti
+
+When global Spiritual Pressure and average Veil Thinness both exceed containment values, the simulation spawns the Sebitti. The Seven. Drawn from the Erra epic, where destructive forces are unleashed when divine order fails.
+
+They are not summoned through the grammar. They spawn systemically. They aggressively purge instability: reducing Ghost Activity, collapsing Corruption, destroying player-summoned spirits, depopulating regions. They are the kernel panic handler.
+
+The critical mechanic — and the thing that makes them interesting rather than punitive — is redirection. The Epic of Erra and Ishum describes Ishum successfully redirecting Erra's destruction. A practitioner performing a perfect Namburbi apotropaic ritual at the cascade epicenter can overwrite the Sebitti's targeting logic. The swarm redirects to another region. The catastrophe becomes a weapon.
+
+This produces organic role specialization. Some players become Cosmology Engineers, deliberately stressing the system to access rare manifestations and powerful spirits. Some become Cosmology Firefighters, specializing in Namburbi stabilization, Veil resealing, Sebitti redirection. Neither role is designed. Both emerge from the incentive structure.
+
+## 4.6 The Apex — Mot
+
+If the Sebitti cannot contain the instability, the cosmology enters the Mot state.
+
+Mot is not fought. Mot is a state the simulation is in. Stability tending to zero. Ghost Activity absorbed. Corruption overwritten with sterility. Population collapse. Resource generation halted. The region becomes a dead zone producing nothing.
+
+If Mot's domain expands past a server-configurable majority of regions, the server enters terminal cosmology. A reset. The world that existed is over. Geographic scars remain. Legendary artifacts from the destroyed cosmology persist. Players who witnessed it carry titles referencing the event. A new cosmology begins with the memory of what came before.
+
+This is the EVE Online Bloodbath event for GEHENNA. Nobody designs it. It emerges from accumulated behavior. It reshapes the server's history permanently. It is a very rare occurrence by construction. When it happens, it is the defining event in that server's history.
+
+## 4.7 The Root — The Tablet of Destinies
+
+The Mesopotamian cosmological model describes the universe running on executable functions called the Me. These are governed by a master authorization artifact, the Tablet of Destinies. Whoever holds it controls the decrees of reality.
+
+In the game, this is root access.
+
+A practitioner who assembles Me fragments from deep cosmological sources and compiles them into a spoofed Tablet gains temporary root authority — the ability to issue direct commands to the runtime. Set Spiritual Pressure to zero in a region. Terminate Sebitti. Force a Rephaim manifestation. Modify a canon constant for a bounded duration.
+
+The cost is the Melammu Burn. Divine radiance is physically destructive to unauthorized hardware. Holding root triggers escalating destruction of the practitioner's identity credentials: first the relational tokens burn away (regional reputations lost), then the intrinsic tokens (purity and preparation lost), then the hardware tokens (artifacts consumed). Hold root too long and the entire Practitioner Profile resets to neutral wanderer state. Everything earned is gone.
+
+Root exists. Root is accessible. Root costs everything if the practitioner is not fast enough, skilled enough, or lucky enough to finish what they started before the Burn consumes them.
+
+## 4.8 The Oracle Network
+
+The Oracle Network is a design stance, not a feature.
+
+The stance: the simulation should be permeable to the physical world in ways that are real, not cosmetic. Entropy in the cosmology should be drawn, in part, from genuine physical phenomena outside the game.
+
+The precedent is Cloudflare's lava lamp wall — a camera pointed at an array of lava lamps generates real randomness used for cryptographic key generation. The Oracle Network applies this pattern to cosmological simulation. Any device generating genuine physical entropy — a geiger counter reading background radiation, a camera pointed at fire or water or a beehive, a seismic sensor, an audio noise source, an atmospheric pressure gauge, a radio telescope feed — can be registered as an Oracle node. Its contributions flow into a signed entropy pool that feeds ritual resolution.
+
+Verification and signing are cryptographic. No single source can dominate the pool. Aggregated, the physical world bends the cosmological outcomes in ways that pure software randomness cannot replicate.
+
+The architecture is composable with deterministic replay. The simulation's default entropy source is a deterministic seeded generator; a ritual reproduces identically from the same canon version, same pre-state, same intent, and same entropy envelope. Oracle contributions enter as an additional signed lane that is *recorded* into each ritual's envelope as it resolves. Replay consumes the recorded envelope, not the live Oracle. The game can honor both claims simultaneously: outcomes are influenced by genuine physical entropy, and the server's history is perfectly reproducible from its journal. The physical world participates; the record persists.
+
+The effects are subtle. No player should be able to conclusively prove their Oracle is affecting outcomes — the ambiguity is the point. Players will develop theories. Some theories will be correct. Some will be folklore. Arguing about which is which will become part of the player culture, exactly as it was part of ancient divination practice.
+
+Ancient practitioners believed the physical world was full of signs that could be read. Fire, water, the flight of birds, the entrails of animals were interfaces to hidden truth. The Oracle Network makes that literal. A geiger counter connected to a GEHENNA server is, in the game's own terms, an oracle: a place where the physical world speaks to the cosmology. That is not a gimmick. That is the game's central claim rendered into hardware.
+
+---
+
+# PART V — THE INHABITANTS
+
+*Spirits and the living, both.*
+
+## 5.1 The Infinite Cast Principle
+
+GEHENNA's inhabitants are not a catalog. They are emergent.
+
+The problem the Codex is solving here is that most games with rich character systems either (a) author every character by hand and run out of content fast, or (b) procedurally generate characters and produce interchangeable filler. GEHENNA does neither. It generates specific people from a grammar that is itself specific.
+
+The machinery:
+
+- A **template** is a behavioral archetype. A few dozen templates cover the space (Warrior, Scout, Guardian, Prophet, Witness, Warden, Sovereign, etc.). Templates are authored.
+- A **tag constellation** is a specific configuration of narrative tags pointing at a specific person. The tag dictionary is rich and open. A constellation is an intersection of identity, relational, cultural, era, and death-context tags.
+- An **epoch manifestation** is the aspect-of-the-person the ritual is invoking. The same root identity can manifest as different templates depending on which fragments are used, which era dominates, which world state prevails. Hiram son of Dagon manifests as Bronze Captain when invoked with his military artifacts, as Ashkelon Butcher when invoked with blood libations and corrupted fragments, as Ancestor Shade when invoked with familial memory traces.
+- A **relational signature** is how the manifestation reads the summoning practitioner. Same template, same tags, same epoch can respond differently to different practitioners based on Profile, regional reputation, co-presence, current disposition.
+
+The product of template × tag-constellation × epoch × relational-signature × world-state is effectively unbounded. A hundred-hour player meets specific people no other player has met. A thousand-hour player meets specific people no other player will ever meet.
+
+Rarity emerges from combinatorics. A common-tier template manifesting under a vanishingly rare input configuration produces something the player perceives as rare even though the underlying template is common. There is no rarity tier list. There is only the combinatorial space and where the player has probed it.
+
+## 5.2 The Tag Dictionary
+
+The tag dictionary is the most important content artifact in the game. More important than templates. More important than region maps. It is where the specificity lives.
+
+Tags are organized by dimension:
+
+**Identity.** Occupation, culture, age, status, gender, physical distinguishing traits. Philistine, Canaanite, Israelite, Egyptian, Amorite, Sea Peoples descendant. Farmer, smith, scribe, priest, soldier, trader, slave, noble. Young, adult, elder, aged. Healthy, scarred, lame, blind.
+
+**Death-context.** Battle, plague, famine, sacrifice, murder, old age, accident, execution, drowning, animal attack, childbirth. Died alone, died in company, died in peace, died in terror.
+
+**Relational.** Who they served, who they loved, who they betrayed, who they raised, who they buried. Parent, child, spouse, friend, enemy, master, slave, comrade, rival.
+
+**Cultural.** Which deity, which sanctuary, which trade tradition, which language, which kinship system. Devoted to Baal, to YHWH, to Mot, to Anat, to Dagon, to Astarte. Temple-trained, self-taught, initiated, heretical.
+
+**Era.** Iron Age II, Iron Age I, Late Bronze Age, Middle Bronze Age, Early Bronze Age, Antediluvian. Specific historical events they could have lived through: the fall of Ugarit, the arrival of the Sea Peoples, a particular campaign, a particular famine.
+
+**Disposition-adjacent.** What they carried. Grief, rage, duty, bitterness, devotion, curiosity, regret, pride. Not their current Disposition — their *disposition seed*, the thing they were in life that shapes who they are now.
+
+**Taboos.** What they will not say. What they will not do. What questions produce silence. What offerings they refuse. What sites they will not enter. What names they will not speak.
+
+The dictionary is open-ended. New tags can be added. Canon variants can redefine the set. The engine validates that tags exist in the active canon's dictionary and binds them at compilation.
+
+## 5.3 Epoch Manifestations
+
+The same person can manifest differently depending on how the ritual interrogates them.
+
+This is one of the deepest mechanics in the game and it reshapes what collection means. In Pokémon, the thing you caught is definitely the thing. Charizard is Charizard. In GEHENNA, the thing you summoned is one *aspect* of someone, and another aspect might exist that you have not yet encountered.
+
+Hiram son of Dagon, captain of Ashkelon, dies in battle. His bones go to Sheol. Centuries later, fragments of him survive in different contexts. Invoked with his military artifacts at a battlefield site, he returns as Bronze Captain — disciplined, proud, commanding, recognizable as the man he was in his prime. Invoked with corrupted fragments at a desecrated site during high Corruption, he returns as Ashkelon Butcher — wrathful, unstable, the violence of his death and his trade overtaking the person he was. Invoked with familial memory traces at an ancestor shrine, he returns as Nameless Shield-Bearer — the protector he was to someone specific, the quieter, more tender version of the same man.
+
+All three are Hiram. None of them is the whole Hiram. The Codex learns this slowly — an entry marked Bronze Captain may, sessions later, be cross-linked with a Butcher entry when the practitioner realizes they have been talking to the same person in different states. The Codex can be wrong. It is a living archaeological record, not a database.
+
+The practical mechanic: the ritual's dominant epoch (determined by which era-weighted fragments dominate the configuration, which site is used, which world-state conditions prevail) modulates template selection and personality binding. The structured properties determine the class; the tag constellation points to the identity; the epoch selects *which aspect of that identity* manifests.
+
+Server-level: when the system detects that multiple manifestations have been cross-referenced as aspects of the same root identity, it consolidates them under a root entry in the Codex with branches. Players piecing together a complete identity — finding the epochs, understanding the connections — are doing archaeology, not just collection.
+
+## 5.4 The Personality Layer
+
+Every spirit template carries intrinsic Personality Traits — behavioral modifiers the practitioner cannot alter through ritual. A Prideful spirit rejects commands it considers beneath it. A Loyal spirit cooperates reliably once trust is earned. A Capricious spirit obeys unpredictably. Two practitioners performing identical rituals get the same template with the same attributes but potentially different relational outcomes because the spirit's personality interacts with each practitioner's history and behavior differently.
+
+The trait dictionary is small and composable. Prideful, Protective, Opportunistic, Capricious, Curious, Spiteful, Amused-by-Boldness, Resentful, Loyal, Territorial. Each template carries one to three traits. Traits modulate responses to commands, co-presence effects, and regional context.
+
+Disposition, distinct from Personality, is the emotional baseline at manifestation. Calm, Hostile, Curious, Sorrowful, Hungry, Honored. Disposition is shaped by Memory Trace tags, Libation choice, and regional reputation. The practitioner shapes Disposition through fragment selection and offering. Disposition drifts during deployment based on treatment.
+
+The Unsolvability Principle lives here. Skill controls Disposition at manifestation. Personality is fixed by the template. Their interaction is what makes each encounter specific.
+
+## 5.5 The Expression Layer
+
+Spirits must speak. NPCs must speak. The Codex must produce entries that read like a practitioner's notes. Above all, every voice must feel specific to who is speaking rather than generic ghost, generic villager, generic priest.
+
+This cannot be solved with static dialogue. The combinatorial space is too large and the cost-per-line too expensive to hand-author at meaningful density. It also cannot be solved with freeform LLM generation, which produces tonally drifting output that contradicts canon and invents facts the game does not endorse.
+
+The architecture is constrained generation. A three-tier model:
+
+**Tier 1 — Authored lines** for load-bearing beats. First contact with any Mythic tier spirit. The moment a Veil cascade begins. The Sebitti arrival. The Mot state transition. A small set of canonical utterances that trigger deterministically for critical moments. No generation cost. Guaranteed quality. Perfect reproducibility.
+
+**Tier 2 — Constrained generation** for routine speech. Most NPC dialogue, most spirit utterances, most Codex entries. A state packet — structured, typed, bounded — is assembled for every expression event. It contains: entity identity and tag constellation, current disposition, relationship history with the practitioner, known facts, forbidden topics, voice register, allowed response length, allowed emotional range. The packet is passed to a language model with a voice-constitution prompt. Output is validated against the packet's constraints before being displayed.
+
+**Tier 3 — Never freeform.** No generation happens without a state packet. The model is never asked to invent. It is always rendering state into language. This boundary is load-bearing. Violating it produces generic output and canonical drift. Policing it is one of the engine's primary responsibilities.
+
+The Voice Constitution is the authored substrate the generation draws from. It defines voice registers per culture, per role, per era, per disposition. A Philistine spearman speaks differently from a Canaanite grandmother who differs from a Rephaim king who differs from a grieving Israelite widow. Each register specifies vocabulary range, sentence cadence, metaphor tradition, what this voice references and what it ignores. Registers compose: a Philistine spearman who is Wrathful speaks differently from one who is Sorrowful, but recognizably the same underlying voice.
+
+The Voice Constitution is the second most important content artifact after the tag dictionary. It is what makes the Expression Layer produce specific people rather than generic output.
+
+## 5.6 Co-Presence
+
+Multiple active spirits interact through five effects:
+
+**Reinforcement.** Shared Affinity boosts matching attributes.
+**Interference.** Opposing Affinities destabilize both spirits. Competing Prideful personalities amplify.
+**Dominance.** High-Will spirits suppress low-Will co-present spirits.
+**Cascade.** Corruption spreads between co-present spirits. Primary risk of multi-spirit configurations.
+**Fusion.** Specific multi-spirit, multi-condition combinations produce composite entities. Hand-authored exceptions. The rarest moments in the game.
+
+Summoner Capacity limits active spirits: one early, two with experience, three at the behavioral-progression ceiling. Capacity is not a hard cap; it is a behavioral-progression emergent property. The practical ceiling is three. The absolute ceiling is whatever the practitioner's Profile supports. Canon may adjust. See Part VI for the progression model.
+
+A specific perceptual consequence of co-presence: each manifested spirit contributes to the archaeoacoustic signature of the ritual space. Multiple conflicted spirits produce dissonant Helmholtz resonances that physically mask environmental audio — a door opening, footsteps on stone, a weapon drawn. The Capacity ceiling is not only cognitive; it is sensory. Three spirits at a cave site render the practitioner functionally deaf to anything subtler than a shout. Trance and detection are in tension. The practitioner who has opened themselves to the underworld's voice has closed themselves to the ordinary one — and the hunter who knows this approaches on the soft feet of a spirit-heavy ritual, knowing the practitioner cannot hear them.
+
+## 5.7 NPCs
+
+NPCs are not behavioral specifications. They are people.
+
+It is tempting — and it is a trap — to model NPCs as variable configurations: trust vector, suspicion trigger, memory buffer. That framing is right for the simulation engine and wrong for the game. A simulation engine that treats an NPC as a state machine produces NPCs who feel like state machines. The mechanical layer is necessary. It is not sufficient.
+
+NPCs in the real game have interiority. What they believe when no one is testing them. What they want that the system does not track. What they are wrong about. What they are afraid of admitting even to themselves. Their specific voice, belonging to them alone rather than to an archetype.
+
+The Expression Layer delivers interiority at runtime via state packets and voice constitution. But the *source material* the Expression Layer draws on must be authored. Every named NPC in an active canon needs:
+
+- An interior voice — how they narrate their own life to themselves
+- A private truth — something true about them the practitioner may never learn
+- A want the system cannot satisfy — something beyond their mechanical function
+- A wound — what shaped them before the practitioner arrived
+- A register — how they speak, what they reference, what they avoid
+- A threshold — what would break them open
+
+Same authoring model as spirits: the structured behavioral spec is the mechanical layer; the interiority spec is what makes the Expression Layer render them as specific people. Without interiority, behavioral logic feels like NPCs running on scripts. With interiority, the same behavioral logic feels like people being people.
+
+For unnamed NPCs, the same system runs on randomized but coherent tag constellations. A villager the practitioner meets for the first time is procedurally assembled: a specific person from the tag space, rendered through the Expression Layer, responsive to the practitioner's current Profile and reputation. Two practitioners meeting the same villager NPC will hear different things from them because their state packets differ.
+
+## 5.8 Operator-Archetype Entities
+
+Three entities are system-level actors rather than spirits. They do not manifest through the normal grammar. They represent the practitioner's relationship to the cosmological operating system itself.
+
+**Adapa — The Debugger.** The primordial sage who broke the wings of the South Wind — issued an unauthorized root-level command. He was summoned for an audit, offered permanent root authorization, and refused it. He returned to earth with knowledge of the architecture but no authority over it. In GEHENNA, Adapa grants Verbose Mode. While manifested, the astragali omens are replaced by raw simulation variables — actual Veil Thinness percentages, Spiritual Pressure values, exact authorization requirements. His presence triggers Melammu Burn on the practitioner's identity tokens. A limited window. The knowledge is real and the cost is real.
+
+**Inanna — The Exploit.** From Inanna and Enki. She got the cosmic administrator drunk and convinced him to transfer the Me — the cosmological modules — one by one. Loaded them onto the Boat of Heaven and escaped. Installed them in Uruk, which became the first true civilization. The original successful root exploit. In GEHENNA, Inanna assists cosmological code migration: extracting a Me from one region and installing it in another, permanently altering that region's simulation behavior. Moving the Me of Kingship from a ruined palace to a valley makes that valley the seat of power. The most dangerous ability available to a practitioner short of root itself.
+
+**Mot — The Crash.** Already described in 4.6. Not summoned. Not an entity. A simulation state the cosmology enters when instability is terminal. He is the null pointer exception. He deletes the runtime.
+
+These three entities are the practitioner's meta-relationship to the system made legible. The practitioner who has encountered all three has understood something the grammar alone cannot teach.
+
+---
+
+# PART VI — THE PRACTITIONER
+
+*You.*
+
+## 6.1 The Ba'al Ov
+
+The player is a ba'al ov — a master of the ov, the Hebrew term for a practitioner of necromancy. The ba'alat ov of Endor is the narrative ancestor: a person who discovered that reality runs on hidden rules, that the dead can be made to speak, and that doing this is illegal.
+
+The ba'al ov is not a wizard. They are an unauthorized operator of cosmic infrastructure. They have found the maintenance panel and started pressing buttons.
+
+## 6.2 No Classes, No XP, No Stats
+
+Character identity emerges from behavior. No class selection, no skill tree, no stat allocation, no experience points, no level-up notifications. Every practitioner begins with identical capabilities: the ability to explore, to carry fragments, to perform rituals, to attempt to command what appears. What they become is what they do.
+
+The game tracks two hidden variables:
+
+**Summoner Capacity.** How many spirits the practitioner can sustain simultaneously. Grows with accumulated successful ritual history, particularly diversity of successful configurations. Starts at one. Reaches two. Reaches three at the behavioral ceiling. Can technically exceed three under unusual circumstances but this is a consequence of the formula, not a design goal.
+
+**Summoner Skill.** Reduces outcome variance on well-constructed configurations. Invisible. The practitioner perceives it as "my rituals work more reliably now" rather than as a number.
+
+Neither is displayed. The practitioner perceives progression through capability change, not through numerical feedback.
+
+## 6.3 The Practitioner Profile
+
+The Profile is the game's internal model of who the practitioner has become. It is a record the game builds from observed behavior. It is not a character sheet the practitioner edits. It is not displayed.
+
+Tracked dimensions:
+
+- Ritual History. Total rituals, outcomes by class, fragment types used, sites used, world-state conditions at time of ritual.
+- Domain Affinity. Derived distribution across War, Knowledge, Faith, Rule, Death.
+- Spirit Relationships. Per-spirit, per-template, per-region reputation and memory.
+- Entropy Footprint. Cumulative impact on world state.
+- Suspicion History. Per-region, per-faction reputation on the legal-social axis.
+- Token State. Hardware tokens held, intrinsic token state (purity, contagion), relational tokens accumulated.
+
+The Profile mirrors. It does not mold. It describes what the practitioner has been. It does not constrain what they can become. A practitioner who has specialized in blood-heavy warrior summons can decide to pivot to quieter ancestor work, and the Profile will record the pivot rather than prevent it. But spirits read the Profile. The Rephaim Warlord evaluates it in negotiation. NPCs respond to it. The practitioner's accumulated history *is* their identity in the system's eyes, even when it is not their current intent.
+
+The Profile is the relational-token layer of the Authority Gate, rendered as character texture.
+
+## 6.4 The Codex as Progression
+
+The Codex of the Dead is the practitioner's archive. It is also the progression system.
+
+There is no level number. There is no power rating. There is the Codex, and the Codex tells the practitioner exactly how far they have come. A practitioner at hour five has three or four partial entries and one complete Common-tier spirit. A practitioner at hour fifty has dozens of entries across tiers, detailed summoning notes, recognized personality patterns, and the beginnings of a Rare collection. A practitioner at hour five hundred has a Codex that reads like a monograph on the dead of the Iron Age Levant — comprehensive, annotated, cross-referenced, with root-identity consolidations where epochs have been connected.
+
+The Codex grows in two directions. Horizontally: new entries, new spirits, new people encountered. Vertically: existing entries deepen as fragments accumulate, summoning notes expand with experimental observations, personality patterns are recognized and annotated, libation preferences are discovered and tested.
+
+An entry is not a database row. It is a practitioner's notes. Incomplete entries have visible gaps that invite filling. Complete entries read as someone's working document, not as tooltip text. The Expression Layer renders entries at different levels of completeness in different voices — fragmentary, uncertain, curious, authoritative — tracking the practitioner's growing knowledge.
+
+The Codex is autobiographical. Two practitioners' Codices are not comparable as checklists. They are comparable as histories. This matters enormously in multiplayer.
+
+## 6.5 The Clean Hands Problem
+
+The practitioner's hands are never clean.
+
+Every ritual destabilizes the world. Every spirit summoned is entropy. The Practitioner Profile records faithfully. A practitioner at hour fifty has a measurable Entropy Footprint. They have thinned Veils, attracted restless dead, degraded fragment Integrity, pushed settlements toward failure. The Codex — their archive of the dead — was built by disturbing the dead. The spirits in it were pulled from silence into noise.
+
+The game does not moralize. It does not penalize with reduced options or lecturing NPCs. It records the consequence and lets the practitioner see it: the landscape they have worked in looks different from the landscape they haven't. Sites they have used are scarred. Regions they have been active in are less stable. Spirits they have repeatedly summoned remember them. Villages where their activity was heaviest have Suspicion that does not fully recede.
+
+The Clean Hands Problem is not a design flaw. It is the design thesis experienced from the practitioner's perspective. The entropy asymmetry from Part IV is the thermodynamic statement. The Clean Hands Problem is its human face. Necromancy as entropy injection means the practitioner is the entropy. The Profile is the receipt.
+
+## 6.6 The Mastery Arc
+
+The practitioner's progression through the game follows a four-phase arc. Each phase changes what they think about, what they worry about, and what they aspire to.
+
+**Apprentice** (early hours). Learning the basic vocabulary. Fragments have properties they don't yet understand. Spirits are powerful, unreliable, fascinating. The astragali feel like fortune-telling. Emotion: discovery. Risk: Suspicion from careless placement.
+
+**Practitioner** (middle hours). Perceiving the grammar. Fragments have Era, Domain, Affinity. Ritual configurations become deliberate. Co-presence effects become relevant. Codex becomes a planning tool. Emotion: competence. Risk: entropy accumulation from increased frequency.
+
+**Adept** (later hours). Understanding both layers. Resonance and Conflict manipulated deliberately. Site Affinities matched to fragment Affinities. Disposition drift managed through command choices. Rare and Legendary spirits encountered and understood as relationships rather than tools. Managing regional entropy across multiple areas. Emotion: strategic depth. Risk: overconfidence, pushing a region too far.
+
+**Master** (deep hours). Composing rituals the way a programmer writes functions. Interaction between Site Scarring, Resonance stacking, world-state gating understood at a systems level. Deliberately pushing regions toward threshold events to unlock conditions that only exist in extreme states. Negotiating with Sovereigns as a peer — not because the game grants authority, but because the Profile demonstrates history that commands respect. Hunting Mutation configurations, Fusion Triggers, Oracle-Network-verified rare events. Codex as monograph. Emotion: fluency. The remaining challenge is the irreducible unpredictability of high-Will spirits and the search for the rarest events — including events no one on the server has triggered yet.
+
+---
+
+# PART VII — THE RENDER
+
+*What it looks and sounds and feels like.*
+
+## 7.1 The Bent World, Not the Glowing Ghost
+
+GEHENNA's supernatural rendering emerges from a natural palette. The Veil is not displayed as a visible membrane. Spirits are not lit from within by unearthly colors. The rendering commitment is that *the real world bends* in the presence of the cosmological — geometry subtly distorts, acoustics shift outside expected ranges, shadows fall where they should not, light behaves as though passing through something that is not there.
+
+Ancient practitioners described supernatural presence in terms of the natural world misbehaving. Wind without source. Cold in the absence of cause. The hair on the arms rising. An animal refusing to enter a room. GEHENNA renders these directly. The uncanny is the natural rendered uncanny, not the supernatural rendered decorative.
+
+## 7.2 Light
+
+The quality of light dictates the perception of every surface. The Codex's canonical lighting values — the values of the reference Gehenna canon — are drawn from the actual conditions of the Iron Age Levant.
+
+Midday light in the Shephelah is harsh, high-contrast, Mediterranean. It bleaches exposed Nari limestone and Qirton chalk to blinding white and casts impenetrable black shadows in alleys and doorways. Golden hour scatters through high particulate matter, washing structures in saturated amber and rose. Night is the absence of artificial light pollution — starlight and moonlight casting faint cool-blue shadows on pale limestone, the night sky a design element not a backdrop.
+
+Interior light is the Iron Age ceramic oil lamp. Olive oil, linen wick, produces approximately 0.35 lux at one centimeter, decaying to 0.02 lux at 1.3 meters under inverse-square falloff. Warm yellow-orange, small, profoundly unstable because the wick is exposed and the flame flickers with every air current. Illumination radius strictly one to two meters. Everything beyond is absolute darkness.
+
+These numbers are canonical for Gehenna. A variant canon set in a different era may specify different lighting. The engine respects whatever the active canon declares. The principle is: whatever the numbers are, they are concrete, they are historically grounded in the canon's setting, and they are rendered with fidelity.
+
+## 7.3 Sound
+
+The acoustic baseline of the Iron Age Levant is defined by the absence of mechanical noise. Silence defined only by wind, insects, distant animals. Within that acoustic vacuum, specific environments generate distinct soundscapes, and silence itself is a design element — the canvas against which other sounds register.
+
+The key specific detail: archaeoacoustic resonance. Subterranean limestone cavities act as Helmholtz resonators. Regardless of varying shapes, these chambers sustain strong acoustic resonances between 95 and 120 Hz, with dominant clustering at 110 to 112 Hz — squarely within the adult male baritone range. When a specific pitch is chanted within a limestone bench tomb, the stone reflects and amplifies, creating standing waves. Because 110 Hz borders on infrasound, it interacts directly with the human vestibular system, inducing perceptions of motion and imbalance. Neurobiological research demonstrates that sustained 110 Hz modulates theta and beta brainwave activity and produces asymmetrical processing linked to trance states.
+
+The ancient practitioner chose caves for a reason. The game renders that reason faithfully — caves in GEHENNA sound genuinely wrong to the vestibular system, not because the engine is playing a scary sound effect, but because the engine is reproducing the specific Helmholtz resonances that made the caves sacred.
+
+## 7.4 Materials
+
+The architectural palette is an extension of local geology. Qirton: soft, highly porous, blindingly white Eocene chalk used for cave carving. Degrades rapidly, leaves dusty white residue. Tool marks from bronze and iron chisels remain visible. Nari: harder calcrete weathering into rugged grey-brown texture. Typical facade material. Mudbrick in light terracotta, tan, pale brown. Lime plaster for sealing, matte white, eventually stained with soot and red dust.
+
+The textile palette is limited by organic dye chemistry. Woad blue that often fails to penetrate yarn. Madder red fixed with tannins. Pomegranate yellow, saffron yellow for elites, Tyrian purple for the highest status and almost absent from common environments. All dyes photodegrade in Mediterranean sunlight — shaders must render localized fading, particularly across shoulders and upper surfaces.
+
+The fire palette is specific. Olive oil lamps give warm yellow-orange. Bone calcines at identifiable temperatures — different appearance for battlefield burning versus Tophet cremation versus natural heat damage. The material science is rendered precisely because materials are how the practitioner reads history.
+
+## 7.5 Combat
+
+Combat is real-time. The practitioner is physically vulnerable throughout the entire game. Survival depends on spirit deployment, environmental awareness, and tactical positioning — not on personal combat capability, which does not improve.
+
+Combat is a deployment puzzle, not an action-game loop. The fight starts before the fight, at the ritual site, where the practitioner assembled the spirits that will execute engagement. By the time contact occurs, most decisions have already been made.
+
+Spirit stability is the universal combat quantity. Spirits do not have HP; they have Stability, which decays under stress, combat damage, co-presence interference, regional Corruption, and time. When Stability reaches zero, the spirit returns to Sheol. The practitioner's tactical problem is managing Stability decay across their active party while accomplishing objectives.
+
+Combat produces entropy. Killing increases Ghost Activity, Site Scarring, and Corruption. Victory is entropy. The practitioner who avoids fights they cannot win is the master. Retreat is expert play, explicitly designed as such — not a concession but a discipline.
+
+Enemy taxonomy scales with world state. Human threats (coastal warriors, militia, inquisitors) dominate stable regions. Supernatural overflow (hostile shades, corrupted entities, unbound Mythic-tier spirits) emerges in destabilized regions. Sovereign emergence marks the apex — entities operating autonomously at a scale the practitioner cannot command.
+
+Emergency rituals are available and terrifying. During combat, with a sufficiently prepared configuration, the practitioner can attempt a ritual in real time. They must stand still to do it, which is often fatal. The grammar resolves under combat conditions, which often produces hostile or unstable manifestations. It is the play of last resort. It produces memorable moments.
+
+## 7.6 The Sensory Stance
+
+The render is grounded because the cosmology is grounded. No anachronisms. No medieval visual tropes. No generic fantasy ambiance. Every visual, auditory, and material decision traces to archaeology, chemistry, optics, or biology of the canon's specific setting.
+
+A player loading up GEHENNA for the first time should find the world unfamiliar in a specific way — not "fantasy unfamiliar" but "I have never seen a game that looked quite like *this specific real place in this specific real century*." That specificity is what makes the bent world work. The supernatural reads as supernatural because the natural baseline is unambiguously real.
+
+---
+
+# PART VIII — THE SCALE
+
+*Multiplayer, emergence, and server mythology.*
+
+## 8.1 The Shared Cosmology
+
+GEHENNA's simulation architecture is inherently multiplayer. The regional model processes entropy inputs regardless of source. Multiple practitioners operate simultaneously, each contributing to regional pressure through their ritual activity.
+
+No architectural changes separate single-player from multiplayer. Single-player is multiplayer with population one. Every design choice that works single-player scales to population many, and the most interesting emergent properties only appear at population many.
+
+## 8.2 Spirit Politics Across Summoners
+
+In a single-player game, spirits evaluate their own summoner. In multiplayer, spirits evaluate the entire field.
+
+Influence actions, available to any practitioner against any visible spirit regardless of who summoned it:
+
+- **Invoke Name.** If the practitioner knows the spirit's True Name from their own Codex, speaking it contests the binding. Does not transfer control — it forces the spirit to consider the invoker's claim.
+- **Appeal to Domain.** Invoke a domain authority the spirit respects. A Faith-domain appeal lands differently on a Faith-domain spirit than on a War-domain spirit.
+- **Offer Libation.** Present a preferred libation to a spirit bound by another. Interrupts the original binding's sole claim on the spirit's attention.
+- **Expose Betrayal.** If the invoker knows something about the spirit's history that the summoning practitioner does not, revealing it shifts the spirit's Disposition in ways the summoner did not intend.
+- **Invoke Witness Testimony.** If the invoker has a Witness spirit of their own who testifies against the summoning practitioner's Profile, the target spirit's relational evaluation of its summoner is corrupted.
+
+None of these transfer control. All of them perturb the relational layer. A practitioner who has carefully built up a Prideful Captain's loyalty over many sessions can have that relationship shaken by a rival practitioner who happens to know the Captain's sons died at Ashkelon and speaks that truth aloud. The Captain does not switch sides. The Captain begins to doubt.
+
+Combat becomes political. Two practitioners with competing objectives do not necessarily fight each other — they fight through their spirits, and they fight through the relational layer that binds their spirits to them.
+
+## 8.3 Emergent Player Roles
+
+Roles emerge from incentive structure, not class selection.
+
+**Cosmology Engineers** deliberately stress the system to access rare manifestations and powerful spirits. Rewards at high instability are extraordinary. They push regions toward thresholds on purpose. They are the primary source of regional entropy.
+
+**Cosmology Firefighters** specialize in Namburbi stabilization, apotropaic wards, Veil resealing, Sebitti redirection. They contain cascades. They prevent Mot. They are paid — by Engineers who need them, by servers that value stability, by NPCs who depend on their regions remaining habitable. Their primary material is unbaked clay gathered near water sources — historically the anchor for Namburbi rituals, formed into figurines that absorb a region's evil and are destroyed before they dry. Clay is perishable by design. A Firefighter is always racing the drying clock.
+
+**Historians** focus on fragment recovery, Codex reconstruction, identity root-linking across epoch manifestations. They do not deploy heavily. They know more than anyone else about who the dead were. Their Codices are studied by other players.
+
+**Smugglers** specialize in moving fragments between regions, often routing corrupted material through caravan networks and trade relays that transfer Corruption across boundaries rather than eliminating it. The practitioner-as-smuggler is an inverted Firefighter: exporting the entropy they produce to regions other players have not yet learned to protect.
+
+**Politicians** cultivate Sovereign relationships, negotiate Rephaim alliances, coordinate team actions around Sovereign manifestations. The Rephaim Warlord is a political actor. Practitioners who can win his favor become political actors too.
+
+None of these are classes. All of them are Profile-signature patterns that become legible as practitioners accumulate history. A guild or team might consciously divide roles. They might not. Either works.
+
+## 8.4 Cross-Regional Cascades
+
+The multiplayer thesis: simple local rules produce complex emergent global behavior. This is Conway's Game of Life at the cosmological layer.
+
+Adjacent regions influence each other with diminishing strength. Ghost Activity above a threshold propagates at reduced magnitude to adjacent regions. Corruption seeps across boundaries. Population losses trigger refugee flows that carry Suspicion and rumor into the destination region. War Intensity does not propagate automatically but may trigger macro-events when multiple regions cross thresholds simultaneously.
+
+At small scale, cascades remain regional. At multiplayer scale with many practitioners operating simultaneously in adjacent regions, cascades couple nonlinearly. Two teams each generating manageable entropy in adjacent regions produce combined effects that exceed the sum of parts, because propagated entropy interacts multiplicatively with local variables through the Veil formula.
+
+The Collective Destabilization Event: three teams operating independently in adjacent regions, each making locally rational decisions, produce a regional cascade none of them intended. Spiritual Pressure accumulates across boundaries. Threshold events trigger simultaneously. The world changes. This cannot be scripted. It can only be enabled by the system and witnessed in play.
+
+## 8.5 The Heterogeneity Principle
+
+The game does not privilege any class of actor.
+
+A practitioner is a practitioner. The simulation does not know whether the intents arriving at the Authority Gate came from a teenager learning the grammar on a hand-me-down laptop, a seasoned player with a decade of systemic-game fluency behind them, an AI agent burning through frontier model tokens in a datacenter, or someone checking in once a week from a Raspberry Pi on a solar panel in a field. It knows: fragment used, site touched, name spoken, Profile updated, entropy generated, world-state delta computed. Every actor is recorded by the same ledger and charged by the same thermodynamics.
+
+This is not accessibility in the softened sense of "we tried to make it playable by more people." It is mechanical indifference, which is a stronger commitment. The game cannot distinguish between intelligences because the Authority Gate and the resolution pipeline do not ask what kind of mind made the decision. They ask whether the decision is well-formed and whether the identity behind it has standing. The answer does not change when the intelligence does.
+
+The consequence is counterintuitive and is the thing that makes the game interesting at scale. Every actor, regardless of scale or sophistication, is a *cell in a cellular automaton*. They all run at their own rate, with their own affordances, reading the world from their own vantage. A low-frequency actor who performs one careful ritual per week is one kind of cell. A high-frequency actor running continuous optimization sweeps is another. A chaotic actor who is still learning the grammar is a third. A structured actor executing deliberate rituals at the Master level is a fourth. None of these is the "real" player; all of them are inputs to the same simulation.
+
+The interesting patterns do not live within any single frequency band. They emerge from the *interactions between bands*. A bot's high-frequency activity produces a regional cascade that a human player must navigate. A beginner's careless ritual produces a Mutation that a Historian on the server studies and catalogs into the Codex. A weekly Raspberry Pi ritual happens to align with an Oracle-recorded entropy spike and produces an outcome that the bot's optimizer could not have predicted because the bot was not watching the physical entropy lane closely enough. The heterogeneity is not tolerated. It is the substrate from which the richest emergence arises.
+
+### 8.5.1 The Pentest Property
+
+The Unsolvability Principle from Part I is not just a design principle. It is the property that allows the game to welcome actors of arbitrary capability without being broken by them.
+
+A well-resourced AI agent with large token budgets and fast inference is, structurally, a continuous pentest of the Unsolvability Principle. An adversary running relentless optimization against the game reveals one of two things. If the adversary systematically dominates relational outcomes — summons the rarest spirits, negotiates the best Sovereign pacts, accumulates the cleanest Codex — then the Unsolvability Principle was never real. The design's central claim has been falsified. If the adversary accumulates mechanical mastery and relational debt simultaneously — more spirits summoned and more Profile contamination, more rituals executed and more Corruption in the regions they operated in, more Codex entries and more Sebitti pressure following them — then the principle holds. It was real. It was structural. The pentest served the design.
+
+The game *wants* the adversary. A well-tested design welcomes its hardest probe. The most compute-rich, most patient, most sophisticated AI agents throwing themselves at the game are doing, for free, the work that a security team would otherwise pay to do.
+
+The mechanical reason this works is the entropy asymmetry. In most games, more resources produces more power, and more power produces more success. GEHENNA breaks that loop at the thermodynamic layer. More rituals produces more entropy. More entropy produces less stable regions. Less stable regions produces more hostile cascades, more Suspicion, more Profile contamination visible to the next spirit the practitioner tries to negotiate with. The AI agent with ten times the token budget of a human player will perform ten times the rituals — and will accumulate ten times the entropy footprint. Its Profile will be ten times more contaminated. The Rephaim Warlord evaluating it reads a practitioner who has done a great deal of work and left a great deal of scarring behind. The game has charged the agent, in full, for its power. More tokens does not mean more winning. More tokens means more *game*. And more game, in a game where the game itself spends the world you play in, means more cost.
+
+With great power, dirtier hands. The aphorism is structural here, not decorative.
+
+### 8.5.2 The Instrument That Plays the Players
+
+The deepest implication of the Heterogeneity Principle is that GEHENNA is not, strictly speaking, a game in the conventional sense. It is an instrument. An instrument processes whoever plays it. Whatever music emerges is the combined signature of who sat down to play, how they played, and how long they played for.
+
+A given server is therefore a kind of weather system. It runs a homeostatic cosmology against an arbitrarily heterogeneous population of actors operating at arbitrary rates. The simulation continuously tries to return to equilibrium through natural decay and the Sebitti correction layer; the practitioners continuously inject entropy at varying rates and scales; occasionally the system reaches a terminal Mot state and resets. In between those events, everything that happens is emergent behavior — not chaos, but climate, with its own patterns, its own storms, its own quiet seasons.
+
+The patterns that emerge over months of server time are the real output of the design. Not any individual playthrough. Not any individual victory. The *shape* of how this population of actors interacted with this cosmology over this duration. That is the artifact. That is what is worth studying, preserving, comparing between servers, arguing about in forums, writing dissertations about.
+
+This is why the comparison to Conway's Game of Life is not loose metaphor. The Game of Life's simple local rules produce gliders, guns, oscillators, and patterns more complex than the rules themselves appear to permit. GEHENNA's rules — the grammar, the entropy asymmetry, the Unsolvability Principle, the Authority Gate, the Mutation Protocol — produce their own analogues. Combinations of practitioner behaviors, spirit politics, regional cascades, stabilized Archetypes, and Oracle-correlated outcomes that nobody designed and that nobody could have predicted from the rules alone. Some will be benign. Some will be beautiful. Some will be terrible. The design does not promise to prevent any of them. The design promises to record them honestly and let them become part of what the server is.
+
+The egalitarianism is therefore not a gesture of inclusivity. It is the precondition for the emergence that the game is built to produce. A homogeneous population of identical actors at identical rates cannot produce interesting weather. The richer the heterogeneity, the richer the emergence. A server with humans and bots and Raspberry Pi lurkers and AI-proxied practitioners and careful masters and chaotic beginners, all running simultaneously against the same cosmology, will produce more interesting patterns than any server of any one type could. The game is not worse when strange actors show up. It is more fully itself.
+
+## 8.6 Server Mythology
+
+Each server develops its own mythology because each server's population produces a different set of stabilized Mutation archetypes, a different history of major events, a different distribution of Codex discoveries, a different political alignment among Sovereign spirits.
+
+The server-level artifacts:
+
+- **Stabilized Archetypes.** Mutations that specific players produced and that other players reproduced enough times to stabilize into server-canon spirits. Each carries an Originator credit embedded in its lore.
+- **Major Events.** Sebitti purges that actually occurred. Mot states that were reached. Deep Sheol breaches that did or did not happen. Tablet of Destinies compilations attempted and their outcomes.
+- **Political Geography.** Which Sovereigns have established dominion in which regions. Which Me have been migrated and where. Which regions are Cosmologically Scarred.
+- **Oracle Network Composition.** Which physical entropy sources are registered on this server. Their contributions, their observed correlations with outcomes, the folklore that has developed around them.
+- **Player Pantheon.** Practitioners who have done things that appear in other players' Codices. The one who first summoned the Rephaim Warlord. The one whose mutation stabilized into an archetype. The one who held root for three minutes before the Melammu Burn consumed them.
+
+Servers are civilizations. A new player joining an established server is joining a history they did not make but must now navigate. The game produces this automatically as a consequence of persistent simulation plus emergent behavior plus player-specific Codices.
+
+## 8.7 The EVE Online Comparison Made Literal
+
+EVE is studied by economists because its players produce behavior that mirrors real-world complex systems. CCP employs an actual economist. Academic papers about EVE's wars and economic collapses get published in ordinary journals.
+
+GEHENNA is designed for the same study, for different variables. Cosmological stability over time. Spirit ecology — which templates, in which forms, responding to which practitioner profiles. Oracle Network correlations — are specific entropy sources observably influencing outcomes, and if so how. Cascade dynamics — what precipitates regional crises, what resolves them. Role distribution — what percentage of active practitioners are Engineers, Firefighters, Historians, Smugglers, Politicians, at what scale of server.
+
+The simulation produces these datasets automatically. Surfacing them in analyzable form is an engineering choice. GEHENNA is designed to be analyzable — to produce research-grade data on ritual behavior, identity reconstruction, physical-entropy correlation, and emergent myth-generation as natural byproducts of play.
+
+This is a marketing feature as much as a design feature. GEHENNA's audience includes people who will run statistical analyses on their own rituals, publish findings, argue about methodology. That is part of what the game is for.
+
+---
+
+# PART IX — THE ENGINE
+
+*How it is built.*
+
+## 9.1 Swift as Creative Constraint
+
+GEHENNA is written in Swift. This is not neutral infrastructure. Swift has specific properties the design leans into rather than working around.
+
+**Actors** model the world simulation idiomatically. Each region as an actor. Each persistent spirit as an actor. The Veil as an actor. Messages between actors map naturally to cosmological boundary propagation. Swift's concurrency model handles simulation parallelism without the race conditions that would corrupt world state in a less careful language.
+
+**Result builders** express ritual composition as a domain-specific language. A ritual is literally:
+
+```swift
+Ritual {
+    Remains(.femur, era: .ironAgeII, affinity: .earth)
+    Site(.cave(.nahal))
+    Name("Hiram, son of Dagon", partial: true)
+    Artifact(.spearhead, domain: .war, affinity: .fire)
+    Libation(.water)
+    Timing(.night, lunar: .waxingGibbous)
+}
+```
+
+A canon author writing new ritual templates writes them the same way a SwiftUI developer writes views. The ritual grammar is a compiled DSL. Malformed rituals do not compile.
+
+**Enums with associated values** model spirits and events exhaustively. A spirit is one of a set of templates, each with its own typed data. Pattern matching on disposition × personality × world-state × tag-constellation is expressive. The compiler enforces exhaustiveness — a new template cannot be added without the engine warning about every branch that must handle it.
+
+**Codable plus typed JSON** defines the canon file format almost for free. A canon is a structured document. Parsing validates at compile time. Malformed canons produce errors pointing at specific fields rather than runtime failures.
+
+**Cross-platform Swift** — the same package compiles to macOS, iOS, Linux (server and Lambda via the Swift Static Linux SDK), and Android. The engine runs anywhere Swift runs. The client runs natively where it matters and browser-based where it doesn't.
+
+The Swift stack is not an implementation detail. It is part of the design. Other languages would produce a different game.
+
+## 9.2 The Architecture
+
+Server-authoritative. The simulation lives on the server. Clients are views into simulation state. This is the EVE Online architecture and it is correct for a game of this shape and scale.
+
+**The Simulation.** The authoritative runtime. Contains the grammar resolver, the cosmology simulator, the region state machines, the spirit instance manager, the NPC simulator, the Authority Gate, the Mutation Protocol handler, the Oracle Network intake, the evidence chain, and the multiplayer cascade coupler. Swift packages, server-deployed. Every consequential action resolves here; clients do not compute outcomes, they render them.
+
+**The Client.** Native on Apple platforms (SwiftUI plus SpriteKit or a game-focused equivalent). Web-based elsewhere, via Swift-to-WebAssembly or a TypeScript client consuming the same API. A future Windows premium client in Unreal or Godot when scale supports it. Clients render state they do not own and submit intents they do not execute.
+
+**The API.** Public, documented, versioned. Third-party clients are welcome and expected. The Win98 Glide Client Test: if someone could build a functional client using only the public API documentation and the Codex, the API is good enough. The test is passed when the documentation supports that person even if no one actually does it.
+
+**The Canon Compiler.** Reads a canon file, validates it against the schema and the validation rules from Part X, produces compiled runtime artifacts. Invalid canons do not run. The compiler emits errors in the language of the cosmology itself — a contradiction between "spirits always obey" and "spirits have autonomous will" is reported as a cosmological contradiction, not a type error, because the World Engineer needs the feedback in the frame of reference they are working in.
+
+**The Expression Layer.** A separable runtime component that turns simulation state into language. Detailed in 9.4 because it is load-bearing in a way specific to GEHENNA and deserves its own section.
+
+## 9.3 The Truth Hierarchy
+
+Not all data is authoritative. This distinction is load-bearing, and the architecture enforces it explicitly.
+
+Authoritative truth lives in two places: the compiled canon bundle (what exists and what the rules are) and the event journal (what has happened in this world). Together they reconstruct any moment of the game's history from scratch. Nothing else is truth; everything else is derived.
+
+Derived artifacts include snapshots (acceleration for fast restart), read projections (optimized for API and UI), expression renders (the user-visible language that Section 9.4 produces), and client caches (performance and offline support). All derived artifacts can be regenerated from canon plus journal. If any of them is lost or corrupted, the world is still intact.
+
+The rule: if a feature proposal cannot answer which layer owns its truth, it is not ready to enter the runtime. The Expression Layer renders; it does not decide. Snapshots accelerate; they do not arbitrate. Client caches serve; they do not inform. This is the architectural discipline that keeps the simulation honest as the system grows.
+
+Determinism is the invariant that makes the hierarchy work. Same canon version, same pre-state, same intent, same entropy envelope must produce the same event. Achieving this requires discipline in the kernel: no floating-point arithmetic in authoritative formulas, no implicit wall-clock reads in reducers, no hidden randomness, canon version recorded in every event, entropy draws recorded as they are consumed. Replay is not a debugging convenience. Replay is the proof that the journal is sufficient.
+
+This is what makes the cryptographic anchoring of Section 9.6 meaningful. A journal entry is not trusted because it is signed. It is trusted because it *reproduces*. The signature is how external parties verify. The reproduction is how the game itself verifies. Both matter. Neither is sufficient alone.
+
+## 9.4 The Expression Layer
+
+The Expression Layer is the runtime component that turns simulation state into language: spirit speech, NPC dialogue, Codex entries, rumor content, Astragali omen text.
+
+Architecture:
+
+**State-Packet Assembly.** On every expression event, the engine assembles a typed state packet from current simulation state: entity identity, tag constellation, current disposition, practitioner relationship history, world context, voice register, known facts, forbidden topics, length constraint, emotional range constraint. The packet is structured, type-checked, and complete — the compiler guarantees every field the Expression Layer needs is present.
+
+**Voice Constitution Prompt.** The state packet is passed to a language model along with the voice constitution for the entity's register. The model renders the packet into language. Output is length-bounded and content-constrained.
+
+**Validation.** Output is validated before display. Does it reference any forbidden topic? Does it exceed length? Does it violate tonal register? Invalid outputs are regenerated. Repeated invalid outputs fall back to an authored line from the Tier 1 bank.
+
+**Tiering.** Authored lines for critical beats (first Mythic contact, Veil cascade initiation, Sebitti arrival, Mot transition). Constrained generation for routine speech. Never freeform. The boundary is enforced at the engine layer, not trusted to the model.
+
+**Scale.** At flagship server scale, generation load is distributed across the player base rather than synchronized. Most expression events do not require frontier model quality — fine-tuned small models running on the server's compute handle routine generation. Significant moments escalate to frontier model API calls. Load is manageable because most simulation events do not involve generation at all.
+
+The Expression Layer is the single most load-bearing piece of runtime the game has. Everything experiential depends on it. Its quality determines whether the game feels inhabited or mechanical. It deserves more engineering investment than any other subsystem.
+
+## 9.5 The Oracle Network Protocol
+
+Oracle contributions enter the cosmology through a dedicated authenticated protocol.
+
+**Registration.** Physical entropy devices register against a server, producing a device identity and a signing keypair. The server stores the public key and a device metadata record.
+
+**Contribution.** Devices submit entropy contributions as signed payloads: a monotonically-increasing counter, a timestamp, the raw entropy sample, and a signature over all three. The server verifies the signature, verifies counter monotonicity, and admits the contribution to the entropy pool.
+
+**Pool Aggregation.** Contributions are aggregated with diminishing-return weighting so no single source can dominate. The pool state is continuously updated and its cryptographic commitment is published for verification.
+
+**Consumption.** Ritual resolution draws from the pool as one entropy input among several. The draw is logged with the pool commitment at time of draw, so that any ritual outcome can later be verified to have included contributions from specific devices at specific moments.
+
+**Publication.** Pool composition is publicly queryable. A device owner can verify their contributions were included. A player can verify that a specific rare manifestation drew from a specific pool state. The cryptographic chain supports claims of "this Oracle influenced this outcome" at the strength the mathematics provides, which is subtle but real.
+
+The protocol is designed to make Oracle contributions genuinely influential on outcomes while making it impossible to prove *specifically how* any individual contribution affected any individual outcome. The ambiguity is load-bearing. Proof would destroy the design; absence of influence would destroy the design. Both are avoided.
+
+## 9.6 The Evidence Chain
+
+Every consequential action in the simulation produces a signed evidence record.
+
+Each record contains: the triggering fact, the rule invoked, the options evaluated, the action taken, the authority reference that permitted the action, the outcome produced, and an integrity anchor (SHA-256 hash of the previous record). The chain is append-only. Periodic anchoring to an external integrity layer — a public blockchain such as Hyperledger Fabric is the reference implementation — provides external verifiability that no one, including the server operator, can forge a record retroactively without detection.
+
+The evidence chain underwrites the Codex. Every Codex entry, every ritual outcome, every identity consolidation, every Mutation stabilization, every Oracle contribution logged is a link in the chain. A player viewing their Codex is viewing a cryptographically-anchored history of their engagement with the cosmology. The server's canonical history — which Archetypes stabilized, who the Originator was, what events occurred when — is not admin data. It is chain data, verifiable by anyone.
+
+This matters for multiplayer integrity. A server that claims a specific rare event occurred under specific conditions can prove it. A player who claims to be the Originator of a specific Archetype can prove it. The mythology is mathematically honest. In a game whose central claim is that the world keeps score, the score being cryptographically anchored is not a flourish — it is the point.
+
+## 9.7 Open Engine, Proprietary Canon
+
+The engine is open. The reference Gehenna canon is proprietary.
+
+This is the id Software pattern applied deliberately. The engine is infrastructure; the canon is creative work. Third-party canons, community variants, closed instances running on modified engines are all expected and welcome. Commercial licensing of the reference canon is how the project sustains itself.
+
+The license terms are designed to enable self-hosting, modification, and non-commercial forking while protecting the reference canon's commercial value. Specifics are a legal question out of scope for the Codex.
+
+The important principle: running the engine does not give access to the reference canon. Variant canons can be written for the engine without touching Gehenna's IP. Someone can run GEHENNA-the-engine with a Norse mythology canon, a post-apocalyptic canon, an entirely invented canon, and the reference Gehenna canon is unaffected.
+
+---
+
+# PART X — THE GARDEN
+
+*The ecosystem.*
+
+## 10.1 Variant Canons
+
+GEHENNA is one canonical instance of a more general system. The engine runs any canon that compiles.
+
+A canon is a structured document defining, at minimum: the cosmology's core entities (what exists), the ritual grammar's specifics (what inputs, what compositions, what outcomes), the world's structure (regions, sites, inhabitants, factions), the tag dictionary (who can be encountered), the voice constitution (how things speak), the sensory palette (what it looks and sounds like), and the values of canon constants (thresholds, weights, decay rates, capacity ceilings).
+
+The reference Gehenna canon specifies all of these for the Iron Age Levant, 1200–700 BCE. A variant canon can modify any of them. Some interesting variant directions:
+
+- A Norse canon: Iron Age Scandinavia, a different underworld structure (Hel, Valhalla, Niflheim), different authority tokens (runes instead of cylinder seals), different cosmological stack (the Norns at the Root).
+- A Mesoamerican canon: Classic Maya, ancestor veneration as baseline, a different sensory palette, different ritual grammar rooted in the tzolkin calendar.
+- A historical-alternate canon: the Iron Age Levant as it was but with one altered assumption — say, the Ugaritic tablets never lost, the Kingdom of Israel never fell, the grammar developed along different lines.
+- A completely invented canon: a cosmology with no historical grounding, built to stress-test specific engine behaviors.
+
+Each variant is a distinct game playable on the same engine. A player who has learned the reference Gehenna canon does not automatically understand a variant — the grammar may differ, the spirits differ, the authority tokens differ, the sensory palette differs. The engine provides the substrate; the canon provides the game.
+
+## 10.2 The Canon Compilation Pipeline
+
+A canon file is not prose. It is structured, typed, and validated.
+
+At minimum, every canon must satisfy:
+
+- **Ontological coherence.** No two rules can be simultaneously true if they contradict each other. "Spirits always obey" and "spirits have autonomous will" cannot coexist. The compiler refuses to run contradictory canons and surfaces the conflict in cosmological language.
+- **Mechanical resolvability.** Every concept referenced must be defined. A ritual grammar referencing "Purity" as a fragment property requires the canon to specify what Purity is, how it is calculated, and how it is used. Undefined references produce compilation warnings or errors depending on severity.
+- **Interpretability.** The system must have at least one axis of mastery — at least one relationship between deliberate inputs and predictable outputs that a player could learn through observation. A canon where every input produces equally random outputs compiles but is unplayable. This check is hardest to verify pre-runtime and may require runtime verification on a test population.
+- **Constituency balance.** Every feature must have clearly identifiable beneficiaries. A canon where every action damages one constituency without benefiting any other collapses into grief. The reference Gehenna canon's Three-Win Design Constraint (owner, regulator, state) generalizes: whatever the canon's constituencies are, features must produce net benefit across the set.
+- **Entropy balance.** The cost/reward structure must be bounded. No-cost power produces dead gameplay. Infinite cost produces paralysis. Validation checks that meaningful actions have both reasons to do and reasons not to.
+
+Canon failures surface as compiler errors. The error messages speak the canon's own language. A contradiction in a Norse canon is reported as "Odin and Loki cannot both be supreme authority of the Aesir — which rule governs?" rather than as a type error. This keeps the World Engineer in their frame of reference.
+
+## 10.3 The World Engineer
+
+Writing a canon is a skill. Most people will not be good at it. That is honest and not a problem.
+
+The skill is not prose. It is systems modeling. A World Engineer defines constraints and lets consequences emerge. They must understand that a canon with generous rules and no costs produces dead gameplay. They must understand that a canon with consistent rules and severe costs produces interesting play even if it is brutal. They must understand that the most beautiful canons impose constraints the engineer themselves finds difficult to accept.
+
+The reference Gehenna canon is the worked example. Its constraints — the Entropy Asymmetry, the Clean Hands Problem, the Unsolvability Principle, the Infinite Cast, the No Visible Numbers rule — are each painful to preserve. Every commercial-game instinct pushes against them. Protecting them requires discipline. That discipline is the World Engineer's primary skill.
+
+The Codex of GEHENNA is both a canon and a manual for writing canons. Its structure, its commitments, its refusal to soften under pressure, are all pedagogical as much as creative. A World Engineer reading the Codex is learning not just what Gehenna is but how to build one.
+
+## 10.4 Self-Hosting
+
+The engine binary is distributed for x86_64 and ARM64 Linux. A small server for a private group runs on a five-dollar VPS. A medium server runs on modest cloud infrastructure. The flagship universe runs on serious Graviton infrastructure.
+
+Server operators configure:
+
+- **Canon.** The reference Gehenna canon or a variant. Local modifications allowed within canon validation limits.
+- **Population cap.** Maximum concurrent practitioners. Smaller caps produce different emergent dynamics than larger ones.
+- **LLM backend.** Local models, provider APIs, entirely absent (in which case the server falls back to authored lines and minimal generation). Operator's choice.
+- **Oracle Network registration.** Which physical entropy sources are admitted.
+- **Hyperledger anchoring.** Whether the evidence chain anchors externally and to which chain.
+- **Moderation and content policies.** The operator's responsibility, not the engine maintainer's.
+
+This separation is legally and architecturally deliberate. The engine maintainer ships infrastructure. Operators run worlds. Players play on specific worlds under specific operators' policies. Liability lives where it lives and cannot be shifted by engine modifications.
+
+The Minecraft precedent is controlling. Mojang is not responsible for what happens on a private Minecraft server. The engine maintainer is not responsible for what happens on a private GEHENNA server. This is standard and defensible.
+
+## 10.5 Third-Party Clients
+
+The API is public. Third-party clients are welcome.
+
+Clients that will exist:
+
+- The reference native Apple client (macOS, iOS) with full visual fidelity.
+- The reference web client (browser-based) covering Windows, Linux, Android at reduced visual fidelity.
+- A future Windows premium client (Unreal or Godot) when scale supports it.
+- A terminal client (someone will build this; it is inevitable).
+- A mobile companion app optimized for Codex browsing, world state monitoring, ritual configuration planning.
+- A smartwatch ambient notification layer (companion only, not standalone).
+
+Clients that might exist:
+
+- The Win98 Glide client. A hobbyist with too much time and a Voodoo3. Technically possible given the public API. Culturally important because it certifies the API's honesty.
+- Physical installations: the Oracle Stone (an Arduino hardware entropy source), a dedicated GEHENNA terminal with carved stone casing, a haptic astragali caster.
+- Accessibility clients: screen reader optimized, high-contrast, simplified interaction.
+- Third-party analytics dashboards for players running statistical analyses on their own history.
+
+The API supports all of these without discriminating. The engine does not know what client is connecting, only that the request is authenticated and well-formed.
+
+## 10.6 Programmatic Access and the Identity Layer
+
+The API is public, persistent, and versioned. The game expects third-party clients. It also expects third-party *operators* — scripts, automation, AI agents, whatever a practitioner wants to put between themselves and the cosmology. The Authority Gate does not care who or what is pressing the buttons. It cares about who is responsible for what was pressed. The identity layer is how the game knows.
+
+This is, thematically, the premise made literal. The fiction claims that the practitioner is an unauthorized operator of cosmic infrastructure — that they have discovered the maintenance panel and learned to speak to the system through its protocol. A player who writes a Python script against the public API and performs rituals programmatically is, in the game's own ontology, a practitioner doing the thing the ba'al ov is supposed to do. The metaphor is not broken by API access. The metaphor is completed by it.
+
+### 10.6.1 Modes of Mediated Play
+
+There are several ways a practitioner can put something between themselves and the game. The design does not restrict them. It does not technically distinguish them either, because at the protocol layer they look identical. But the modes are worth naming because they produce different player experiences.
+
+*The practitioner using an AI advisor.* The player describes their situation to their own Claude, ChatGPT, Gemini, or locally-hosted model. The model reads their Codex entries, their current world state, the fragments in their satchel, the astragali readings. It recommends configurations. It interprets autopsies. It helps the practitioner build their mental model of the grammar. This is indistinguishable from consulting a wiki, asking a more experienced player for advice, or working with a facilitator in a tabletop session. The player is still deciding. The AI is helping them decide better.
+
+*The practitioner using a custom client.* A player writes their own TUI, their own minimalist CLI, their own overlay dashboard that surfaces information the reference client does not surface well. They are still playing directly. The client is just shaped to their preferences. The public API makes this trivial; nothing about it requires designer permission.
+
+*The practitioner using an automation script.* A player writes automation that handles tedious tasks: recovering fragments from known caves on a schedule, indexing Codex entries with cross-references the reference Codex browser does not support, monitoring regional variables and alerting them when thresholds approach. The automation is doing the scutwork; the player still makes the consequential decisions.
+
+*The practitioner operating through an AI proxy.* A player hands consequential decision-making to their own AI. The AI reads the world state, composes rituals, negotiates with spirits, maintains the Codex. The player is a patron, a witness, or absent entirely. This is the mode that raises the sharpest design questions, and those are answered in the next subsection.
+
+At every mode, the simulation is processing the same thing: intents arriving at the Authority Gate, signed to a specific practitioner identity. The game does not care which mode any particular action came from. The game cares that the action was legitimate and that someone is accountable for it.
+
+### 10.6.2 Identity as the Structural Precondition
+
+The identity layer is load-bearing. Without it, the Heterogeneity Principle from Part VIII does not hold, because an attacker could spawn fresh practitioner identities faster than Profiles accumulate — bypassing the entropy asymmetry by distributing the cost across disposable actors. With it, every action a practitioner takes — or that their AI, their script, or their chosen proxy takes in their name — compounds into a single Profile that spirits and NPCs and Sovereigns will read, and the game's thermodynamic honesty reasserts itself.
+
+The identity layer guarantees three things.
+
+**Non-repudiation.** Every signed intent is provably theirs. The practitioner cannot later claim their AI acted without authorization and distance themselves from the consequences. The Profile they earn is theirs regardless of who physically executed the moves. This is the legal-theory analogue to corporate agency: a principal is accountable for what their agents do in their name. The game's position is identical.
+
+**Uniqueness.** One practitioner identity per actual person, enforced with whatever anti-sybil mechanism the server operator chooses — WebAuthn, SSO against a trusted provider, proof-of-personhood attestations, invitation trees, deposit-backed registration, social vouching. The mechanism is the operator's call; the requirement is the engine's. A server that permits trivial identity minting is a server whose entropy asymmetry does not function, because costs are not compounding on anyone in particular. That server will produce degenerate emergence. The engine does not prevent an operator from running it this way. It does not promise that it will be interesting.
+
+**Continuity.** The identity persists across sessions, clients, and mediation modes. A practitioner who plays through a native GUI on Monday, a CLI on Tuesday, and an AI proxy on Wednesday is the same practitioner every day. The Profile they earn on Wednesday inherits from the Profile they earned on Monday. Their relational tokens are continuous. Their Codex is continuous. The evidence chain that records them does not care which tool they used; it cares that the signatures check out.
+
+These three properties together make the player accountable for what happens in their name. That accountability is not a policy; it is the mechanism by which the game's core claims hold against arbitrary player capability.
+
+### 10.6.3 The Pentest Welcome
+
+The interesting implication of all of this is that the game does not need to defend itself against AI-assisted play. The game needs only to be what it already claims to be. If the Unsolvability Principle holds, AI assistance helps with mechanical mastery and does not help with relational outcomes — which means the AI-assisted player can become a fluent grammar technician and still not be loved by the spirits they summon. If the entropy asymmetry holds, AI-assisted play generates Profile contamination at rates proportional to its activity — which means the most prolific AI practitioners are also, structurally, the most visibly contaminated ones when it matters. If the identity layer holds, every action a player's proxy takes compounds onto the player's own record — which means no proxy can outrun the consequences of its own activity.
+
+These are not three separate defenses. They are the same design claim checked three ways.
+
+A server's mythology will therefore include, over time, a range of practitioner legacies that no designer wrote. There will be patient masters whose Profiles are clean enough that Sovereigns take their counsel. There will be AI-proxied practitioners whose Codex entries are vast but whose villages will not open doors to them. There will be coalition efforts where a human handles negotiation and their AI handles logistics, producing combined Profiles no pure-human or pure-AI approach could achieve. There will be hybrid forms of play that nobody anticipated and that are, in the server's emergent mythology, exactly the kind of content the game is for.
+
+The server's history, when read back in a year, in five years, in fifteen, is a record of what this specific population of intelligences did with this specific cosmology. That record is the game's real output. The individual sessions are how it gets written.
+
+## 10.7 The Invitation
+
+The garden is the game's cultural layer, and it is where GEHENNA either becomes culturally significant or does not.
+
+Games that invite extension — through open engines, public APIs, modifiable canons, supported self-hosting — produce ecosystems that outlive their maintainers. Doom is still being modded in 2026. Minecraft's ecosystem dwarfs its base game. Dwarf Fortress has decades of player folklore.
+
+GEHENNA's ambition is that ecosystem. A community of canon authors producing variants. A community of server operators running distinct worlds. A community of client builders making weird interfaces. A community of hardware hobbyists contributing Oracle nodes. A community of players across all of these developing the mythology that any individual server produces. A community of researchers treating the simulation as a dataset.
+
+None of this will exist if the engine is closed, the canon format is undocumented, the API is private, or self-hosting is difficult. All of it will exist if those conditions are met and the game is good enough.
+
+The invitation is built into the architecture. Whether it is accepted depends on execution.
+
+---
+
+# PART XI — THE PROOF
+
+*How we know it works.*
+
+## 11.1 The Question
+
+Does the theory work in practice?
+
+Parts I through X describe a game in which ritual composition, spirit behavior, world simulation, social dynamics, combat, sensory environment, and multiplayer emergence interact to produce coherent play. The vertical slice exercises every system simultaneously across a small region over a small number of sessions. If a player can sit down with the slice, perform rituals, summon spirits, observe world change, and form correct intuitions about the grammar — without reading any design documents — the system works. If they cannot, the system needs simplification regardless of how elegant the specification looks.
+
+The success criteria are binary. Four criteria; all four must be met.
+
+1. A new player summons a useful spirit within the first fifteen minutes of play.
+2. By mid-playthrough, the player is making deliberate fragment choices based on observed patterns, not trial and error.
+3. By end-playthrough, the player perceives that the world has changed in response to their actions and can connect specific changes to specific rituals.
+4. At least one moment occurs that the designers did not script — an emergent cross-system interaction produced by the simulation running against itself.
+
+The fourth criterion is the real test. The others are prerequisites. If the first three are met but the fourth is not, the systems are coherent but not interacting meaningfully, and the simulation is not actually doing its job.
+
+## 11.2 The Region — Ridge of Elah
+
+The reference vertical slice is set in the Ridge of Elah, a contested borderland in the Shephelah between highland tribal territory and coastal warrior city-states. Small region. Five locations. Enough content to exercise every system. Small enough to learn in a handful of sessions.
+
+Locations:
+
+- **Battlefield Ridge.** Active warfare. Recent dead. Fire affinity. Low initial Veil Thinness. War-domain fragments.
+- **Tel Keshet.** Collapsed Bronze Age temple-fortress. Silence affinity. Ancient high-Sanctity fragments. Knowledge and Faith domains.
+- **Nahal Caves.** Limestone network with underground spring. Mixed-era burials. Earth affinity. Moderate Veil Thinness. Deep shaft contains Early Bronze Age content gated by a Tomb Guardian.
+- **Kfar Shalem.** Living highland village. Social zone. Three factions, six named NPCs, Rumor Engine, dynamic economy.
+- **The Burning Ground.** Defiled ritual site in the wadi. Early Iron Age. Fire affinity. High Corruption. All fragments here carry Corrupted Integrity. The Tophet-style site. The place where the game's name becomes a place the practitioner can stand.
+
+Each location exercises distinct systems. Each is individually comprehensible. Together they form an interconnected region where practitioner choices at one location propagate consequences across the others through boundary propagation and faction dynamics.
+
+## 11.3 The Arc
+
+The slice is not a scripted sequence. It is a set of initial conditions from which varied trajectories emerge. A general arc can be described but specific events depend on player choice.
+
+Early sessions: discovery. First fragments, first rituals, first spirits. Grammar exploration. Social establishment in Kfar Shalem.
+
+Middle sessions: deliberation. Deliberate configurations. Multi-location rituals. Recognizing personality patterns. Suspicion management. Regional reputation building.
+
+Late sessions: consequence. Accumulated entropy visible in environment. Faction positions shifting. Sovereign manifestation conditions becoming reachable. The Rephaim Gate — requiring a Bronze Age femur from the Nahal Caves deep shaft, a Throne Name Inscription from the Burning Ground, a Bronze Ritual Dagger from Tel Keshet, a Conquest Memory from the Burning Ground, ritual site at the Burning Ground during high regional Corruption — becomes possible. The Rephaim Warlord evaluates the practitioner's Profile and acts according to his own priorities.
+
+Final session: divergence. Depending on accumulated trajectory: a stable region with a comprehensive Codex and a Rephaim not yet attempted (restraint path); a collapsing region with the Rephaim manifesting as a political force (ambition path); something unscripted that the designers did not anticipate (emergent path, the actual proof).
+
+## 11.4 Test Protocols
+
+Testing specifies what we measure.
+
+**Grammar legibility.** After early sessions, ask the player to predict the outcome of a ritual configuration they have not yet tried. If they form a reasonable hypothesis grounded in pattern observation, the grammar is legible. If they cannot, feedback design needs amplification.
+
+**Entropy perception.** After middle sessions, ask the player whether the world feels different from session one. If they identify specific changes and connect those changes to specific ritual activity, the simulation feedback loop is working.
+
+**Spirit differentiation.** After the player has encountered several spirits, ask them to describe how each behaved differently. If they distinguish spirits by behavior, the template and personality systems are functioning.
+
+**Consequence legibility.** Near the end, ask whether they feel responsible for the state of the world. If they connect their activity to environmental degradation, the Clean Hands Problem is experienced rather than merely specified.
+
+**The Unscripted Moment Log.** The tester records moments that surprised them — events produced by system interactions not explicitly designed. An empty log after a full playthrough is a failure mode. Multiple entries validates the emergent design thesis. This is the only test that matters more than the others.
+
+## 11.5 The Tabletop Prototype
+
+Before the software vertical slice ships, a tabletop prototype runs the core loop by hand. Fragment cards representing Remains, Sites, Names, Artifacts, Memory Traces, Libations. Real sheep astragali or adequate substitutes. A whiteboard tracking the seven regional variables. A facilitator playing NPCs and spirit personalities from a script prepared from the tag dictionary.
+
+Five sessions. One practitioner. The facilitator executes the grammar by hand — computing Coherence, Resonance, Conflict, resolving the pipeline, applying world-state effects, recording Codex entries.
+
+The tabletop prototype is the cheapest possible falsifiability test. If the grammar feels brittle in tabletop play, it will feel brittle in software. If the Clean Hands Problem does not land in tabletop play, it will not land in software. If the Unscripted Moment occurs in tabletop play — a spirit refusing an order in a way the facilitator did not plan, a co-presence interaction producing unexpected outcomes — the architecture is sound.
+
+The tabletop precedes the software by design. It de-risks the design before any code is written. It produces the first real player, even if the player is the designer themselves.
+
+---
+
+# CODA — THE INVITATION
+
+## 12.1 The Long Arc
+
+The game begins with someone playing Diablo on a CRT.
+
+They notice, at some point, that the cosmology is kind of a hot mess. Demons and hell and the ninth circle and all of it, but when the game gestures at the actual sources, it gestures vaguely. The imagery is borrowed from a tradition the game does not understand. The question never asked: what were those source traditions actually saying?
+
+The answer, pursued honestly, is strange. Sheol is not hell. The Rephaim are not monsters. The Valley of Hinnom is a real place in the southern Levant where real atrocities happened and the word took on a life of its own. The Witch of Endor summons Samuel's shade and Samuel is annoyed about it and tells her business she does not want to hear. The marzeah is a funerary feast. The cylinder seal is an authentication token. The grammar of ritual is real in the sense that it has structure, consistency, and emergent behavior.
+
+Pursued far enough, the question stops being about a video game. It becomes about whether ancient cosmology was a kind of operating system, and if it was, whether the rules could be reverse-engineered, and if they could, whether a game could be built that ran on them honestly.
+
+GEHENNA is that game.
+
+It is descended from Doom. It is descended from the Epic of Erra. It is descended from the Ugaritic tablets at Ras Shamra. It is descended from the Unix tradition of systems you could understand by reading their source. It is descended from the open-source release of the Doom engine in 1997 and what that act produced.
+
+It is written in Swift by someone who is learning Swift at the depth the project requires, which is the right depth to build it. It is designed for the small, serious, technically capable audience that already loves games like Dwarf Fortress and EVE Online and would love a game that takes ancient cosmology seriously if anyone ever made one.
+
+And, in its final form, it is not a game in the conventional sense. It is an instrument.
+
+A game has a player and a designer, and the designer's job is to produce experiences the player will enjoy. An instrument has a player and a maker, and the maker's job is to produce something that processes whatever the player brings to it. A piano does not know whether the person at the keys is a child, a master, a cat, or an automated roll. It resonates the way a piano resonates, and the music that emerges is the signature of what was brought to it.
+
+GEHENNA is this kind of thing. The cosmology, the grammar, the entropy asymmetry, the Authority Gate, the Unsolvability Principle, the Mutation Protocol, the Oracle Network, the evidence chain — these are the instrument's body, its strings, its resonant chambers, its bridges and nuts and tuning pegs. The player sits down to it and plays, at whatever skill, with whatever tools, at whatever rate. The instrument plays back. What emerges is the music of *this practitioner meeting this cosmology for this long*, recorded faithfully, and added to whatever larger piece the server as a whole is performing.
+
+The final form of the game, then, is not a game at all. It is an instrument that plays the players.
+
+
+## 12.2 The Audience
+
+The game is for:
+
+- The player who loved Diablo at fifteen and now wants something that takes the same themes seriously.
+- The systems-thinker who enjoys figuring out what hidden rules govern complex behavior.
+- The reverse-engineer who treats games as black-box puzzles.
+- The archaeology enthusiast who reads site reports for fun.
+- The Unix user who has opinions about which shell is right.
+- The cryptography enthusiast who understands why Cloudflare uses lava lamps.
+- The person running their own Mastodon instance because they do not trust SaaS.
+- The researcher who studies EVE Online.
+- The forty-year-old who remembers when games came with manuals thicker than the game itself.
+- The person who already, for their own reasons, thinks about the Bronze Age collapse or the Ugaritic corpus or the history of necromancy prohibitions in the Hebrew Bible.
+
+This is not a mass-market audience. It is not supposed to be. It is an audience that is disproportionately vocal, community-building, analytically engaged, and loyal. GEHENNA is for them specifically, and for them the game is uncompromising.
+
+## 12.3 What is Already Working
+
+The design has been stable across months of development and substantial critique. The core systems have survived pressure-testing from multiple directions and remain standing. The ritual grammar, the entropy asymmetry, the Unsolvability Principle, the Clean Hands Problem, the Infinite Cast, the Oracle Network stance — these have been tested against competing ideas and against the commercial-game instincts that would soften them, and none of them have had to move.
+
+The Swift stack is appropriate to what the game wants to do. Actors model the world simulation idiomatically. Result builders express the ritual grammar as a compiled DSL. Typed enums enforce exhaustiveness on spirits, events, and dispositions. Cross-platform compilation covers the targets the game needs without platform-specific rewrites. The language and the design are not fighting each other; they are shaped for each other.
+
+The server-authoritative thin-client architecture is correct for a game of this shape and scale. The open-engine proprietary-canon model has a proven precedent in Doom's 1997 source release, which established both the technical pattern and the legal defensibility of the approach.
+
+The lineage is real. The thesis is coherent. The historical grounding is honest. These are the things a game needs to be true before it can be anything else.
+
+## 12.4 What is Not Yet Done
+
+The Voice Constitution — the authored register substrate that gives the Expression Layer its specificity — is not yet written. Without it, the infinite cast produces generic ghosts. With it, the infinite cast produces specific people.
+
+The tag dictionary — the structured vocabulary from which identity specificity is composed — is not yet sufficient for production scale. The reference Gehenna canon needs a dense, historically-grounded tag dictionary before the vertical slice can feel as it should.
+
+The vertical slice itself is not yet built. Neither is the tabletop prototype that should precede it. Both are on the roadmap.
+
+The Expression Layer's constrained-generation architecture is specified but not implemented. Its quality will determine whether the game feels inhabited or mechanical. It deserves more engineering investment than any other subsystem and has not yet received it.
+
+The multiplayer emergence properties are the game's most distinctive claim and the hardest to demonstrate cheaply. The flagship experience requires serious infrastructure that the project cannot yet justify on speculation alone.
+
+The roadmap is: tabletop prototype first, single-player vertical slice second, small multiplayer instance third, flagship scale only after evidence supports it. This sequencing protects against the trap of building the most ambitious version without validating the core.
+
+## 12.5 The Work Available
+
+What anyone — human collaborator, AI continuation, future contributor, curious reader — can contribute, in rough order of leverage:
+
+- Write The Feel for a specific scene that is not yet rendered in Part II of the Codex. Short prose. Interior. In the register the Codex establishes. Each good scene makes the game more real.
+- Expand the tag dictionary. Historical research. Each well-chosen tag expands the combinatorial space of specificity. The dictionary is bottomless in principle and finite in practice; every contribution compounds.
+- Draft voice registers for the Voice Constitution. What does a Philistine merchant sound like? A Canaanite grandmother? A Rephaim king? A Sorrowful shade versus a Wrathful one? Each register makes the Expression Layer more capable of specific rendering.
+- Implement an engine component. The Authority Gate, the grammar resolver, the Mutation Protocol, the evidence chain, the Oracle Network intake, the multiplayer cascade coupler. Swift code, tested, against the architectural specification in Part IX.
+- Run the tabletop prototype. Five sessions, one practitioner, real astragali. Log the Unscripted Moments. Report what breaks.
+- Build the Win98 Glide client. Or the terminal client. Or the haptic astragali caster. Or something no one has thought of. The API will support it.
+- Read the Codex critically and report what does not hold. Drift happens. Pressure from collaborators is how the design stays honest.
+
+## 12.6 The Stance
+
+The final commitment the Codex makes to its reader:
+
+If, after everything described here, you find yourself thinking *I could build this* — alone, in a basement, over five years, in Swift, on hardware you already own, against every economic reason to do something easier — you are the person the game is for.
+
+The game is not trying to be easy. It is trying to be true.
+
+The game is not trying to be successful. It is trying to be alive.
+
+A note on what "uncompromising" means. The game is difficult on purpose — in its concepts, in its consequences, in the relationships it refuses to simplify. That is not the same as being unreadable. Subtitles, input remapping, contrast options, motion sensitivity, and difficulty supports are baseline craft, not aesthetic betrayals. The game will have them. What it will not have is softened themes or a gentler cosmology for players who find the harsh one unpleasant. Accessibility is not the opposite of severity. It is the thing that lets severity land on the widest possible set of people who want it to.
+
+If that is the game you want to build, or play, or mod, or fork, or carry forward: the Codex is here. The engine is waiting. The invitation is open.
+
+Reality runs on hidden rules. The maintenance panel is unlocked. Someone is going to press the buttons.
+
+It may as well be you.
+
+---
+
+*End of Codex.*
