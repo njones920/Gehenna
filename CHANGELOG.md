@@ -22,6 +22,7 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - `PlayerCommand` enum: non-interactive command model for bot and server use.
 - `PractitionerSession`: per-player state separation from shared world state.
 - Canon data roadmap documenting the gap between the current Ridge seed and the intended historically grounded reference canon.
+- GitHub Actions CI workflow for macOS and Linux Swift builds.
 
 ### Changed
 

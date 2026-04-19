@@ -1,0 +1,51 @@
+name: Swift CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  macos:
+    name: macOS Swift
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift Version
+        run: swift --version
+
+      - name: Test
+        run: swift test
+
+      - name: Build
+        run: swift build
+
+      - name: Arena Smoke Test
+        run: swift run gehenna-arena --bots 2 --ticks 10 --report 10
+
+  linux:
+    name: Linux Swift
+    runs-on: ubuntu-latest
+    container: swift:6.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift Version
+        run: swift --version
+
+      - name: Test
+        run: swift test
+
+      - name: Build
+        run: swift build
+
+      - name: Arena Smoke Test
+        run: swift run gehenna-arena --bots 2 --ticks 10 --report 10
