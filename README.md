@@ -1,0 +1,122 @@
+# GEHENNA
+
+*A physics engine for ancient cosmology, disguised as a game.*
+
+GEHENNA is an early Swift implementation of the Codex concept in this repository. The current build is a terminal-playable engine prototype set in the Ridge of Elah. It is not the final game and it is not a conventional fantasy RPG. It is the first executable seed of the ritual grammar, world clock, site memory, NPC social pressure, and Codex loop.
+
+## 420 Build
+
+Version: `0.4.20`
+
+This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
+
+What is live:
+
+- Swift package with engine library and `gehenna` CLI.
+- Ritual configuration and deterministic resolution pipeline.
+- Seven ritual inputs: Remains, Site, True Name, Life Artifact, Memory Trace, Libation, Timing.
+- Coherence, Resonance, Conflict, Apotropaic Rule, Mutation checks, tiering, personality, and manifestation.
+- Ridge of Elah vertical-slice content.
+- WorldClock for command/travel/rest time advancement.
+- Site-local memory: scarring, traces, suspicion, witness exposure.
+- WorldDirector v1 for unsolicited world narration.
+- NPC interiority and slow suspicion/trust drift.
+- Journal entries with source, severity, region/site IDs, NPC IDs, and tags.
+- Codex entries and epoch manifestation support.
+- Swift Testing suite.
+
+What is not live yet:
+
+- Persistence.
+- Public API.
+- Multiplayer.
+- Identity/accountability layer.
+- Full rumor chains.
+- Taboo shock and clean-channel catalyst systems.
+- Oracle Network.
+- Evidence chain.
+- LLM-backed Expression Layer.
+- Graphics.
+
+## Requirements
+
+- macOS 14 or newer.
+- Xcode command line tools with Swift 6.
+
+Check Swift:
+
+```sh
+swift --version
+```
+
+## Build And Test
+
+```sh
+swift test
+```
+
+Expected result: all tests pass.
+
+## Play
+
+```sh
+swift run gehenna
+```
+
+Useful first commands:
+
+```text
+look
+sites
+fragments
+artifacts
+cast
+ritual
+world
+village
+codex
+help
+quit
+```
+
+A first successful ritual path:
+
+1. Run `ritual`.
+2. Choose the Iron Age II long bone.
+3. Speak `Hiram, son of Dagon`.
+4. Include the Bronze Spearhead.
+5. Include the Potsherd with Inscription.
+6. Pour fermented wine.
+7. Proceed after the bones are cast.
+
+## Design Documents
+
+Read in this order:
+
+1. `GEHENNA_CODEX v3.md` — authoritative design.
+2. `GEHENNA_DESIGN_HISTORY.md` — v2/v3 concordance and implementation-facing interpretation.
+3. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
+4. `AGENTS.md` — coding-agent collaboration rules.
+5. `GEHENNA_CODEXv2.txt` — historical source document.
+
+## Development Direction
+
+Near-term work should improve world autonomy, not add generic RPG surface area.
+
+Priority sequence:
+
+1. Persistence for world/site/profile/Codex/journal state.
+2. Stronger site-local timelines.
+3. Rumor engine with propagation and mutation.
+4. Witness system.
+5. Spirit persistence and relationship memory.
+6. Taboo shock cascades.
+7. Clean-channel/noob catalyst events.
+8. Ridge of Elah proof playthrough.
+
+Preserve the core rule: the Expression Layer renders state; it does not decide simulation truth.
+
+## License
+
+No license has been declared yet. Until a license is added, treat this repository as source-available for review and collaboration, not as open-source software with reuse rights.
+
