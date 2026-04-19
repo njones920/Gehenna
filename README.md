@@ -62,8 +62,12 @@ What is not live yet:
 
 ## Requirements
 
-- macOS 14 or newer.
-- Xcode command line tools with Swift 6.
+- Swift 6 toolchain.
+- macOS 14 or newer with Xcode command line tools, or Linux with the Swift 6 toolchain.
+
+The package currently uses Foundation and SwiftPM only. The Apple platform
+targets in `Package.swift` are deployment minimums for Apple builds, not an
+intentional exclusion of Linux.
 
 Check Swift:
 
