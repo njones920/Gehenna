@@ -6,6 +6,7 @@ This repo contains the early Swift implementation of GEHENNA, based on the Codex
 
 - `GEHENNA_CODEX v3.md` is the current authoritative design reference.
 - `GEHENNA_DESIGN_HISTORY.md` reconciles Codex Two and v3 for implementation context.
+- `docs/CANON_DATA_ROADMAP.md` records the historical data gap and the intended canon expansion path.
 - `docs/archive/GEHENNA_CODEX_TWO.txt` is superseded historical context. Do not use it as implementation authority.
 - The current implementation is an engine/CLI prototype, not the full vertical slice.
 
@@ -19,6 +20,7 @@ GEHENNA is not a conventional fantasy RPG and should not drift toward one. Prese
 - Consequence is content. The world must remember.
 - No karma meter, no alignment meter, no visible stat sheet in the final player-facing experience.
 - Spirits and NPCs should become specific people, not generic content categories.
+- Canon/lore data should be historically grounded and structured; avoid generic fantasy filler.
 - The CLI is a serious prototype interface, not just a debug shell.
 
 The near-term priority is world autonomy: the world should act around the practitioner instead of only responding to commands.

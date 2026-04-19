@@ -15,12 +15,14 @@ What is working:
 - The 13-stage ritual resolution pipeline exists and is tested.
 - The seven ritual inputs are modeled.
 - Coherence, Resonance, Conflict, Apotropaic Rule, Mutation checks, tier resolution, personality binding, and manifestation are present.
-- Ridge of Elah content exists with five locations, fragments, artifacts, memory traces, root identities, and named NPCs.
+- Ridge of Elah prototype content exists with five locations, fragments, artifacts, memory traces, root identities, and named NPCs.
 - Epoch manifestations are implemented and are important to keep.
 - NPC interiority exists in the model and should be expanded, not flattened.
 - The CLI has the right tone and should remain a serious proof interface.
 
 The main weakness is not lack of ritual options. The main weakness is that the world still feels command-response, closer to Zork than to an active cosmology. The simulation changes when the player acts, but the world does not yet have enough independent initiative.
+
+The other major weakness is canon density. The engine is meant to operate on a rich historically grounded canon dataset from the Iron Age and Late Bronze Age southern Levant. The current Ridge content proves the data path, but it is far too small to create the intended density of real history, archaeology, names, objects, social roles, mortuary practice, and ritual context.
 
 ## Design Call
 
@@ -154,6 +156,7 @@ The Expression Layer renders. It must not decide simulation truth.
 - The Burning Ground is not yet dangerous enough as a systemic place.
 - Codex output can duplicate tags because tag merging concatenates arrays.
 - Root identity IDs are generated UUIDs and should become stable canon IDs before persistence.
+- The historical canon/lore dataset is thin. Ridge content is a small seed, not the target reference canon.
 - Player-facing CLI still exposes several raw counts. Keep debug utility, but final interface should become more diegetic.
 - Ritual seeds are generated from wall-clock time in the CLI; eventual ritual history should record replayable envelopes.
 - No persistence yet.
@@ -210,6 +213,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Decision**: Added `gehenna-arena`, `PlayerCommand`, `PractitionerSession`, and `WorldShard` as the local shared-world multiplayer proof.
 - **Rationale**: Bots and humans need one authoritative world before a network server matters. The arena proves multiple practitioners can scar the same sites, perturb the same NPCs, and write into one journal without adding TCP/server complexity to the 420 seed.
 - **Implication**: This is local multiplayer simulation, not networked multiplayer. Future TCP/MUD work should wrap `WorldShard` rather than duplicating command logic. Keep ritual journal entries single-source and attributable; do not double-log practitioner rituals.
+
+### Canon Data Gap
+- **Decision**: Added `docs/CANON_DATA_ROADMAP.md` and explicitly marked the Ridge content as a prototype canon seed.
+- **Rationale**: GEHENNA should be driven by structured historical data, not generic fantasy lore. The 420 build proves the engine and local bot arena, but the reference canon still needs deep real-world content from the period.
+- **Implication**: Near-term work should add stable canon IDs, provenance metadata, typed canon files, and a much richer tag dictionary before claiming the Ridge feels historically deep.
 
 ### Deterministic Director Gating
 - **Decision**: Replaced process-random director/site trace gates with deterministic scheduling from local tick state and stable salts.
