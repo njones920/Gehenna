@@ -1156,3 +1156,91 @@ struct WorldDirectorTests {
         }
     }
 }
+
+// MARK: - World Shard Multiplayer Tests
+
+@Suite("World Shard Multiplayer Tests")
+struct WorldShardTests {
+
+    @Test("Ritual command records one journal entry and increments attempts")
+    func ritualCommandRecordsSingleJournalEntry() async {
+        let content = RidgeOfElah.createWorld()
+        let shard = WorldShard(
+            world: WorldSimulation(regions: [content.region]),
+            sites: content.sites,
+            npcs: RidgeOfElah.kfarShalemNPCs(),
+            rootIdentities: RidgeOfElah.rootIdentities()
+        )
+
+        let session = PractitionerSession(
+            name: "Test Practitioner",
+            fragments: content.fragments,
+            artifacts: content.artifacts,
+            memoryTraces: content.memoryTraces
+        )
+        let playerID = await shard.addPractitioner(session)
+
+        let result = await shard.execute(.performRitual(RitualIntent(
+            fragmentIndex: 0,
+            trueName: "Hiram, son of Dagon",
+            artifactIndex: 0,
+            traceIndex: 0,
+            libationType: .fermentedWine
+        )), for: playerID)
+
+        let journal = await shard.journal
+        let ritualEntries = journal.filter { $0.type == .ritualPerformed }
+        let updatedSession = await shard.session(for: playerID)
+
+        #expect(!result.narration.isEmpty)
+        #expect(ritualEntries.count == 1)
+        #expect(ritualEntries.first?.source == .practitioner)
+        #expect(ritualEntries.first?.description.contains("Test Practitioner") == true)
+        #expect(updatedSession?.ritualCount == 1)
+        #expect(updatedSession?.profile.totalRituals == 1)
+    }
+
+    @Test("Practitioners share site scarring")
+    func practitionersShareSiteScarring() async {
+        let content = RidgeOfElah.createWorld()
+        let shard = WorldShard(
+            world: WorldSimulation(regions: [content.region]),
+            sites: content.sites,
+            npcs: RidgeOfElah.kfarShalemNPCs(),
+            rootIdentities: RidgeOfElah.rootIdentities()
+        )
+
+        let first = PractitionerSession(
+            name: "First Practitioner",
+            fragments: content.fragments,
+            artifacts: content.artifacts,
+            memoryTraces: content.memoryTraces
+        )
+        let second = PractitionerSession(
+            name: "Second Practitioner",
+            fragments: content.fragments,
+            artifacts: content.artifacts,
+            memoryTraces: content.memoryTraces
+        )
+
+        let firstID = await shard.addPractitioner(first)
+        let secondID = await shard.addPractitioner(second)
+        let initialScarring = await shard.siteStates[0].scarring
+
+        for _ in 0..<3 {
+            _ = await shard.execute(.performRitual(RitualIntent(
+                fragmentIndex: 0,
+                trueName: "Hiram, son of Dagon",
+                artifactIndex: 0,
+                traceIndex: 0,
+                libationType: .fermentedWine
+            )), for: firstID)
+        }
+
+        let seenBySecond = await shard.execute(.look, for: secondID)
+        let sharedScarring = await shard.siteStates[0].scarring
+
+        #expect(sharedScarring > initialScarring)
+        #expect(seenBySecond.narration.first == "[Battlefield Ridge]")
+    }
+}

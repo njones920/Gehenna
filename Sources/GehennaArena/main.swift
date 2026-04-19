@@ -319,7 +319,7 @@ struct GehennaArena {
         print("  │ Practitioners:")
         for (id, personality) in botIDs {
             if let session = await shard.session(for: id) {
-                print("  │   \(personality.name): \(session.ritualCount) rituals, at \(sites[session.currentSiteIndex].name)")
+                print("  │   \(personality.name): \(session.profile.totalRituals) rituals, at \(sites[session.currentSiteIndex].name)")
             }
         }
 
