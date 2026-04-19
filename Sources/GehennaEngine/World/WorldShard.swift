@@ -324,11 +324,17 @@ public actor WorldShard {
             rootIdentities: rootIdentities
         )
 
-        // Apply effects to the shared world
-        world.applyRitualEffects(result.worldEffects, regionID: regionID, site: &sites[session.currentSiteIndex])
+        // Apply effects to the shared world. This records the single ritual journal entry.
+        world.applyRitualEffects(
+            result.worldEffects,
+            regionID: regionID,
+            site: &sites[session.currentSiteIndex],
+            practitionerName: session.name
+        )
 
         let spiritSuccess = result.spirit != nil
         let wasMutation = result.spirit?.isMutation == true
+        session.ritualCount += 1
 
         let totalEntropy = result.worldEffects.ghostActivityDelta + result.worldEffects.corruptionDelta + result.worldEffects.spiritualPressureDelta + result.worldEffects.veilDamage
         session.profile.recordRitual(
@@ -352,7 +358,6 @@ public actor WorldShard {
                 ritualID: config.id,
                 tick: clock.currentTick
             )
-            session.ritualCount += 1
         }
 
         // Advance time
@@ -386,18 +391,6 @@ public actor WorldShard {
             world: world, sites: sites, npcs: npcs,
             currentSiteIndex: session.currentSiteIndex, clock: clock
         )
-
-        // Journal entry for multiplayer visibility
-        world.journal.append(JournalEntry(
-            tick: clock.currentTick,
-            type: .ritualPerformed,
-            description: "\(session.name) performed a ritual at \(site.name).",
-            source: .practitioner,
-            severity: .significant,
-            regionID: regionID,
-            siteID: site.id,
-            tags: Set(["ritual", "practitioner:\(session.name)"])
-        ))
 
         return CommandResult(narration: narration, worldEvents: events, directorEvents: directorEvents)
     }

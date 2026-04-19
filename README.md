@@ -43,13 +43,14 @@ What is live:
 - NPC interiority and slow suspicion/trust drift.
 - Journal entries with source, severity, region/site IDs, NPC IDs, and tags.
 - Codex entries and epoch manifestation support.
+- Headless shared-world bot arena for local multiplayer simulation.
 - Swift Testing suite.
 
 What is not live yet:
 
 - Persistence.
 - Public API.
-- Multiplayer.
+- Networked multiplayer server.
 - Identity/accountability layer.
 - Full rumor chains.
 - Taboo shock and clean-channel catalyst systems.

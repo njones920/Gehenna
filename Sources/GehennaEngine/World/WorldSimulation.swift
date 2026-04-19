@@ -200,7 +200,8 @@ public struct WorldSimulation: Sendable {
     public mutating func applyRitualEffects(
         _ effects: WorldEffects,
         regionID: UUID,
-        site: inout RitualSite
+        site: inout RitualSite,
+        practitionerName: String? = nil
     ) {
         regions[regionID]?.applyRitualEntropy(
             ghostActivityDelta: effects.ghostActivityDelta,
@@ -211,15 +212,28 @@ public struct WorldSimulation: Sendable {
 
         site.recordRitualPerformed(corruption: effects.corruptionDelta)
 
+        let description: String
+        let source: EventSource
+        var tags = Set(["ritual", "entropy"])
+
+        if let practitionerName {
+            description = "\(practitionerName) performed a ritual at \(site.name)."
+            source = .practitioner
+            tags.insert("practitioner:\(practitionerName)")
+        } else {
+            description = "A ritual was performed at \(site.name)."
+            source = .ritual
+        }
+
         journal.append(JournalEntry(
             tick: currentTick,
             type: .ritualPerformed,
-            description: "A ritual was performed at \(site.name).",
-            source: .ritual,
+            description: description,
+            source: source,
             severity: .significant,
             regionID: regionID,
             siteID: site.id,
-            tags: Set(["ritual", "entropy"])
+            tags: tags
         ))
     }
 

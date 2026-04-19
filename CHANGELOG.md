@@ -28,8 +28,10 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - CLI splash now identifies the 420 Ridge of Elah build.
 - `look`, `cast`, and NPC conversation advance local world time.
 - Site trace fading and director event gating now use deterministic local scheduling instead of process randomness.
+- Shared-world ritual journal entries now include practitioner attribution without double-counting rituals.
 
 ### Verified
 
 - `swift test` passes with the current Swift Testing suite.
+- `swift run gehenna-arena` smoke-tested with multiple bot counts.
 - `swift run gehenna` smoke-tested through the documented Hiram/Bronze Captain first ritual path.

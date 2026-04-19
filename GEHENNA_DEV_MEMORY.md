@@ -206,6 +206,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Rationale**: The root should make the current hierarchy obvious: v3 is the active Codex, and it leads the 420 release.
 - **Implication**: Agents should not treat Codex Two as a competing spec. Read it only for provenance after v3 and `GEHENNA_DESIGN_HISTORY.md`.
 
+### Headless Bot Arena
+- **Decision**: Added `gehenna-arena`, `PlayerCommand`, `PractitionerSession`, and `WorldShard` as the local shared-world multiplayer proof.
+- **Rationale**: Bots and humans need one authoritative world before a network server matters. The arena proves multiple practitioners can scar the same sites, perturb the same NPCs, and write into one journal without adding TCP/server complexity to the 420 seed.
+- **Implication**: This is local multiplayer simulation, not networked multiplayer. Future TCP/MUD work should wrap `WorldShard` rather than duplicating command logic. Keep ritual journal entries single-source and attributable; do not double-log practitioner rituals.
+
 ### Deterministic Director Gating
 - **Decision**: Replaced process-random director/site trace gates with deterministic scheduling from local tick state and stable salts.
 - **Rationale**: The eventual evidence chain needs replayable behavior. Ambient rendering can still be selective without using unrecorded randomness.
