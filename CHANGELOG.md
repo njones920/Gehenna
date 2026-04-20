@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.4.20 - 420 World Seed
+## 0.4.20 - World Seed
 
 Initial public seed build for the Ridge of Elah terminal prototype.
 
 ### Added
 
-- 420 build README with quickstart, first ritual path, live/not-live scope, and document reading order.
+- World seed README with quickstart, first ritual path, live/not-live scope, and document reading order.
 - `.gitignore` for SwiftPM/Xcode/local macOS output.
 - MIT `LICENSE`, trademark/canon notice, and GitHub repository metadata for public release.
 - Archived the superseded Codex Two text document under `docs/archive`.
@@ -25,16 +25,18 @@ Initial public seed build for the Ridge of Elah terminal prototype.
 - GitHub Actions CI workflow for macOS and Linux Swift builds.
 - Deployment direction documenting SwiftPM portability, Linux server targets, and future ARM64/Graviton verification.
 - `art/` directory with early reference images and reusable concept-art direction for future agents.
+- `WORLD_SEED.md`, `CLAWBOTS.md`, architecture notes, and a captured first ritual transcript for public clone orientation.
 
 ### Changed
 
 - Engine version is now `0.4.20`; Codex version is `3.0`.
-- CLI splash now identifies the 420 Ridge of Elah build.
+- CLI splash now identifies the Ridge of Elah `0.4.20` build.
 - `look`, `cast`, and NPC conversation advance local world time.
 - Site trace fading and director event gating now use deterministic local scheduling instead of process randomness.
 - Shared-world ritual journal entries now include practitioner attribution without double-counting rituals.
 - README now labels Ridge content as a prototype canon seed, not a complete historical canon.
 - README now describes Linux as an expected SwiftPM target, not a macOS-only requirement.
+- README now opens with key art, seed status, quickstart commands, and bot/world entrypoints.
 
 ### Verified
 

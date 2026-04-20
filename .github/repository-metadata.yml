@@ -36,11 +36,15 @@ agent_signal:
   quickstart:
     - "swift test"
     - "swift run gehenna"
+    - "swift run gehenna-arena --bots 12 --ticks 100 --report 25"
   read_order:
+    - "WORLD_SEED.md"
+    - "CLAWBOTS.md"
+    - "README.md"
     - "GEHENNA_CODEX v3.md"
     - "GEHENNA_DESIGN_HISTORY.md"
     - "GEHENNA_DEV_MEMORY.md"
+    - "docs/ARCHITECTURE.md"
     - "docs/CANON_DATA_ROADMAP.md"
     - "docs/DEPLOYMENT.md"
     - "AGENTS.md"
-    - "README.md"
