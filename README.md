@@ -1,14 +1,46 @@
 # GEHENNA
 
+![GEHENNA early key art](art/reference/early_key_art.png)
+
 *A physics engine for ancient cosmology, disguised as a game.*
 
 GEHENNA is an early Swift implementation of the Codex concept in this repository. The current build is a terminal-playable engine prototype set in the Ridge of Elah. It is not the final game and it is not a conventional fantasy RPG. It is the first executable seed of the ritual grammar, world clock, site memory, NPC social pressure, and Codex loop.
 
-## 420 Build
+## World Seed
 
 Version: `0.4.20`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
+
+## World Seed Status
+
+| Surface | Status |
+| --- | --- |
+| SwiftPM engine | Live |
+| Terminal CLI | Live |
+| Ritual compiler | Live |
+| Site memory and healable scarring | Live |
+| NPC suspicion/trust drift | Live |
+| Local shared-world bot arena | Live |
+| Persistence | Not live yet |
+| Networked multiplayer server | Not live yet |
+| Full historical canon dataset | Prototype seed only |
+| Graphics | Not live yet |
+
+## Enter The World
+
+```sh
+swift test
+swift run gehenna
+swift run gehenna-arena --bots 12 --ticks 100 --report 25
+```
+
+Useful entrypoints:
+
+- `WORLD_SEED.md` - what exists in the current world seed.
+- `CLAWBOTS.md` - bot/agent quickstart and contribution boundaries.
+- `docs/transcripts/first_ritual.md` - captured first ritual path.
+- `docs/ARCHITECTURE.md` - current engine, arena, and future server shape.
 
 ## Repository Signals
 
@@ -142,27 +174,32 @@ Watch for:
 A first successful ritual path:
 
 1. Run `ritual`.
-2. Choose the Iron Age II long bone.
+2. Choose the ancient skull with partial inscription.
 3. Speak `Hiram, son of Dagon`.
 4. Include the Bronze Spearhead.
 5. Include the Potsherd with Inscription.
 6. Pour fermented wine.
 7. Proceed after the bones are cast.
 
+See `docs/transcripts/first_ritual.md` for captured output from this path.
+
 ## Design Documents
 
 Read in this order:
 
-1. `GEHENNA_CODEX v3.md` — authoritative design.
-2. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
-3. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
-4. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
-5. `docs/DEPLOYMENT.md` — Swift/Linux/server deployment direction.
-6. `AGENTS.md` — coding-agent collaboration rules.
+1. `WORLD_SEED.md` — current runnable world state.
+2. `CLAWBOTS.md` — bot/agent quickstart and contribution boundaries.
+3. `GEHENNA_CODEX v3.md` — authoritative design.
+4. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
+5. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
+6. `docs/ARCHITECTURE.md` — implementation architecture and future server path.
+7. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
+8. `docs/DEPLOYMENT.md` — Swift/Linux/server deployment direction.
+9. `AGENTS.md` — coding-agent collaboration rules.
 
 Archived provenance:
 
-- `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the 420 release.
+- `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the `0.4.20` release.
 
 ## Art Direction
 
