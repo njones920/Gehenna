@@ -1,6 +1,6 @@
 # GEHENNA Dev Memory
 
-Last updated: 2026-04-19
+Last updated: 2026-04-20
 
 Related orientation:
 
@@ -250,3 +250,104 @@ The Expression Layer renders. It must not decide simulation truth.
 - WorldClock as single time owner.
 - WorldDirector renders, never decides.
 - Site scarring is durable but healable — consequence creates work for healers.
+
+## Linux Cross-Platform Verification (2026-04-20)
+
+### Verification Performed
+
+- **Platform**: Linux x86_64, Fedora, Swift 6 toolchain.
+- **Clone source**: `https://github.com/njones920/Gehenna.git` (public repository).
+- **Build**: `swift test` — clean compile, no warnings, no Apple-specific API failures.
+- **Test suite**: 71 tests in 17 suites — all passed in 0.010 seconds.
+- **Arena simulation**: `swift run gehenna-arena --bots 12 --ticks 100 --report 25` — ran to completion. 310 rituals, 8 ruptures, 3/5 sites scarred, 0/6 NPCs refusing contact.
+
+### Verdict
+
+The 0.4.20 world seed is **fully portable across macOS and Linux x86_64**. The package uses only Foundation and SwiftPM. No Apple-specific APIs were detected anywhere in `GehennaEngine`, `GehennaCLI`, or `GehennaArena`. The `platforms` block in `Package.swift` specifies `.macOS(.v14)` and `.iOS(.v17)` as deployment minimums for Apple builds; these are correctly ignored by the Linux toolchain.
+
+Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain intended but unverified; update `docs/DEPLOYMENT.md` accordingly when CI or a deployment smoke test confirms them.
+
+## Architecture Decisions (Session 2026-04-20 Linux Audit)
+
+### Linux x86_64 Verified
+- **Decision**: Mark Linux x86_64 as a verified target in the deployment matrix. Previously it was intended but unverified.
+- **Rationale**: Full build + test suite + bot arena simulation passed cleanly on Fedora Linux with the Swift 6 toolchain. No code changes were required.
+- **Implication**: `docs/DEPLOYMENT.md` "Configured but not yet proven" section should be updated to reflect that Linux x86_64 is now proven. The repo can credibly claim cross-platform readiness for x86_64 development and hobby deployment.
+
+## Codebase Analysis — Full Audit From Fresh Eyes (2026-04-20)
+
+### Scale
+
+~8,300 lines of Swift across 27 source files, 1 test file, 3 executables, and 5 documentation files. For a 0.x prototype, this is a well-shaped codebase. The code-to-documentation ratio is excellent.
+
+### What Is Genuinely Impressive
+
+1. **The ritual-as-compiler thesis is implemented, not just described.** The 13-stage `ResolutionPipeline` is a real, tested, deterministic pipeline. Coherence, Resonance, Conflict, Apotropaic evaluation, Mutation check, Tier resolution, Attribute generation, Template selection, Epoch resolution, Personality binding, and Manifestation all exist as discrete, testable stages. This is not a design document — it is a working compiler.
+
+2. **The Epoch Manifestation system is a genuinely novel collection mechanic.** Hiram son of Dagon can manifest as the Bronze Captain, the Ashkelon Butcher, or the Nameless Shield-Bearer depending on what fragments, site, and world state the practitioner configures. This creates combinatorial depth that most games simulate with random drops. The `EpochResolver` scoring system is well-designed: era alignment, domain matching, tag trigger intersection, site type preference, corruption gating, and libation influence all feed into a single score.
+
+3. **The NPC interiority system is remarkable.** Every NPC has a private truth, an unsatisfied want, a wound, a threshold, and an interior voice. These are not gameplay-facing yet (the CLI shows behavior descriptions, not interiority), but the data is structured and ready for an Expression Layer that can draw on it. The writing quality of the interiority text is exceptionally high — Yoel ben Shimri's theological doubt, Devorah's suppressed practitioner past, Baruk's bronze mirror. These are people.
+
+4. **The `WorldShard` actor is the correct multiplayer primitive.** It serializes all consequential actions, owns the shared state, and is wrappable by any interface (CLI, arena, future server). The arena already proves that 12 practitioners can act in the same world without data races.
+
+5. **The Astragali degradation mechanic is brilliant design.** The diagnostic tool becomes unreliable exactly as the Veil thins — the training wheels come off when the practitioner needs them most, and the thing that removed them was the practitioner's own ritual activity. This is entropy asymmetry made mechanical.
+
+6. **The Ritual Autopsy mastery-phase system is well-architected.** The same ritual produces different internal narration depending on whether the practitioner is an Apprentice, Practitioner, Adept, or Master. The language shifts from emotional/sensory to analytical/spare. This is diegetic progression without numbers.
+
+### Specific Issues Found
+
+1. **Tag duplication on merge.** `TagConstellation.merged(with:)` concatenates arrays without deduplication. Over multiple rituals, Codex entries and spirit tag constellations will accumulate duplicate tags. The `similarity(to:)` function uses `Set` comparison, so the mechanical impact is limited, but the `knownTags` on a CodexEntry will grow unboundedly. This is already noted in the Known Gaps but remains unaddressed.
+   - *Fix*: Add a `deduplicated()` method to `TagConstellation` or dedup in `merged(with:)`.
+
+2. **`PractitionerProfile.summmonerCapacity` has a typo** — triple 'm'. It compiles fine but is an API-level misspelling that will propagate if persistence or a public API ever serializes the field name.
+   - *Fix*: Rename to `summonerCapacity` before persistence is added.
+
+3. **The CLI (`GehennaCLI/main.swift`) is 44KB in a single file.** This is manageable for a prototype but will become unwieldy as features are added. The arena is 16KB in one file, which is fine.
+   - *Recommendation*: Before adding persistence or richer CLI commands, split the CLI into at least `GameSession.swift`, `RitualFlow.swift`, `CommandParser.swift`, and `CLIRenderer.swift`.
+
+4. **Root identity IDs are generated UUIDs.** Already noted in Known Gaps. Before persistence, these should become stable, deterministic IDs (e.g., UUID v5 from a canonical namespace + the trueName or a stable content hash).
+
+5. **`WorldShard.execute()` uses `world.regions.keys.first` to find the region ID.** This works with one region but will silently pick an arbitrary region if multiple regions exist. The shard should either track which region a site belongs to, or sites should carry a `regionID` reference.
+
+6. **Ritual entropy seeds in the CLI use wall-clock time** (`Date().timeIntervalSince1970`). This breaks deterministic replay across runs. The arena correctly uses tick + player ID + ritual count for seeds, which is the right pattern. The CLI should adopt the same approach.
+
+7. **The `RitualSite` suspicion multiplier `default` case** returns 1.0 but doesn't cover `springCaveMouth`, `ossuaryNiche`, or `wadiBed`. These site types exist in the enum but have no Ridge of Elah content yet. If content is added for them, the suspicion behavior will be the untuned default.
+
+8. **NPC rumor propagation is uniform.** In `WorldShard.executeRitual()`, when site suspicion exceeds 0.05, *all* NPCs hear the rumor at the same strength. This means a ritual at the Burning Ground (suspicion multiplier 0.2) and a ritual at the ancestor shrine (suspicion multiplier 3.0) both propagate to all six NPCs identically once the threshold is crossed. Rumors should attenuate by distance from the site and be weighted by NPC faction.
+
+9. **No `Codable` conformance on `JournalEntry`.** The journal entry has a `Sendable` conformance but no `Codable`. When persistence is added, this will need to be added along with coding for `EventSource`, `EventSeverity`, `JournalEntryType`, etc.
+
+10. **The `WorldClock` does not track in-world time of day or lunar phase.** `WorldTiming` exists as a ritual input but is not derived from the clock — it is set manually in the CLI and arena. For world autonomy, the clock should derive a `currentTiming: WorldTiming` from tick count so that rituals performed at "the wrong time" are naturally penalized without the player needing to set it.
+
+### Architectural Observations
+
+1. **The engine is genuinely server-ready.** The `WorldShard` actor + `PlayerCommand` + `CommandResult` pattern is a clean request/response loop. A Vapor or Hummingbird server could wrap it with minimal adapter code. The journal is already the event-sourcing spine — adding persistence means persisting journal entries and projecting state from them.
+
+2. **The Expression Layer boundary is well-maintained.** The `WorldDirector` reads state and emits text. It never mutates state. This invariant is preserved throughout the codebase.
+
+3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
+
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, and shared-world practitioner interaction are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented).
+
+5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
+
+### Recommended Near-Term Sequence
+
+Based on this audit, the most valuable next work is:
+
+1. **Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.
+2. **Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.
+3. **Derive `WorldTiming` from `WorldClock`** tick count. Map ticks to time-of-day and a simple lunar cycle. This gives the world a natural rhythm and removes the manual timing input from the CLI.
+4. **Attenuate NPC rumor propagation by site proximity and faction.** Village NPCs should hear village-site rumors loudly; cave-site rumors should travel slowly.
+5. **Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era.
+6. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay.
+7. **Split the CLI** into multiple files before it grows further.
+
+### Preserve (Additions)
+
+- Linux x86_64 as a verified deployment target.
+- The `WorldShard` actor as the wrappable multiplayer primitive.
+- The Epoch Manifestation system as the core collection mechanic.
+- NPC interiority as authored depth, not generated filler.
+- The Astragali degradation mechanic — training wheels that come off.
+- Mastery-phase-aware autopsy voice.
