@@ -58,7 +58,7 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
 
     // -- Progression (hidden) --
     /// How many spirits the practitioner can sustain simultaneously.
-    public var summmonerCapacity: Int
+    public var summonerCapacity: Int
 
     /// Reduces outcome variance on well-constructed configurations. Invisible.
     public var summonerSkill: Double
@@ -89,7 +89,7 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
 
     public init(id: UUID = UUID()) {
         self.id = id
-        self.summmonerCapacity = 1
+        self.summonerCapacity = 1
         self.summonerSkill = 0.0
         self.totalRituals = 0
         self.successfulRituals = 0
@@ -124,10 +124,10 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
         }
 
         // Capacity grows at milestones
-        if summmonerCapacity == 1 && successfulRituals >= 10 {
-            summmonerCapacity = 2
-        } else if summmonerCapacity == 2 && successfulRituals >= 40 {
-            summmonerCapacity = 3
+        if summonerCapacity == 1 && successfulRituals >= 10 {
+            summonerCapacity = 2
+        } else if summonerCapacity == 2 && successfulRituals >= 40 {
+            summonerCapacity = 3
         }
     }
 
