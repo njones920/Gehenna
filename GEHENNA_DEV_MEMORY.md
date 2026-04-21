@@ -327,7 +327,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, and shared-world practitioner interaction are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented).
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, and clock-derived timing are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **74 tests as of 2026-04-20.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -335,13 +335,27 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 Based on this audit, the most valuable next work is:
 
-1. **Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.
-2. **Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.
-3. **Derive `WorldTiming` from `WorldClock`** tick count. Map ticks to time-of-day and a simple lunar cycle. This gives the world a natural rhythm and removes the manual timing input from the CLI.
-4. **Attenuate NPC rumor propagation by site proximity and faction.** Village NPCs should hear village-site rumors loudly; cave-site rumors should travel slowly.
+1. ~~**Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.~~ **Done** (`c8a0add`). Renamed across PractitionerProfile, CLI, and tests.
+2. ~~**Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.~~ **Done** (`fd216b8`). Added Codable to ThresholdEvent, EventType, EventSource, EventSeverity, JournalEntry, JournalEntryType.
+3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
+4. **Attenuate NPC rumor propagation by site proximity and faction.** Village NPCs should hear village-site rumors loudly; cave-site rumors should travel slowly. ← **next**
 5. **Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era.
 6. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay.
 7. **Split the CLI** into multiple files before it grows further.
+
+## Architecture Decisions (Session 2026-04-20 Fixes)
+
+### WorldTiming Derived From Tick Count
+- **Decision**: `WorldClock` now owns the day/night cycle and lunar phase. `currentTimeOfDay`, `currentLunarPhase`, and `currentTiming` are computed properties derived from `currentTick`.
+- **Constants**: 7 ticks per day (`ticksPerDay`), 8 days per lunar cycle (`daysPerLunarCycle`), 56-tick full lunar cycle.
+- **Rationale**: The world needs a natural rhythm for world autonomy. Rituals performed at midday should be naturally penalized without the player manually selecting timing. This removes a manual input from the CLI and gives the Director a time-of-day signal for atmospheric narration.
+- **Implication**: The CLI and arena can now use `clock.currentTiming` as the default timing for rituals instead of hardcoded `WorldTiming(time: .night)`. The Director can check `clock.currentTimeOfDay` to vary narration. The existing `WorldTiming` parameter on `RitualIntent` should remain as an override for player-specified timing (e.g., "wait until deepNight, then perform the ritual").
+- **Invariant**: The mapping is deterministic from tick count alone. No wall-clock, no randomness. Replaying the same tick sequence produces the same timing.
+
+### Journal Types Made Codable
+- **Decision**: All journal and event types (`JournalEntry`, `ThresholdEvent`, `EventSource`, `EventSeverity`, etc.) now conform to `Codable`.
+- **Rationale**: Prerequisite for any persistence layer. Auto-synthesis handles everything since all stored properties are already Codable-compatible.
+- **Implication**: The journal can now be serialized to JSON lines or encoded for SQLite storage without additional work.
 
 ### Preserve (Additions)
 
@@ -351,3 +365,5 @@ Based on this audit, the most valuable next work is:
 - NPC interiority as authored depth, not generated filler.
 - The Astragali degradation mechanic — training wheels that come off.
 - Mastery-phase-aware autopsy voice.
+- WorldClock as the sole derivation source for time-of-day and lunar phase. 7 ticks/day, 56-tick lunar cycle.
+- Journal types are Codable and ready for persistence.
