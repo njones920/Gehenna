@@ -9,13 +9,13 @@
 import Foundation
 
 /// A threshold event triggered by regional state crossing a boundary.
-public struct ThresholdEvent: Sendable {
+public struct ThresholdEvent: Codable, Sendable {
     public let type: EventType
     public let regionID: UUID
     public let description: String
     public let tick: Int
 
-    public enum EventType: String, Sendable {
+    public enum EventType: String, Codable, Sendable {
         case ghostsHostile          // Ghost Activity crossed hostile threshold
         case corruptionDegrading    // Corruption degrading fragment Integrity
         case settlementFailing      // Stability collapsed — survival override
@@ -29,7 +29,7 @@ public struct ThresholdEvent: Sendable {
 }
 
 /// The origin system that produced this event.
-public enum EventSource: String, Sendable {
+public enum EventSource: String, Codable, Sendable {
     case ritual         // produced by ritual resolution
     case worldTick      // produced by the tick/decay cycle
     case cascade        // produced by threshold crossings or cascades
@@ -41,7 +41,7 @@ public enum EventSource: String, Sendable {
 }
 
 /// How important this event is — guides director attention and journal queries.
-public enum EventSeverity: Int, Sendable, Comparable {
+public enum EventSeverity: Int, Codable, Sendable, Comparable {
     case ambient = 0        // background noise — wind, silence, passage of time
     case notable = 1        // worth mentioning — a state change the practitioner might notice
     case significant = 2    // demands attention — threshold crossing, NPC reaction, site disturbance
@@ -53,7 +53,7 @@ public enum EventSeverity: Int, Sendable, Comparable {
 }
 
 /// An entry in the append-only event journal.
-public struct JournalEntry: Sendable, Identifiable {
+public struct JournalEntry: Codable, Sendable, Identifiable {
     public let id: UUID
     public let tick: Int
     public let type: JournalEntryType
@@ -88,7 +88,7 @@ public struct JournalEntry: Sendable, Identifiable {
         self.tags = tags
     }
 
-    public enum JournalEntryType: String, Sendable {
+    public enum JournalEntryType: String, Codable, Sendable {
         case ritualPerformed
         case spiritManifested
         case thresholdEvent
