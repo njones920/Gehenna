@@ -98,6 +98,85 @@ struct FragmentTests {
     }
 }
 
+@Suite("Narrative Tag Tests")
+struct NarrativeTagTests {
+    @Test("Tag constellation merge deduplicates exact duplicates")
+    func tagConstellationMergeDeduplicates() {
+        let warrior = NarrativeTag(.identity, "warrior")
+        let battle = NarrativeTag(.deathContext, "battle")
+
+        let left = TagConstellation([warrior, battle])
+        let right = TagConstellation([warrior, NarrativeTag(.cultural, "philistine")])
+
+        let merged = left.merged(with: right)
+
+        #expect(merged.tags.count == 3)
+        #expect(merged.tags[0] == warrior)
+        #expect(merged.tags[1] == battle)
+        #expect(merged.tags[2] == NarrativeTag(.cultural, "philistine"))
+    }
+
+    @Test("Codex encounter merge does not accumulate duplicate tags")
+    func codexEncounterMergeDeduplicatesKnownTags() {
+        let sharedTag = NarrativeTag(.identity, "warrior")
+        let additionalTag = NarrativeTag(.deathContext, "battle")
+        let rootIdentityID = UUID()
+
+        let attributes = SpiritAttributes(
+            strength: 0.4,
+            knowledge: 0.4,
+            will: 0.4,
+            stability: 0.6,
+            disposition: 0.4
+        )
+        let firstSpirit = Spirit(
+            template: .warrior,
+            tier: .common,
+            tags: TagConstellation([sharedTag, additionalTag]),
+            era: .ironAgeII,
+            epochName: "First",
+            rootIdentityID: rootIdentityID,
+            personalityTraits: [.loyal],
+            disposition: .curious,
+            attributes: attributes
+        )
+        let thirdTag = NarrativeTag(.cultural, "philistine")
+        let secondSpirit = Spirit(
+            template: .warrior,
+            tier: .common,
+            tags: TagConstellation([sharedTag, additionalTag, thirdTag]),
+            era: .ironAgeII,
+            epochName: "Second",
+            rootIdentityID: rootIdentityID,
+            personalityTraits: [.loyal],
+            disposition: .curious,
+            attributes: attributes
+        )
+
+        var codex = CodexOfTheDead()
+        let ritualID = UUID()
+
+        let entryID = codex.recordEncounter(
+            spirit: firstSpirit,
+            autopsy: [],
+            ritualID: ritualID,
+            tick: 1
+        )
+        _ = codex.recordEncounter(
+            spirit: secondSpirit,
+            autopsy: [],
+            ritualID: UUID(),
+            tick: 2
+        )
+
+        let knownTags = codex.entries[entryID]?.knownTags.tags ?? []
+        #expect(knownTags.count == 3)
+        #expect(knownTags.contains(sharedTag))
+        #expect(knownTags.contains(additionalTag))
+        #expect(knownTags.contains(thirdTag))
+    }
+}
+
 // MARK: - Region State Tests
 
 @Suite("Region State Tests")

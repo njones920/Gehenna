@@ -56,9 +56,21 @@ public struct TagConstellation: Codable, Hashable, Sendable {
         tags.contains { $0.value == value }
     }
 
+    /// Remove exact duplicate tags while preserving first-seen order.
+    public func deduplicated() -> TagConstellation {
+        var seen: Set<NarrativeTag> = []
+        var uniqueTags: [NarrativeTag] = []
+
+        for tag in tags where seen.insert(tag).inserted {
+            uniqueTags.append(tag)
+        }
+
+        return TagConstellation(uniqueTags)
+    }
+
     /// Merge two constellations, combining their tags.
     public func merged(with other: TagConstellation) -> TagConstellation {
-        TagConstellation(tags + other.tags)
+        TagConstellation(tags + other.tags).deduplicated()
     }
 
     /// Similarity score between two constellations.

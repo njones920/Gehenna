@@ -296,8 +296,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 ### Specific Issues Found
 
-1. **Tag duplication on merge.** `TagConstellation.merged(with:)` concatenates arrays without deduplication. Over multiple rituals, Codex entries and spirit tag constellations will accumulate duplicate tags. The `similarity(to:)` function uses `Set` comparison, so the mechanical impact is limited, but the `knownTags` on a CodexEntry will grow unboundedly. This is already noted in the Known Gaps but remains unaddressed.
-   - *Fix*: Add a `deduplicated()` method to `TagConstellation` or dedup in `merged(with:)`.
+1. ~~**Tag duplication on merge.**~~ **Resolved in the local working tree.** `TagConstellation.merged(with:)` now deduplicates exact duplicate tags while preserving first-seen order. This prevents Codex entries and spirit tag histories from growing duplicate tag rows over repeated encounters.
 
 2. ~~**`PractitionerProfile.summmonerCapacity` has a typo** — triple 'm'.~~ **Resolved in `c8a0add`.** The field is now `summonerCapacity`, avoiding a bad serialized/public API name before persistence lands.
 
@@ -327,7 +326,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, and clock-derived timing are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **74 tests as of 2026-04-20.**
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, and tag deduplication are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **76 tests as of 2026-04-20.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -357,6 +356,18 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: Prerequisite for any persistence layer. Auto-synthesis handles everything since all stored properties are already Codable-compatible.
 - **Implication**: The journal can now be serialized to JSON lines or encoded for SQLite storage without additional work.
 
+### Tag Constellation Merge Deduplication
+- **Decision**: `TagConstellation.merged(with:)` now deduplicates exact duplicate tags after merging while preserving first-seen order.
+- **Rationale**: Codex accumulation and ritual tag aggregation should not bloat with repeated identical tags. Similarity logic already treated tags as a set; the stored representation now matches that intent better.
+- **Implication**: Repeated encounters with the same spirit or overlapping ritual inputs will not inflate `knownTags` counts artificially. Existing ordering remains stable for rendering/debugging.
+
+## Repository Maintenance (Session 2026-04-20)
+
+### GitHub Actions Checkout Updated To v5
+- **Decision**: Updated `.github/workflows/ci.yml` from `actions/checkout@v4` to `actions/checkout@v5`.
+- **Rationale**: GitHub warned that Node.js 20-based JavaScript actions are deprecated. `checkout@v5` moves the workflow onto the Node 24 runtime line and removes that warning source.
+- **Implication**: This addresses the checkout deprecation warnings on both macOS and Linux CI jobs. Any remaining CI failure after this change is a real job failure, not the Node 20 warning.
+
 ### Preserve (Additions)
 
 - Linux x86_64 as a verified deployment target.
@@ -367,3 +378,4 @@ Based on this audit, the most valuable next work is:
 - Mastery-phase-aware autopsy voice.
 - WorldClock as the sole derivation source for time-of-day and lunar phase. 7 ticks/day, 56-tick lunar cycle.
 - Journal types are Codable and ready for persistence.
+- Tag constellation merges preserve order while removing exact duplicates.
