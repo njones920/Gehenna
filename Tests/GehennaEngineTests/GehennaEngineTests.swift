@@ -919,6 +919,47 @@ struct WorldClockTests {
         // With such extreme values, we should see at least one threshold event
         #expect(!events.isEmpty || !world.journal.isEmpty)
     }
+
+    @Test("Clock derives time of day from tick count")
+    func clockDerivesTimeOfDay() {
+        var clock = WorldClock()
+        // Tick 0 = dawn, 1 = morning, ... 5 = night, 6 = deepNight, 7 = dawn again
+        #expect(clock.currentTimeOfDay == .dawn)
+
+        clock.currentTick = 5
+        #expect(clock.currentTimeOfDay == .night)
+
+        clock.currentTick = 6
+        #expect(clock.currentTimeOfDay == .deepNight)
+
+        clock.currentTick = 7  // wraps to dawn
+        #expect(clock.currentTimeOfDay == .dawn)
+    }
+
+    @Test("Clock derives lunar phase from tick count")
+    func clockDerivesLunarPhase() {
+        var clock = WorldClock()
+        // Day 0 (ticks 0-6) = newMoon, day 1 (ticks 7-13) = waxingCrescent, etc.
+        #expect(clock.currentLunarPhase == .newMoon)
+
+        clock.currentTick = 7  // day 1
+        #expect(clock.currentLunarPhase == .waxingCrescent)
+
+        clock.currentTick = 28  // day 4
+        #expect(clock.currentLunarPhase == .fullMoon)
+
+        clock.currentTick = 56  // day 8 — wraps to newMoon
+        #expect(clock.currentLunarPhase == .newMoon)
+    }
+
+    @Test("Clock currentTiming combines time of day and lunar phase")
+    func clockCurrentTimingCombines() {
+        var clock = WorldClock()
+        clock.currentTick = 33  // day 4 (fullMoon), tick-in-day 5 (night)
+        let timing = clock.currentTiming
+        #expect(timing.timeOfDay == .night)
+        #expect(timing.lunarPhase == .fullMoon)
+    }
 }
 
 // MARK: - Site State Tests

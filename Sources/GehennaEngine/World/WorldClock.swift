@@ -145,6 +145,41 @@ public struct WorldClock: Sendable {
 
     // MARK: - Helpers
 
+    // MARK: Derived World Timing
+
+    /// How many ticks make one in-world day. One tick per TimeOfDay slot.
+    /// 7 ticks = dawn → morning → midday → afternoon → dusk → night → deepNight.
+    public static let ticksPerDay: Int = 7
+
+    /// How many in-world days make one lunar cycle.
+    /// 8 days = newMoon → waxingCrescent → ... → waningCrescent → repeat.
+    /// Full cycle = 7 × 8 = 56 ticks.
+    public static let daysPerLunarCycle: Int = 8
+
+    /// The current time of day, derived deterministically from the tick count.
+    public var currentTimeOfDay: TimeOfDay {
+        let allCases: [TimeOfDay] = [.dawn, .morning, .midday, .afternoon, .dusk, .night, .deepNight]
+        let index = currentTick % Self.ticksPerDay
+        return allCases[index]
+    }
+
+    /// The current lunar phase, derived deterministically from the tick count.
+    public var currentLunarPhase: LunarPhase {
+        let allCases: [LunarPhase] = [
+            .newMoon, .waxingCrescent, .firstQuarter, .waxingGibbous,
+            .fullMoon, .waningGibbous, .lastQuarter, .waningCrescent
+        ]
+        let dayNumber = currentTick / Self.ticksPerDay
+        let index = dayNumber % Self.daysPerLunarCycle
+        return allCases[index]
+    }
+
+    /// The current timing context, derived from tick count.
+    /// Use this as the default when the practitioner does not specify timing.
+    public var currentTiming: WorldTiming {
+        WorldTiming(time: currentTimeOfDay, lunar: currentLunarPhase)
+    }
+
     private func eventSeverity(for type: ThresholdEvent.EventType) -> EventSeverity {
         switch type {
         case .sebittiSpawned, .motApproaching: return .rupture
