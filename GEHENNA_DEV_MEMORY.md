@@ -372,6 +372,11 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: GitHub warned that Node.js 20-based JavaScript actions are deprecated. `checkout@v5` moves the workflow onto the Node 24 runtime line and removes that warning source.
 - **Implication**: This addresses the checkout deprecation warnings on both macOS and Linux CI jobs. Any remaining CI failure after this change is a real job failure, not the Node 20 warning.
 
+### macOS CI Now Selects Xcode 16.2
+- **Decision**: Added an explicit macOS workflow step to select `/Applications/Xcode_16.2.app` before running `swift test`.
+- **Rationale**: The GitHub `macos-14-arm64` runner defaults to Apple Swift 5.10, which cannot build a package with Swift tools version 6.0. The workflow was failing in the macOS `Test` step with `package 'gehenna' is using Swift tools version 6.0.0 but the installed version is 5.10.0`.
+- **Implication**: macOS CI should now run under a Swift 6-capable Xcode instead of the runner default. Linux was already green because it uses the `swift:6.0` container.
+
 ### Preserve (Additions)
 
 - Linux x86_64 as a verified deployment target.
