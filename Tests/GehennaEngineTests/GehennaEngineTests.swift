@@ -437,7 +437,7 @@ struct ProfileTests {
     func newPractitioner() {
         let profile = PractitionerProfile()
         #expect(profile.masteryPhase == .apprentice)
-        #expect(profile.summmonerCapacity == 1)
+        #expect(profile.summonerCapacity == 1)
     }
 
     @Test("Capacity grows at milestones")
@@ -446,7 +446,7 @@ struct ProfileTests {
         for _ in 0..<10 {
             profile.recordRitual(success: true, wasMutation: false, domain: .war, entropyCost: 0.1)
         }
-        #expect(profile.summmonerCapacity == 2)
+        #expect(profile.summonerCapacity == 2)
     }
 
     @Test("Mastery phase advances with experience")

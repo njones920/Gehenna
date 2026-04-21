@@ -634,7 +634,7 @@ final class GameSession: @unchecked Sendable {
         if profile.mutationRituals > 0 {
             print("    Mutations: \(profile.mutationRituals)")
         }
-        print("    Spirits sustained: \(profile.summmonerCapacity)")
+        print("    Spirits sustained: \(profile.summonerCapacity)")
         print("    Purity: \(describeLevel(profile.tokens.effectivePurity, low: "unclean", mid: "adequate", high: "purified"))")
         if profile.tokens.corpseContagion > 0.3 {
             print("    ⚠ Heavy contagion from handling the dead.")
