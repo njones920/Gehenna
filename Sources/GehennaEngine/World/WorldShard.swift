@@ -364,10 +364,13 @@ public actor WorldShard {
         let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
 
         // Propagate rumors
-        let siteSuspicion = sites[session.currentSiteIndex].localSuspicion
-        if siteSuspicion > 0.05 {
+        let rumorSite = sites[session.currentSiteIndex]
+        if rumorSite.localSuspicion > 0.05 {
             for i in npcs.indices {
-                npcs[i].hearRumor(strength: siteSuspicion * 0.3)
+                let rumorStrength = rumorSite.rumorStrength(for: npcs[i].faction)
+                if rumorStrength > 0.01 {
+                    npcs[i].hearRumor(strength: rumorStrength)
+                }
             }
         }
 

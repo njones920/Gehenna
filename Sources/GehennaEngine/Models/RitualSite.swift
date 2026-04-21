@@ -200,6 +200,50 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         min(1.0, veilThinness + localVeilModifier)
     }
 
+    /// Rumor strength that reaches a given faction from this site.
+    /// Site type determines how socially "near" the ritual feels to that faction.
+    public func rumorStrength(for faction: Faction, baseScale: Double = 0.3) -> Double {
+        let siteReach: Double = switch type {
+        case .ancestorShrine:   1.0
+        case .collapsingTemple: 0.55
+        case .battlefield:      0.35
+        case .burialCave:       0.25
+        case .topheth:          0.15
+        case .springCaveMouth:  0.3
+        case .ossuaryNiche:     0.2
+        case .wadiBed:          0.4
+        }
+
+        let factionReach: Double = switch (type, faction) {
+        case (.ancestorShrine, .elders):          1.4
+        case (.ancestorShrine, .priesthood):      1.2
+        case (.ancestorShrine, .traders):         0.6
+        case (.collapsingTemple, .priesthood):    1.4
+        case (.collapsingTemple, .elders):        0.8
+        case (.collapsingTemple, .traders):       0.7
+        case (.battlefield, .traders):            1.1
+        case (.battlefield, .elders):             0.7
+        case (.battlefield, .priesthood):         0.6
+        case (.burialCave, .priesthood):          0.9
+        case (.burialCave, .elders):              0.5
+        case (.burialCave, .traders):             0.4
+        case (.topheth, .priesthood):             1.3
+        case (.topheth, .elders):                 0.6
+        case (.topheth, .traders):                0.3
+        case (.springCaveMouth, .priesthood):     0.9
+        case (.springCaveMouth, .elders):         0.8
+        case (.springCaveMouth, .traders):        0.7
+        case (.ossuaryNiche, .elders):            1.0
+        case (.ossuaryNiche, .priesthood):        0.9
+        case (.ossuaryNiche, .traders):           0.3
+        case (.wadiBed, .traders):                1.0
+        case (.wadiBed, .elders):                 0.6
+        case (.wadiBed, .priesthood):             0.5
+        }
+
+        return localSuspicion * baseScale * siteReach * factionReach
+    }
+
     /// Suspicion multiplier based on site type.
     /// Performing rituals at a living village is much more noticed.
     private var suspicionMultiplier: Double {

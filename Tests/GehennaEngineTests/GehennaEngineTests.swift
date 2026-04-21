@@ -1152,6 +1152,31 @@ struct SiteStateTests {
         #expect(shrine.localSuspicion > cave.localSuspicion)
     }
 
+    @Test("Village rumors reach elders more strongly than cave rumors")
+    func villageRumorsTravelFurtherThanCaveRumors() {
+        var shrine = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        var cave = RitualSite(name: "Nahal Caves", type: .burialCave, affinity: .earth)
+
+        shrine.recordRitualPerformed()
+        cave.recordRitualPerformed()
+
+        let shrineRumor = shrine.rumorStrength(for: .elders)
+        let caveRumor = cave.rumorStrength(for: .elders)
+
+        #expect(shrineRumor > caveRumor)
+    }
+
+    @Test("Topheth rumors reach priesthood more strongly than traders")
+    func tophethRumorsFavorPriesthood() {
+        var topheth = RitualSite(name: "The Burning Ground", type: .topheth, affinity: .fire)
+        topheth.recordRitualPerformed()
+
+        let priestRumor = topheth.rumorStrength(for: .priesthood)
+        let traderRumor = topheth.rumorStrength(for: .traders)
+
+        #expect(priestRumor > traderRumor)
+    }
+
     @Test("Witness exposure cools over time")
     func witnessExposureCools() {
         var site = RitualSite(name: "Test", type: .burialCave, affinity: .earth)
