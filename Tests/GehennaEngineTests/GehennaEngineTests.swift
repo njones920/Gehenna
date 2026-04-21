@@ -555,30 +555,45 @@ struct EpochTests {
     func rootIdentityDeterministicIDs() {
         let id1 = RootIdentity(
             trueName: "Hiram, son of Dagon",
-            coreTags: TagConstellation([]),
-            epochs: [],
+            coreTags: TagConstellation([
+                NarrativeTag(.identity, "warrior"),
+                NarrativeTag(.cultural, "coastal_warrior"),
+            ]),
+            epochs: [
+                Epoch(name: "Bronze Captain", template: .warrior, era: .ironAgeII, domain: .war)
+            ],
             nativeEra: .ironAgeII,
             culture: "Philistine"
         )
         
         let id2 = RootIdentity(
             trueName: "Hiram, son of Dagon",
-            coreTags: TagConstellation([]),
-            epochs: [],
+            coreTags: TagConstellation([
+                NarrativeTag(.cultural, "coastal_warrior"),
+                NarrativeTag(.identity, "warrior"),
+            ]),
+            epochs: [
+                Epoch(name: "Bronze Captain", template: .warrior, era: .ironAgeII, domain: .war)
+            ],
             nativeEra: .ironAgeII,
             culture: "Philistine"
         )
         
         let id3 = RootIdentity(
-            trueName: "Someone Else",
-            coreTags: TagConstellation([]),
-            epochs: [],
+            trueName: "Hiram, son of Dagon",
+            coreTags: TagConstellation([
+                NarrativeTag(.identity, "warrior"),
+                NarrativeTag(.cultural, "highland_village"),
+            ]),
+            epochs: [
+                Epoch(name: "Bronze Captain", template: .warrior, era: .ironAgeII, domain: .war)
+            ],
             nativeEra: .ironAgeII,
             culture: "Philistine"
         )
         
         #expect(id1.id == id2.id, "Identical identities should produce the same deterministic ID")
-        #expect(id1.id != id3.id, "Different identities should produce different IDs")
+        #expect(id1.id != id3.id, "Different identity content should produce different IDs")
     }
 
     @Test("Epoch resolver selects warrior epoch for battlefield configuration")

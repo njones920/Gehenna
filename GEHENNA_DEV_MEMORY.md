@@ -326,7 +326,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, and rumor attenuation are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **78 tests as of 2026-04-20.**
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, rumor attenuation, and deterministic root identity IDs are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **79 tests as of 2026-04-20.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -337,7 +337,7 @@ Based on this audit, the most valuable next work is:
 1. ~~**Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.~~ **Done** (`c8a0add`). Renamed across PractitionerProfile, CLI, and tests.
 2. ~~**Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.~~ **Done** (`fd216b8`). Added Codable to ThresholdEvent, EventType, EventSource, EventSeverity, JournalEntry, JournalEntryType.
 3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
-4. ~~**Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era.~~ **Done** (`551bfec`). Implemented `UUID.deterministic(from:)` using a dual-seeded FNV-1a hash to generate a stable Version 8 UUID without adding CryptoKit dependencies.
+4. ~~**Stabilize root identity IDs** with deterministic UUID generation.~~ **Done, then tightened in the local working tree.** Root identity IDs are now derived from a canonical seed built from normalized name, culture, native era, core tags, and epoch descriptors before hashing into a stable Version 8 UUID. This reduces collisions compared with the earlier `trueName + culture + nativeEra` seed.
 5. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay. ← **next**
 6. **Split the CLI** into multiple files before it grows further.
 
@@ -365,6 +365,11 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: A ritual at Kfar Shalem should move through elders and priesthood much faster than the same ritual in a remote cave. A topheth should trigger priestly attention more than trader chatter. The prior uniform spread flattened social texture.
 - **Implication**: `RitualSite` now exposes a shared rumor-strength rule used by both the interactive CLI and `WorldShard`. This keeps the single-player and shared-world paths aligned and makes rumor propagation feel more local and culturally shaped without introducing a full rumor graph yet.
 
+### Root Identity Seed Widened
+- **Decision**: The deterministic root identity seed now includes normalized name, culture, native era, canonical core tags, and canonical epoch descriptors rather than only `trueName + culture + nativeEra`.
+- **Rationale**: Same-named people in the same culture/era are plausible in a historical dataset. The wider canonical seed materially reduces accidental collisions before canon IDs exist.
+- **Implication**: Root identity IDs remain deterministic across runs, but they are now more robust against future canon expansion. The exploratory `test_crypto.swift` scratch file was also removed; the package still avoids CryptoKit dependencies.
+
 ## Repository Maintenance (Session 2026-04-20)
 
 ### GitHub Actions Checkout Updated To v5
@@ -389,3 +394,4 @@ Based on this audit, the most valuable next work is:
 - Journal types are Codable and ready for persistence.
 - Tag constellation merges preserve order while removing exact duplicates.
 - Rumor spread is site- and faction-weighted, not globally uniform.
+- Root identity IDs are deterministic from a widened canonical identity seed, not a thin three-field seed.
