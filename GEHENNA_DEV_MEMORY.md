@@ -337,8 +337,8 @@ Based on this audit, the most valuable next work is:
 1. ~~**Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.~~ **Done** (`c8a0add`). Renamed across PractitionerProfile, CLI, and tests.
 2. ~~**Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.~~ **Done** (`fd216b8`). Added Codable to ThresholdEvent, EventType, EventSource, EventSeverity, JournalEntry, JournalEntryType.
 3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
-4. **Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era. ← **next**
-5. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay.
+4. ~~**Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era.~~ **Done** (`551bfec`). Implemented `UUID.deterministic(from:)` using a dual-seeded FNV-1a hash to generate a stable Version 8 UUID without adding CryptoKit dependencies.
+5. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay. ← **next**
 6. **Split the CLI** into multiple files before it grows further.
 
 ## Architecture Decisions (Session 2026-04-20 Fixes)
