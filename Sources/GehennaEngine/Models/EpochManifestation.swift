@@ -114,15 +114,71 @@ public struct RootIdentity: Codable, Hashable, Sendable, Identifiable {
         if let id = id {
             self.id = id
         } else {
-            let namePart = trueName ?? "unknown"
-            let seedString = "\(namePart)|\(culture)|\(nativeEra.rawValue)"
-            self.id = UUID.deterministic(from: seedString)
+            self.id = UUID.deterministic(from: RootIdentity.identitySeed(
+                trueName: trueName,
+                coreTags: coreTags,
+                epochs: epochs,
+                nativeEra: nativeEra,
+                culture: culture
+            ))
         }
         self.trueName = trueName
         self.coreTags = coreTags
         self.epochs = epochs
         self.nativeEra = nativeEra
         self.culture = culture
+    }
+
+    private static func identitySeed(
+        trueName: String?,
+        coreTags: TagConstellation,
+        epochs: [Epoch],
+        nativeEra: Era,
+        culture: String
+    ) -> String {
+        let normalizedName = (trueName ?? "unknown")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+
+        let normalizedCulture = culture
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+
+        let canonicalTags = coreTags.tags
+            .map { "\($0.dimension.rawValue):\($0.value):\($0.weight)" }
+            .sorted()
+            .joined(separator: "|")
+
+        let canonicalEpochEntries = epochs.map { epoch -> String in
+            let epochName = epoch.name
+            let template = epoch.template.rawValue
+            let era = String(epoch.era.rawValue)
+            let domain = epoch.domain?.rawValue ?? "none"
+            let preferredSiteType = epoch.preferredSiteType?.rawValue ?? "none"
+            let corruptionThreshold = epoch.corruptionThreshold.map { String($0) } ?? "none"
+            let triggerTags = epoch.triggerTags.sorted().joined(separator: ",")
+
+            return [
+                epochName,
+                template,
+                era,
+                domain,
+                preferredSiteType,
+                corruptionThreshold,
+                triggerTags
+            ].joined(separator: "~")
+        }
+        let canonicalEpochs = canonicalEpochEntries
+            .sorted()
+            .joined(separator: "|")
+
+        return [
+            "name=\(normalizedName)",
+            "culture=\(normalizedCulture)",
+            "nativeEra=\(nativeEra.rawValue)",
+            "coreTags=\(canonicalTags)",
+            "epochs=\(canonicalEpochs)"
+        ].joined(separator: "||")
     }
 }
 
