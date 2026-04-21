@@ -311,7 +311,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 7. **The `RitualSite` suspicion multiplier `default` case** returns 1.0 but doesn't cover `springCaveMouth`, `ossuaryNiche`, or `wadiBed`. These site types exist in the enum but have no Ridge of Elah content yet. If content is added for them, the suspicion behavior will be the untuned default.
 
-8. **NPC rumor propagation is uniform.** In `WorldShard.executeRitual()`, when site suspicion exceeds 0.05, *all* NPCs hear the rumor at the same strength. This means a ritual at the Burning Ground (suspicion multiplier 0.2) and a ritual at the ancestor shrine (suspicion multiplier 3.0) both propagate to all six NPCs identically once the threshold is crossed. Rumors should attenuate by distance from the site and be weighted by NPC faction.
+8. ~~**NPC rumor propagation is uniform.**~~ **Resolved in the local working tree.** Rumor strength is now derived from both site type and faction. Village shrine rumors hit elders and priesthood harder than traders; isolated cave rumors spread more weakly; topheth rumors carry most strongly into priestly suspicion. The interactive CLI and `WorldShard` now use the same site-level rumor rule.
 
 9. ~~**No `Codable` conformance on `JournalEntry`.**~~ **Resolved in `fd216b8`.** `JournalEntry`, `ThresholdEvent`, `EventSource`, `EventSeverity`, and related enums now conform to `Codable`, removing the first serialization blocker for persistence.
 
@@ -326,7 +326,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, and tag deduplication are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **76 tests as of 2026-04-20.**
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, and rumor attenuation are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **78 tests as of 2026-04-20.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -337,10 +337,9 @@ Based on this audit, the most valuable next work is:
 1. ~~**Fix the typo** (`summmonerCapacity` → `summonerCapacity`) before any persistence work serializes it.~~ **Done** (`c8a0add`). Renamed across PractitionerProfile, CLI, and tests.
 2. ~~**Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.~~ **Done** (`fd216b8`). Added Codable to ThresholdEvent, EventType, EventSource, EventSeverity, JournalEntry, JournalEntryType.
 3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
-4. **Attenuate NPC rumor propagation by site proximity and faction.** Village NPCs should hear village-site rumors loudly; cave-site rumors should travel slowly. ← **next**
-5. **Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era.
-6. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay.
-7. **Split the CLI** into multiple files before it grows further.
+4. **Stabilize root identity IDs** with deterministic UUID v5 generation from trueName/culture/era. ← **next**
+5. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay.
+6. **Split the CLI** into multiple files before it grows further.
 
 ## Architecture Decisions (Session 2026-04-20 Fixes)
 
@@ -361,6 +360,11 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: Codex accumulation and ritual tag aggregation should not bloat with repeated identical tags. Similarity logic already treated tags as a set; the stored representation now matches that intent better.
 - **Implication**: Repeated encounters with the same spirit or overlapping ritual inputs will not inflate `knownTags` counts artificially. Existing ordering remains stable for rendering/debugging.
 
+### Site And Faction Weighted Rumor Propagation
+- **Decision**: Rumor spread now depends on both ritual site type and NPC faction instead of one flat `siteSuspicion * 0.3` broadcast.
+- **Rationale**: A ritual at Kfar Shalem should move through elders and priesthood much faster than the same ritual in a remote cave. A topheth should trigger priestly attention more than trader chatter. The prior uniform spread flattened social texture.
+- **Implication**: `RitualSite` now exposes a shared rumor-strength rule used by both the interactive CLI and `WorldShard`. This keeps the single-player and shared-world paths aligned and makes rumor propagation feel more local and culturally shaped without introducing a full rumor graph yet.
+
 ## Repository Maintenance (Session 2026-04-20)
 
 ### GitHub Actions Checkout Updated To v5
@@ -379,3 +383,4 @@ Based on this audit, the most valuable next work is:
 - WorldClock as the sole derivation source for time-of-day and lunar phase. 7 ticks/day, 56-tick lunar cycle.
 - Journal types are Codable and ready for persistence.
 - Tag constellation merges preserve order while removing exact duplicates.
+- Rumor spread is site- and faction-weighted, not globally uniform.
