@@ -162,6 +162,42 @@ final class GameSession: @unchecked Sendable {
         print("\n  [\(site.name)] > ", terminator: "")
     }
 
+    func deterministicSeed(fragmentID: UUID? = nil, salt: UInt64 = 0) -> UInt64 {
+        let practitionerBytes = profile.id.uuid
+        let practitionerSalt =
+            (UInt64(practitionerBytes.0) << 56) |
+            (UInt64(practitionerBytes.1) << 48) |
+            (UInt64(practitionerBytes.2) << 40) |
+            (UInt64(practitionerBytes.3) << 32) |
+            (UInt64(practitionerBytes.4) << 24) |
+            (UInt64(practitionerBytes.5) << 16) |
+            (UInt64(practitionerBytes.6) << 8) |
+            UInt64(practitionerBytes.7)
+
+        let fragmentSalt: UInt64
+        if let fragmentID {
+            let fragmentBytes = fragmentID.uuid
+            fragmentSalt =
+                (UInt64(fragmentBytes.8) << 56) |
+                (UInt64(fragmentBytes.9) << 48) |
+                (UInt64(fragmentBytes.10) << 40) |
+                (UInt64(fragmentBytes.11) << 32) |
+                (UInt64(fragmentBytes.12) << 24) |
+                (UInt64(fragmentBytes.13) << 16) |
+                (UInt64(fragmentBytes.14) << 8) |
+                UInt64(fragmentBytes.15)
+        } else {
+            fragmentSalt = 0
+        }
+
+        return UInt64(bitPattern: Int64(clock.currentTick))
+            &+ practitionerSalt
+            &+ fragmentSalt
+            &+ UInt64(ritualCount)
+            &+ UInt64(currentSiteIndex)
+            &+ salt
+    }
+
     // MARK: - Commands
 
     func lookAround() {
@@ -387,7 +423,7 @@ final class GameSession: @unchecked Sendable {
         }
 
         // Step 6: Timing
-        let timing = WorldTiming(time: .night, lunar: .waxingGibbous) // default for now
+        let timing = clock.currentTiming
 
         // Compile the ritual
         let config = RitualConfiguration(
@@ -404,7 +440,7 @@ final class GameSession: @unchecked Sendable {
         print("\n  ── Casting the Bones ──")
         print()
         let regionID = world.regions.keys.first!
-        let seed = UInt64(ritualCount) &+ UInt64(Date().timeIntervalSince1970.bitPattern)
+        let seed = deterministicSeed(fragmentID: fragment.id)
         let reading = astragali.cast(
             configuration: config,
             regionState: world.regions[regionID]!,
@@ -524,10 +560,11 @@ final class GameSession: @unchecked Sendable {
         guard let config = Ritual.compile({
             fragment
             site
+            clock.currentTiming
         }) else { return }
 
         let regionID = world.regions.keys.first!
-        let seed = UInt64(Date().timeIntervalSince1970.bitPattern)
+        let seed = deterministicSeed(fragmentID: fragment.id, salt: 1)
         let reading = astragali.cast(
             configuration: config,
             regionState: world.regions[regionID]!,
