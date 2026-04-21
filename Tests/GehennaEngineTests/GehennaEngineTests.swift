@@ -551,6 +551,36 @@ struct EpochTests {
         RegionState(name: "Ridge of Elah", stability: 0.8)
     }
 
+    @Test("Root identity IDs are deterministic based on string traits")
+    func rootIdentityDeterministicIDs() {
+        let id1 = RootIdentity(
+            trueName: "Hiram, son of Dagon",
+            coreTags: TagConstellation([]),
+            epochs: [],
+            nativeEra: .ironAgeII,
+            culture: "Philistine"
+        )
+        
+        let id2 = RootIdentity(
+            trueName: "Hiram, son of Dagon",
+            coreTags: TagConstellation([]),
+            epochs: [],
+            nativeEra: .ironAgeII,
+            culture: "Philistine"
+        )
+        
+        let id3 = RootIdentity(
+            trueName: "Someone Else",
+            coreTags: TagConstellation([]),
+            epochs: [],
+            nativeEra: .ironAgeII,
+            culture: "Philistine"
+        )
+        
+        #expect(id1.id == id2.id, "Identical identities should produce the same deterministic ID")
+        #expect(id1.id != id3.id, "Different identities should produce different IDs")
+    }
+
     @Test("Epoch resolver selects warrior epoch for battlefield configuration")
     func epochResolverSelectsWarrior() {
         let identity = RidgeOfElah.hiramSonOfDagon()
