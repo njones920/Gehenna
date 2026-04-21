@@ -104,19 +104,65 @@ public struct RootIdentity: Codable, Hashable, Sendable, Identifiable {
     public let culture: String
 
     public init(
-        id: UUID = UUID(),
+        id: UUID? = nil,
         trueName: String? = nil,
         coreTags: TagConstellation,
         epochs: [Epoch],
         nativeEra: Era,
         culture: String
     ) {
-        self.id = id
+        if let id = id {
+            self.id = id
+        } else {
+            let namePart = trueName ?? "unknown"
+            let seedString = "\(namePart)|\(culture)|\(nativeEra.rawValue)"
+            self.id = UUID.deterministic(from: seedString)
+        }
         self.trueName = trueName
         self.coreTags = coreTags
         self.epochs = epochs
         self.nativeEra = nativeEra
         self.culture = culture
+    }
+}
+
+extension UUID {
+    /// Generates a deterministic UUID based on a stable string.
+    /// This uses a stable custom hash to avoid the random seeding of Swift's `String.hashValue`.
+    public static func deterministic(from string: String) -> UUID {
+        let bytes = Array(string.utf8)
+        
+        // FNV-1a 64-bit hash function
+        func fnv1a(_ data: [UInt8], seed: UInt64) -> UInt64 {
+            var hash = seed
+            for byte in data {
+                hash ^= UInt64(byte)
+                hash = hash &* 0x100000001B3
+            }
+            return hash
+        }
+        
+        // Generate two 64-bit hashes using different seeds to fill 128 bits
+        let h1 = fnv1a(bytes, seed: 0xCBF29CE484222325)
+        let h2 = fnv1a(bytes, seed: 0x0123456789ABCDEF)
+        
+        var uuidBytes: [UInt8] = [
+            UInt8((h1 >> 56) & 0xFF), UInt8((h1 >> 48) & 0xFF), UInt8((h1 >> 40) & 0xFF), UInt8((h1 >> 32) & 0xFF),
+            UInt8((h1 >> 24) & 0xFF), UInt8((h1 >> 16) & 0xFF), UInt8((h1 >> 8) & 0xFF), UInt8(h1 & 0xFF),
+            UInt8((h2 >> 56) & 0xFF), UInt8((h2 >> 48) & 0xFF), UInt8((h2 >> 40) & 0xFF), UInt8((h2 >> 32) & 0xFF),
+            UInt8((h2 >> 24) & 0xFF), UInt8((h2 >> 16) & 0xFF), UInt8((h2 >> 8) & 0xFF), UInt8(h2 & 0xFF)
+        ]
+        
+        // Set UUID version to 8 (Custom) and variant to RFC4122
+        uuidBytes[6] = (uuidBytes[6] & 0x0F) | 0x80
+        uuidBytes[8] = (uuidBytes[8] & 0x3F) | 0x80
+        
+        return UUID(uuid: (
+            uuidBytes[0], uuidBytes[1], uuidBytes[2], uuidBytes[3],
+            uuidBytes[4], uuidBytes[5], uuidBytes[6], uuidBytes[7],
+            uuidBytes[8], uuidBytes[9], uuidBytes[10], uuidBytes[11],
+            uuidBytes[12], uuidBytes[13], uuidBytes[14], uuidBytes[15]
+        ))
     }
 }
 
