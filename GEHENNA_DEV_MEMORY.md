@@ -299,8 +299,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 1. **Tag duplication on merge.** `TagConstellation.merged(with:)` concatenates arrays without deduplication. Over multiple rituals, Codex entries and spirit tag constellations will accumulate duplicate tags. The `similarity(to:)` function uses `Set` comparison, so the mechanical impact is limited, but the `knownTags` on a CodexEntry will grow unboundedly. This is already noted in the Known Gaps but remains unaddressed.
    - *Fix*: Add a `deduplicated()` method to `TagConstellation` or dedup in `merged(with:)`.
 
-2. **`PractitionerProfile.summmonerCapacity` has a typo** — triple 'm'. It compiles fine but is an API-level misspelling that will propagate if persistence or a public API ever serializes the field name.
-   - *Fix*: Rename to `summonerCapacity` before persistence is added.
+2. ~~**`PractitionerProfile.summmonerCapacity` has a typo** — triple 'm'.~~ **Resolved in `c8a0add`.** The field is now `summonerCapacity`, avoiding a bad serialized/public API name before persistence lands.
 
 3. **The CLI (`GehennaCLI/main.swift`) is 44KB in a single file.** This is manageable for a prototype but will become unwieldy as features are added. The arena is 16KB in one file, which is fine.
    - *Recommendation*: Before adding persistence or richer CLI commands, split the CLI into at least `GameSession.swift`, `RitualFlow.swift`, `CommandParser.swift`, and `CLIRenderer.swift`.
@@ -309,15 +308,16 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 5. **`WorldShard.execute()` uses `world.regions.keys.first` to find the region ID.** This works with one region but will silently pick an arbitrary region if multiple regions exist. The shard should either track which region a site belongs to, or sites should carry a `regionID` reference.
 
-6. **Ritual entropy seeds in the CLI use wall-clock time** (`Date().timeIntervalSince1970`). This breaks deterministic replay across runs. The arena correctly uses tick + player ID + ritual count for seeds, which is the right pattern. The CLI should adopt the same approach.
+6. ~~**Ritual entropy seeds in the CLI use wall-clock time** (`Date().timeIntervalSince1970`).~~ **Resolved in the interactive CLI.** Ritual and astragali seeds now derive from tick/state rather than wall-clock time, matching the replayability goal established in the arena path.
 
 7. **The `RitualSite` suspicion multiplier `default` case** returns 1.0 but doesn't cover `springCaveMouth`, `ossuaryNiche`, or `wadiBed`. These site types exist in the enum but have no Ridge of Elah content yet. If content is added for them, the suspicion behavior will be the untuned default.
 
 8. **NPC rumor propagation is uniform.** In `WorldShard.executeRitual()`, when site suspicion exceeds 0.05, *all* NPCs hear the rumor at the same strength. This means a ritual at the Burning Ground (suspicion multiplier 0.2) and a ritual at the ancestor shrine (suspicion multiplier 3.0) both propagate to all six NPCs identically once the threshold is crossed. Rumors should attenuate by distance from the site and be weighted by NPC faction.
 
-9. **No `Codable` conformance on `JournalEntry`.** The journal entry has a `Sendable` conformance but no `Codable`. When persistence is added, this will need to be added along with coding for `EventSource`, `EventSeverity`, `JournalEntryType`, etc.
+9. ~~**No `Codable` conformance on `JournalEntry`.**~~ **Resolved in `fd216b8`.** `JournalEntry`, `ThresholdEvent`, `EventSource`, `EventSeverity`, and related enums now conform to `Codable`, removing the first serialization blocker for persistence.
 
-10. **The `WorldClock` does not track in-world time of day or lunar phase.** `WorldTiming` exists as a ritual input but is not derived from the clock — it is set manually in the CLI and arena. For world autonomy, the clock should derive a `currentTiming: WorldTiming` from tick count so that rituals performed at "the wrong time" are naturally penalized without the player needing to set it.
+10. ~~**Clock-derived timing exists, but the CLI ritual path is not fully wired to it yet.**~~ **Resolved in the interactive CLI.** The ritual menu and astragali diagnostic now default to `clock.currentTiming`, and their entropy seeds are derived from tick/state rather than wall-clock time.
+   - *Remaining follow-up*: Keep an explicit override path for deliberate waiting/timing choices once the CLI grows a more expressive ritual input flow.
 
 ### Architectural Observations
 
@@ -348,8 +348,8 @@ Based on this audit, the most valuable next work is:
 ### WorldTiming Derived From Tick Count
 - **Decision**: `WorldClock` now owns the day/night cycle and lunar phase. `currentTimeOfDay`, `currentLunarPhase`, and `currentTiming` are computed properties derived from `currentTick`.
 - **Constants**: 7 ticks per day (`ticksPerDay`), 8 days per lunar cycle (`daysPerLunarCycle`), 56-tick full lunar cycle.
-- **Rationale**: The world needs a natural rhythm for world autonomy. Rituals performed at midday should be naturally penalized without the player manually selecting timing. This removes a manual input from the CLI and gives the Director a time-of-day signal for atmospheric narration.
-- **Implication**: The CLI and arena can now use `clock.currentTiming` as the default timing for rituals instead of hardcoded `WorldTiming(time: .night)`. The Director can check `clock.currentTimeOfDay` to vary narration. The existing `WorldTiming` parameter on `RitualIntent` should remain as an override for player-specified timing (e.g., "wait until deepNight, then perform the ritual").
+- **Rationale**: The world needs a natural rhythm for world autonomy. Rituals performed at midday should be naturally penalized without the player manually selecting timing. This gives the Director a time-of-day signal for atmospheric narration and establishes the correct source of truth for timing.
+- **Implication**: `WorldClock` is now the source of timing truth, and the interactive CLI ritual path consumes `clock.currentTiming` by default instead of a hardcoded `WorldTiming(time: .night)`. The Director can check `clock.currentTimeOfDay` to vary narration. The existing `WorldTiming` parameter on `RitualIntent` should remain as an override for player-specified timing (e.g., "wait until deepNight, then perform the ritual").
 - **Invariant**: The mapping is deterministic from tick count alone. No wall-clock, no randomness. Replaying the same tick sequence produces the same timing.
 
 ### Journal Types Made Codable
