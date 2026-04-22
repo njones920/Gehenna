@@ -2,7 +2,7 @@
 
 Captured from a local `swift run gehenna` run against `v0.4.20`.
 
-The CLI ritual seed currently includes wall-clock time, so astragali details and manifestation tier can vary until replay envelopes are persisted. The input sequence below is the known Hiram / Bronze Captain path.
+The CLI now derives ritual timing from `WorldClock` and uses deterministic seeds for ritual and astragali paths. This transcript remains a valid opening path, even though the splash/version text below reflects the earlier capture.
 
 ## Input
 

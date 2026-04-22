@@ -105,7 +105,7 @@ public struct JournalEntry: Codable, Sendable, Identifiable {
 }
 
 /// The world simulation — processes all regions, tracks global state, runs the cosmology.
-public struct WorldSimulation: Sendable {
+public struct WorldSimulation: Codable, Sendable {
 
     /// All regions in the simulation.
     public var regions: [UUID: RegionState]

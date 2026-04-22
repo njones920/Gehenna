@@ -22,7 +22,7 @@ This build is intended as the first public "world seed" build: clone it, build i
 | Site memory and healable scarring | Live |
 | NPC suspicion/trust drift | Live |
 | Local shared-world bot arena | Live |
-| Persistence | Not live yet |
+| Persistence | Local single-player save/load via `gehenna-save.json`; no server/backend persistence yet |
 | Networked multiplayer server | Not live yet |
 | Full historical canon dataset | Prototype seed only |
 | Graphics | Not live yet |
@@ -73,18 +73,18 @@ What is live:
 - Site-local memory: scarring, traces, suspicion, witness exposure.
 - WorldDirector v1 for unsolicited world narration.
 - NPC interiority and slow suspicion/trust drift.
-- Journal entries with source, severity, region/site IDs, NPC IDs, and tags (Codable, ready for persistence).
+- Journal entries with source, severity, region/site IDs, NPC IDs, and tags, persisted inside local single-player snapshots.
 - Codex entries and epoch manifestation support.
 - Deterministic root identity IDs from canonical identity seeds.
 - Identity/accountability layer (Zero-Trust Cosmology): spirits and epochs verify the practitioner's identity before manifesting.
 - Taboo system: 6 canonical violations that permanently mark the practitioner and close categories of spirits.
 - Clean Hands / Noob Catalyst: brand-new practitioners can access epochs that corrupted veterans cannot.
 - Headless shared-world bot arena for local multiplayer simulation.
-- Swift Testing suite (82 tests across 19 suites).
+- Swift Testing suite (87 tests across 20 suites).
 
 What is not live yet:
 
-- Persistence.
+- Shared-world/server persistence.
 - Public API.
 - Networked multiplayer server.
 - Deep historically grounded canon dataset.
@@ -141,9 +141,14 @@ ritual
 world
 village
 codex
+save
+load
 help
 quit
 ```
+
+`save` writes the current single-player state to `gehenna-save.json` in the
+current working directory. `load` restores from that file.
 
 ## Bot Arena
 

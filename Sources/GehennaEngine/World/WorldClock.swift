@@ -44,7 +44,7 @@ public struct WorldEvent: Sendable {
 }
 
 /// The world clock — manages time progression and collects events across ticks.
-public struct WorldClock: Sendable {
+public struct WorldClock: Codable, Sendable {
 
     /// Current simulation tick.
     public var currentTick: Int

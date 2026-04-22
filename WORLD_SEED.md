@@ -33,14 +33,15 @@ GEHENNA is currently a runnable seed of the ritual grammar, world clock, site me
 - Healable site scarring through quiet recovery and purification hooks.
 - NPC interiority with trust, suspicion, rumor exposure, and temporal drift.
 - Site- and faction-weighted rumor propagation.
-- Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths (Codable, ready for persistence).
+- Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths, persisted inside local single-player snapshots.
 - `WorldShard` actor as a single shared-world authority for local multiplayer simulation.
 - Headless arena where multiple bot practitioners share sites, NPCs, and consequences.
-- Swift Testing suite (82 tests across 19 suites).
+- Local single-player snapshot save/load via `gehenna-save.json`.
+- Swift Testing suite (87 tests across 20 suites).
 
 ## Not Live Yet
 
-- Persistence for world, site, practitioner, Codex, and journal state.
+- Shared-world/server persistence and replay import/export.
 - Networked multiplayer server.
 - Public API.
 - Full rumor propagation and mutation chains.
@@ -94,8 +95,8 @@ The arena is a stress and emergence harness. It is not final gameplay. Current b
 
 Near-term work should make the world more autonomous before adding conventional game surface:
 
-1. Persistence.
-2. CLI modularization.
+1. CLI modularization.
+2. Shared-world/server persistence.
 3. Historically grounded canon data expansion.
 4. Stronger site-local timelines.
 5. Rumor propagation and mutation.

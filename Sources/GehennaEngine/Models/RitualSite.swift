@@ -18,6 +18,16 @@ public enum SiteType: String, Codable, Hashable, Sendable {
     case springCaveMouth  // where water exits stone — liminal by nature
     case ossuaryNiche     // secondary burial recess
     case wadiBed          // seasonal waterway — carries death downstream
+
+    /// Burial and ancestor contexts where the dead expect compensation.
+    public var requiresFuneraryCompensation: Bool {
+        switch self {
+        case .burialCave, .ancestorShrine, .ossuaryNiche:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 /// The properties of a ritual site.

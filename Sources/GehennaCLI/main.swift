@@ -104,6 +104,10 @@ final class GameSession: @unchecked Sendable {
                 advanceTime()
             case "profile", "p":
                 showProfile()
+            case "save":
+                saveGame()
+            case "load":
+                loadGame()
             case "help", "h", "?":
                 showHelp()
             case "quit", "q", "exit":
@@ -196,6 +200,50 @@ final class GameSession: @unchecked Sendable {
             &+ UInt64(ritualCount)
             &+ UInt64(currentSiteIndex)
             &+ salt
+    }
+
+    var saveURL: URL {
+        URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("gehenna-save.json")
+    }
+
+    func makeSnapshot() -> SinglePlayerSnapshot {
+        SinglePlayerSnapshot(
+            savedAtTick: clock.currentTick,
+            world: world,
+            profile: profile,
+            codex: codex,
+            sites: sites,
+            inventory: PractitionerInventorySnapshot(
+                fragments: inventory.fragments,
+                artifacts: inventory.artifacts,
+                memoryTraces: inventory.memoryTraces,
+                libations: inventory.libations
+            ),
+            currentSiteIndex: currentSiteIndex,
+            ritualCount: ritualCount,
+            rootIdentities: rootIdentities,
+            npcs: npcs,
+            clock: clock
+        )
+    }
+
+    func applySnapshot(_ snapshot: SinglePlayerSnapshot) {
+        world = snapshot.world
+        profile = snapshot.profile
+        codex = snapshot.codex
+        sites = snapshot.sites
+        inventory = Inventory(
+            fragments: snapshot.inventory.fragments,
+            artifacts: snapshot.inventory.artifacts,
+            memoryTraces: snapshot.inventory.memoryTraces,
+            libations: snapshot.inventory.libations
+        )
+        currentSiteIndex = snapshot.currentSiteIndex
+        ritualCount = snapshot.ritualCount
+        rootIdentities = snapshot.rootIdentities
+        npcs = snapshot.npcs
+        clock = snapshot.clock
     }
 
     // MARK: - Commands
@@ -488,7 +536,7 @@ final class GameSession: @unchecked Sendable {
             domain: fragment.domain,
             entropyCost: result.worldEffects.ghostActivityDelta + result.worldEffects.corruptionDelta
         )
-        profile.tokens.handleFragment()
+        profile.applyRitualConsequences(configuration: config, result: result)
 
         // Display result
         if let spirit = result.spirit {
@@ -685,6 +733,30 @@ final class GameSession: @unchecked Sendable {
         print("    Entropy footprint: \(describeLevel(profile.entropyFootprint / 10.0, low: "faint", mid: "visible", high: "heavy"))")
     }
 
+    func saveGame() {
+        do {
+            try SnapshotStore.save(makeSnapshot(), to: saveURL)
+            print("  The record is sealed at tick \(clock.currentTick). [\(saveURL.lastPathComponent)]")
+        } catch {
+            print("  The record would not hold. Save failed: \(error.localizedDescription)")
+        }
+    }
+
+    func loadGame() {
+        do {
+            let snapshot = try SnapshotStore.loadSinglePlayerSnapshot(from: saveURL)
+            applySnapshot(snapshot)
+
+            if snapshot.engineVersion != GehennaEngine.version || snapshot.codexVersion != GehennaEngine.codexVersion {
+                print("  The record returns, but it was sealed under \(snapshot.engineVersion) / Codex \(snapshot.codexVersion).")
+            }
+
+            print("  The old work returns. You stand again at \(sites[currentSiteIndex].name), tick \(clock.currentTick).")
+        } catch {
+            print("  No intact record could be opened. Load failed: \(error.localizedDescription)")
+        }
+    }
+
     func showHelp() {
         print("""
 
@@ -702,6 +774,8 @@ final class GameSession: @unchecked Sendable {
             world (w)        Read the state of the region
             wait / rest      Let time pass
             profile (p)      View your practitioner record
+            save             Seal the current state to gehenna-save.json
+            load             Restore the current state from gehenna-save.json
             help (h / ?)     Show this help
             quit (q)         Leave
         """)
