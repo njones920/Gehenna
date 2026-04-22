@@ -45,6 +45,58 @@ public struct AuthorityTokens: Codable, Hashable, Sendable {
         corpseContagion = min(1.0, corpseContagion + 0.1)
     }
 
+    /// Exposure from a concrete ritual action, not just abstract handling.
+    public mutating func handleFragment(_ fragment: Fragment, at site: RitualSite, using libation: Libation?) {
+        var contagionDelta = 0.08
+
+        switch fragment.remainsType {
+        case .skull, .crematedBone:
+            contagionDelta += 0.05
+        case .ossuaryChip, .toothFragment:
+            contagionDelta += 0.03
+        default:
+            break
+        }
+
+        if fragment.integrity.isCorrupted {
+            contagionDelta += 0.12
+        } else if fragment.integrity.isDegraded {
+            contagionDelta += 0.05
+        }
+
+        if site.sanctity > 0.65 {
+            contagionDelta += 0.03
+        }
+
+        switch site.type {
+        case .topheth:
+            contagionDelta += 0.10
+            purity = max(0.0, purity - 0.06)
+        case .ancestorShrine, .burialCave, .ossuaryNiche:
+            contagionDelta += 0.02
+        default:
+            break
+        }
+
+        if let libation {
+            contagionDelta += libation.corruptionCost * 0.5
+            purity = max(0.0, purity - (libation.corruptionCost * 0.25))
+
+            switch libation.type {
+            case .water:
+                contagionDelta = max(0.03, contagionDelta - 0.02)
+            case .fermentedWine, .honeyWine:
+                contagionDelta = max(0.03, contagionDelta - 0.01)
+            case .bloodOffering, .mimicBlood:
+                contagionDelta += 0.04
+            case .ritualMixture, .opiumTincture:
+                ritualFatigue = min(1.0, ritualFatigue + 0.03)
+            }
+        }
+
+        corpseContagion = min(1.0, corpseContagion + contagionDelta)
+    }
+
     /// Perform purification — reduces contagion.
     public mutating func purify(strength: Double = 0.5) {
         corpseContagion = max(0.0, corpseContagion - strength)
@@ -162,6 +214,38 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
         case 10..<40:  return .practitioner
         case 40..<120: return .adept
         default:       return .master
+        }
+    }
+
+    /// World-facing identity/accountability accrual from a concrete ritual.
+    public mutating func applyRitualConsequences(
+        configuration: RitualConfiguration,
+        result: RitualResult
+    ) {
+        tokens.handleFragment(
+            configuration.remains,
+            at: configuration.site,
+            using: configuration.libation
+        )
+
+        if configuration.site.type.requiresFuneraryCompensation,
+           configuration.libation == nil {
+            taboosBroken.insert(.graveRobbing)
+        }
+
+        if configuration.site.sanctity > 0.65,
+           configuration.remains.integrity.isCorrupted {
+            taboosBroken.insert(.uncleanSacrifice)
+        }
+
+        if configuration.site.type == .topheth,
+           let libation = configuration.libation,
+           libation.type == .bloodOffering || libation.type == .mimicBlood {
+            taboosBroken.insert(.tophethPact)
+        }
+
+        if result.outcomeClass == .hostile {
+            tokens.ritualFatigue = min(1.0, tokens.ritualFatigue + 0.05)
         }
     }
 }

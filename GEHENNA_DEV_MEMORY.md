@@ -339,8 +339,10 @@ Based on this audit, the most valuable next work is:
 3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
 4. ~~**Stabilize root identity IDs** with deterministic UUID generation.~~ **Done, then tightened in the local working tree.** Root identity IDs are now derived from a canonical seed built from normalized name, culture, native era, core tags, and epoch descriptors before hashing into a stable Version 8 UUID. This reduces collisions compared with the earlier `trueName + culture + nativeEra` seed.
 5. ~~**Identity / Accountability Layer (Zero-Trust Cosmology)** — spirits and epochs verify the practitioner's identity before manifesting.~~ **Done.** Added `Taboo` enum, `IdentityRequirements` struct, `SpiritTemplate.identityRequirements`, `Epoch.identityRequirements`, and Stage 11.8 (Spirit Verification) to the pipeline. 3 new tests in a dedicated `ZeroTrustCosmologyTests` suite. 82/82 tests pass.
-6. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay. ← **next**
-7. **Split the CLI** into multiple files before it grows further.
+6. ~~**Make identity/accountability earned in play** rather than only test/setup state.~~ **Done in local working tree.** `PractitionerProfile.applyRitualConsequences` now accrues contagion, purity damage, and the first concrete taboo writes from actual ritual actions. Mortuary rituals without compensation mark `.graveRobbing`; corrupted fragments at high-sanctity sites mark `.uncleanSacrifice`; blood or mimic-blood sacrifice at a `topheth` marks `.tophethPact`. Both CLI and `WorldShard` call the same engine hook. 4 focused tests added.
+7. ~~**Persist journal entries** to a local file (JSON lines or SQLite).~~ **Done in local working tree, with a broader but still narrow cut.** Added typed single-player snapshot persistence (`SinglePlayerSnapshot`, `SnapshotStore`) and CLI `save` / `load` commands. The saved snapshot now carries world state, journal, practitioner profile, Codex, sites, inventory, NPCs, root identities, and clock in one JSON file (`gehenna-save.json`).
+8. **Split the CLI** into multiple files before it grows further. ← **next**
+9. **Broaden persistence coverage for shared-world/server paths** (`PractitionerSession`, shard snapshots, replay/import format) once the CLI save boundary settles.
 
 ## Architecture Decisions (Session 2026-04-20 Fixes)
 
@@ -380,6 +382,19 @@ Based on this audit, the most valuable next work is:
 - **Epoch Override**: Any `Epoch` can define its own `identityRequirements` that override the template defaults. This enables specific canonical manifestations to be stricter or more permissive than their template class.
 - **Implication**: The pipeline now enforces the "consequence is content" principle at the deepest level. A practitioner who breaks taboos will find entire categories of spirits closed to them. A brand-new practitioner with Clean Hands can access epochs that a corrupted master cannot. Power comes through relationships and accountability, not stat growth.
 
+### Identity Layer Now Accrues Through Play
+- **Decision**: Ritual aftermath now writes the first concrete identity/accountability state back into `PractitionerProfile`. The new `applyRitualConsequences(configuration:result:)` hook runs in both the interactive CLI and `WorldShard` ritual path after `recordRitual`.
+- **Rationale**: The verifier layer was structurally correct but too declarative. If taboos and contamination only exist in tests or hand-built profiles, the world is not actually producing the identity it claims to judge.
+- **Rules Added**: Mortuary contexts (`burialCave`, `ancestorShrine`, `ossuaryNiche`) without any compensating libation now mark `.graveRobbing`. Corrupted fragments used at high-sanctity sites now mark `.uncleanSacrifice`. Blood or mimic-blood sacrifice at a `topheth` now marks `.tophethPact`. Fragment/site/libation exposure now feeds corpse contagion and, for harsher contexts, direct purity loss.
+- **Implication**: Identity/accountability is no longer only a gate. The practitioner's future access begins to emerge from what they actually do in the world. This still needs broader event coverage (`oathBreaking`, `falseName`, faction-granted/revoked tokens), but the layer is now attached to real play.
+
+### Local Single-Player Snapshot Persistence
+- **Decision**: Added a typed snapshot boundary in the engine (`PractitionerInventorySnapshot`, `SinglePlayerSnapshot`, `SnapshotStore`) and wired the interactive CLI to `save` and `load` against `gehenna-save.json` in the current working directory.
+- **Rationale**: The project needed a real restart boundary before chasing broader server/storage design. A single explicit JSON snapshot is the smallest useful persistence cut that proves world, journal, practitioner, and Codex state can survive process death together.
+- **Scope**: The saved snapshot includes `WorldSimulation` (including the append-only journal), `WorldClock`, practitioner profile, Codex, sites, inventory, NPCs, current site, ritual count, and root identities. `WorldSimulation` and `WorldClock` are now `Codable`.
+- **Verification**: Added a dedicated persistence test that round-trips world/journal/profile/inventory state through `SnapshotStore.encode` and `decodeSinglePlayerSnapshot`. Also smoke-tested `swift run gehenna` with scripted `save`, `load`, and `quit`, producing and restoring `gehenna-save.json`.
+- **Implication**: Local CLI play can now be resumed cleanly. This is not yet a replay log or server persistence format; it is a typed snapshot. The next persistence work should decide whether shared-world state persists as snapshots, journal replay, or a hybrid.
+
 ## Repository Maintenance (Session 2026-04-20)
 
 ### GitHub Actions Checkout Updated To v5
@@ -408,3 +423,5 @@ Based on this audit, the most valuable next work is:
 - Spirits and epochs verify practitioner identity via IdentityRequirements before manifesting (Stage 11.8).
 - Taboos are permanent and cumulative — the world remembers transgressions.
 - The Noob Catalyst (cleanHands) is a first-class pipeline concept, not a hack.
+- Ritual aftermath, not just test setup, now produces the first taboo and contamination writes.
+- A local single-player save boundary now exists via `gehenna-save.json`; journal persistence is no longer only theoretical.

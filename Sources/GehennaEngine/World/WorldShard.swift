@@ -343,6 +343,7 @@ public actor WorldShard {
             domain: fragment.domain,
             entropyCost: totalEntropy
         )
+        session.profile.applyRitualConsequences(configuration: config, result: result)
 
         // Record mutation at site if applicable
         if wasMutation {

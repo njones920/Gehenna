@@ -538,6 +538,196 @@ struct ProfileTests {
         }
         #expect(profile.masteryPhase == .practitioner)
     }
+
+    @Test("Mortuary ritual without compensation marks grave robbing")
+    func mortuaryRitualMarksGraveRobbing() {
+        var profile = PractitionerProfile()
+        let config = RitualConfiguration(
+            remains: Fragment(
+                remains: .ossuaryChip,
+                era: .ironAgeII,
+                domain: .death,
+                affinity: .earth
+            ),
+            site: RitualSite(name: "Bench Tomb", type: .burialCave, affinity: .earth)
+        )
+
+        profile.applyRitualConsequences(
+            configuration: config,
+            result: RitualResult(
+                spirit: nil,
+                outcomeClass: .failure,
+                worldEffects: WorldEffects(),
+                autopsy: [],
+                entropySeed: 1
+            )
+        )
+
+        #expect(profile.taboosBroken.contains(.graveRobbing))
+        #expect(profile.tokens.corpseContagion > 0.0)
+    }
+
+    @Test("Compensated mortuary ritual avoids grave robbing taboo")
+    func compensatedMortuaryRitualAvoidsGraveRobbing() {
+        var profile = PractitionerProfile()
+        let config = RitualConfiguration(
+            remains: Fragment(
+                remains: .ossuaryChip,
+                era: .ironAgeII,
+                domain: .death,
+                affinity: .earth
+            ),
+            site: RitualSite(name: "Ancestor Niche", type: .ossuaryNiche, affinity: .earth),
+            libation: Libation(.fermentedWine)
+        )
+
+        profile.applyRitualConsequences(
+            configuration: config,
+            result: RitualResult(
+                spirit: nil,
+                outcomeClass: .failure,
+                worldEffects: WorldEffects(),
+                autopsy: [],
+                entropySeed: 2
+            )
+        )
+
+        #expect(!profile.taboosBroken.contains(.graveRobbing))
+    }
+
+    @Test("Corrupted fragment at sanctified site marks unclean sacrifice")
+    func corruptedFragmentAtSanctifiedSiteMarksUncleanSacrifice() {
+        var profile = PractitionerProfile()
+        var site = RitualSite(name: "Hill Shrine", type: .ancestorShrine, affinity: .silence)
+        site.sanctity = 0.85
+
+        let config = RitualConfiguration(
+            remains: Fragment(
+                remains: .crematedBone,
+                era: .ironAgeII,
+                domain: .faith,
+                affinity: .fire,
+                integrity: .corrupted
+            ),
+            site: site,
+            libation: Libation(.bloodOffering)
+        )
+
+        profile.applyRitualConsequences(
+            configuration: config,
+            result: RitualResult(
+                spirit: nil,
+                outcomeClass: .hostile,
+                worldEffects: WorldEffects(),
+                autopsy: [],
+                entropySeed: 3
+            )
+        )
+
+        #expect(profile.taboosBroken.contains(.uncleanSacrifice))
+        #expect(profile.tokens.ritualFatigue > 0.0)
+    }
+
+    @Test("Blood sacrifice at topheth marks topheth pact")
+    func tophethSacrificeMarksTophethPact() {
+        var profile = PractitionerProfile()
+        let config = RitualConfiguration(
+            remains: Fragment(
+                remains: .crematedBone,
+                era: .ironAgeII,
+                domain: .war,
+                affinity: .fire,
+                integrity: .corrupted
+            ),
+            site: RitualSite(name: "Burning Ground", type: .topheth, affinity: .fire),
+            libation: Libation(.bloodOffering)
+        )
+
+        profile.applyRitualConsequences(
+            configuration: config,
+            result: RitualResult(
+                spirit: nil,
+                outcomeClass: .failure,
+                worldEffects: WorldEffects(),
+                autopsy: [],
+                entropySeed: 4
+            )
+        )
+
+        #expect(profile.taboosBroken.contains(.tophethPact))
+        #expect(profile.tokens.corpseContagion >= 0.2)
+        #expect(profile.tokens.purity < 0.8)
+    }
+}
+
+// MARK: - Persistence Tests
+
+@Suite("Persistence Tests")
+struct PersistenceTests {
+    @Test("Single-player snapshot round-trips world, journal, and practitioner state")
+    func singlePlayerSnapshotRoundTrip() throws {
+        let region = RegionState(name: "Ridge of Elah", stability: 0.7)
+        let site = RitualSite(name: "Kfar Shalem Shrine", type: .ancestorShrine, affinity: .earth)
+        let npc = RidgeOfElah.abiGad()
+
+        var world = WorldSimulation(regions: [region])
+        var persistedSite = site
+        world.currentTick = 12
+        world.applyRitualEffects(
+            WorldEffects(ghostActivityDelta: 0.2, corruptionDelta: 0.1, suspicionDelta: 0.05),
+            regionID: region.id,
+            site: &persistedSite,
+            practitionerName: "Operator"
+        )
+
+        var profile = PractitionerProfile()
+        profile.taboosBroken = [.graveRobbing, .tophethPact]
+        profile.tokens.corpseContagion = 0.35
+        profile.tokens.purity = 0.6
+        profile.totalRituals = 3
+
+        let inventory = PractitionerInventorySnapshot(
+            fragments: [
+                Fragment(remains: .skull, era: .ironAgeII, domain: .death, affinity: .earth, integrity: .worn)
+            ],
+            artifacts: [
+                LifeArtifact(name: "Bronze Spearhead", domain: .war, affinity: .fire, era: .ironAgeII)
+            ],
+            memoryTraces: [
+                MemoryTrace(name: "Jar Fragment", era: .ironAgeII)
+            ],
+            libations: [.water, .fermentedWine]
+        )
+
+        let snapshot = SinglePlayerSnapshot(
+            savedAtTick: 12,
+            world: world,
+            profile: profile,
+            codex: CodexOfTheDead(),
+            sites: [persistedSite],
+            inventory: inventory,
+            currentSiteIndex: 0,
+            ritualCount: 3,
+            rootIdentities: RidgeOfElah.rootIdentities(),
+            npcs: [npc],
+            clock: WorldClock(startingTick: 12)
+        )
+
+        let data = try SnapshotStore.encode(snapshot)
+        let decoded = try SnapshotStore.decodeSinglePlayerSnapshot(from: data)
+
+        #expect(decoded.savedAtTick == 12)
+        #expect(decoded.clock.currentTick == 12)
+        #expect(decoded.world.currentTick == 12)
+        #expect(decoded.world.journal.count == 1)
+        #expect(decoded.world.journal[0].type == JournalEntry.JournalEntryType.ritualPerformed)
+        #expect(decoded.profile.taboosBroken.contains(Taboo.graveRobbing))
+        #expect(decoded.profile.taboosBroken.contains(Taboo.tophethPact))
+        #expect(decoded.inventory.fragments.count == 1)
+        #expect(decoded.inventory.libations == [LibationType.water, LibationType.fermentedWine])
+        #expect(decoded.npcs.count == 1)
+        #expect(decoded.sites[0].localSuspicion > 0.0)
+    }
 }
 
 // MARK: - Epoch Manifestation Tests (v3 §5.3)

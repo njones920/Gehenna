@@ -18,6 +18,7 @@ Identity/Accountability layer and engine stabilization.
 - WorldClock-derived `currentTimeOfDay` (7 ticks/day) and `currentLunarPhase` (56-tick cycle).
 - `Codable` conformance for `JournalEntry`, `ThresholdEvent`, and associated event enums.
 - Site- and faction-weighted rumor propagation.
+- Typed single-player snapshot persistence plus CLI `save` / `load`.
 
 ### Changed
 
@@ -25,12 +26,15 @@ Identity/Accountability layer and engine stabilization.
 - Resolution pipeline now has 14 effective stages (13 original + Stage 11.8 Spirit Verification).
 - Root identity IDs use a widened canonical seed (name + culture + era + coreTags + epochs) instead of random UUIDs.
 - `summonerCapacity` typo fixed from `summmonerCapacity`.
+- Ritual aftermath now writes the first taboo and contamination state back into the practitioner profile.
+- `WorldSimulation` and `WorldClock` are now `Codable`, enabling full single-player snapshot persistence.
 
 ### Verified
 
-- 82 tests across 19 suites pass on Linux x86_64 and macOS.
+- 87 tests across 20 suites pass on macOS.
 - `swift run gehenna-arena --bots 12 --ticks 100` completes with stable world state.
 - Identity verification correctly blocks corrupted practitioners and enables Clean Hands access.
+- `swift run gehenna` save/load smoke passes with `gehenna-save.json`.
 
 ## 0.4.20 - World Seed
 
