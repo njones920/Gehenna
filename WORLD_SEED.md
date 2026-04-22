@@ -1,12 +1,12 @@
 # GEHENNA World Seed
 
-This file describes what exists in the public `0.4.20` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
+This file describes what exists in the public `0.4.21` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
 
 ## Build Identity
 
 | Field | Value |
 | --- | --- |
-| Version | `0.4.20` |
+| Version | `0.4.21` |
 | Codex | `3.0` |
 | Interface | SwiftPM engine, terminal CLI, headless bot arena |
 | Current region | Ridge of Elah |
@@ -20,17 +20,23 @@ GEHENNA is currently a runnable seed of the ritual grammar, world clock, site me
 - Swift package with `GehennaEngine`, `gehenna`, and `gehenna-arena`.
 - Ritual configuration model with seven inputs: remains, site, true name, life artifact, memory trace, libation, and timing.
 - 13-stage resolution pipeline with coherence, resonance, conflict, apotropaic rule, mutation checks, tiering, personality, and manifestation.
+- Stage 11.8: Spirit Verification (Zero-Trust Cosmology) — spirits and epochs verify the practitioner's identity before manifesting.
+- Taboo system: 6 canonical violations (bloodshed, graveRobbing, falseName, uncleanSacrifice, oathBreaking, tophethPact) that permanently mark the practitioner.
+- Clean Hands / Noob Catalyst: unburdened practitioners can access epochs closed to corrupted veterans.
 - Astragali diagnostic reading before ritual execution.
 - Ritual autopsy output for mastery feedback.
 - Codex of the Dead entries and epoch manifestation support.
-- WorldClock for command, travel, ritual, and rest time advancement.
+- Deterministic root identity IDs from canonical identity seeds (FNV-1a hash, Version 8 UUID).
+- WorldClock for command, travel, ritual, and rest time advancement with deterministic day/night (7 ticks/day) and lunar (56-tick) cycles.
 - WorldDirector v1 for authored unsolicited world narration.
 - Site-local state: scarring, suspicion, witness exposure, active traces, visit ticks, ritual ticks, and recent event count.
 - Healable site scarring through quiet recovery and purification hooks.
 - NPC interiority with trust, suspicion, rumor exposure, and temporal drift.
-- Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths.
+- Site- and faction-weighted rumor propagation.
+- Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths (Codable, ready for persistence).
 - `WorldShard` actor as a single shared-world authority for local multiplayer simulation.
 - Headless arena where multiple bot practitioners share sites, NPCs, and consequences.
+- Swift Testing suite (82 tests across 19 suites).
 
 ## Not Live Yet
 
@@ -38,14 +44,9 @@ GEHENNA is currently a runnable seed of the ritual grammar, world clock, site me
 - Networked multiplayer server.
 - Public API.
 - Full rumor propagation and mutation chains.
-- Witness system.
-- Taboo shock cascade engine.
-- Clean-channel / noob-catalyst system.
+- Witness system and evidence chains.
 - Spirit persistence after manifestation.
-- Stable canon IDs for all root identities.
 - Deep historically grounded canon dataset.
-- Identity/accountability layer.
-- Evidence chain.
 - Oracle Network intake.
 - LLM-backed Expression Layer runtime.
 - Graphics.
@@ -94,13 +95,12 @@ The arena is a stress and emergence harness. It is not final gameplay. Current b
 Near-term work should make the world more autonomous before adding conventional game surface:
 
 1. Persistence.
-2. Stable canon IDs and richer historical canon data.
-3. Stronger site-local timelines.
-4. Rumor propagation and mutation.
-5. Witness state.
-6. Spirit persistence and relationship memory.
-7. Taboo shock cascades.
-8. Clean-channel catalyst events.
-9. Network server wrapping `WorldShard`.
+2. CLI modularization.
+3. Historically grounded canon data expansion.
+4. Stronger site-local timelines.
+5. Rumor propagation and mutation.
+6. Witness state and evidence chains.
+7. Spirit persistence and relationship memory.
+8. Network server wrapping `WorldShard`.
 
 Core invariant: the Expression Layer renders state. It does not decide simulation truth.
