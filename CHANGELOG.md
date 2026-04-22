@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.22 - CLI Modularization & UI Polish
+
+Structural refactoring and user-facing polish.
+
+### Added
+
+- `profile` command now explicitly displays "Clean Hands" status and any broken taboos.
+- `quit` command now prompts the user to save their game before exiting.
+
+### Changed
+
+- **CLI Modularization:** Split the monolithic `main.swift` (1,200 lines) into focused, maintainable files:
+  - `GameSession.swift` (State and main loop)
+  - `Commands.swift` (Interactive actions)
+  - `Display.swift` (Rendering and read-only views)
+  - `main.swift` (Entrypoint)
 ## 0.4.21 - Zero-Trust Cosmology
 
 Identity/Accountability layer and engine stabilization.
