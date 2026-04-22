@@ -182,6 +182,10 @@ public struct ResolutionPipeline: Sendable {
         // the epoch overrides template, personality, and disposition.
         resolveEpoch(&state)
 
+        // Stage 11.8: Spirit Verification (Zero-Trust Cosmology)
+        // The resolved spirit/epoch evaluates the practitioner's identity.
+        verifyIdentity(&state, template: template)
+
         // Stage 12: Personality Binding
         let (traits, disposition) = bindPersonality(&state, template: template)
 
@@ -606,6 +610,30 @@ public struct ResolutionPipeline: Sendable {
         }
     }
 
+    /// Stage 11.8: Spirit Verification
+    /// The entity verifies the practitioner's identity against its requirements.
+    private func verifyIdentity(_ state: inout ResolutionState, template: SpiritTemplate) {
+        let requirements: IdentityRequirements
+        if let epoch = state.resolvedEpoch, let epochReqs = epoch.identityRequirements {
+            requirements = epochReqs
+        } else {
+            requirements = template.identityRequirements
+        }
+
+        if let rejection = requirements.evaluate(state.profile) {
+            state.autopsyFactors.append("Verification Failed: \(rejection)")
+            
+            // Rejection shifts outcome class based on conflict and corruption
+            if state.conflict > 0.5 || state.profile.tokens.effectivePurity < 0.3 {
+                state.outcomeClass = .hostile
+                state.autopsyFactors.append("The rejection was violent.")
+            } else {
+                state.outcomeClass = .failure
+                state.autopsyFactors.append("The spirit refused to manifest and withdrew.")
+            }
+        }
+    }
+
     /// Stage 12: Personality Binding.
     /// Bind intrinsic Personality Traits from the template. Apply regional reputation memory.
     /// If an epoch was resolved, the epoch's traits and baseline disposition override defaults.
@@ -723,20 +751,25 @@ public struct ResolutionPipeline: Sendable {
             rootIdentityID = nil
         }
 
-        // Build the spirit
-        let spirit = Spirit(
-            template: finalTemplate,
-            tier: state.resolvedTier,
-            tags: finalTags,
-            era: config.dominantEra,
-            epochName: epochName,
-            rootIdentityID: rootIdentityID,
-            personalityTraits: traits,
-            disposition: disposition,
-            attributes: attributes,
-            isMutation: state.isMutation,
-            originRitualID: config.id
-        )
+        // Build the spirit, unless verification completely rejected the practitioner
+        let spirit: Spirit?
+        if state.outcomeClass == .failure {
+            spirit = nil
+        } else {
+            spirit = Spirit(
+                template: finalTemplate,
+                tier: state.resolvedTier,
+                tags: finalTags,
+                era: config.dominantEra,
+                epochName: epochName,
+                rootIdentityID: rootIdentityID,
+                personalityTraits: traits,
+                disposition: disposition,
+                attributes: attributes,
+                isMutation: state.isMutation,
+                originRitualID: config.id
+            )
+        }
 
         // Calculate world effects — every ritual is entropy
         var effects = WorldEffects()

@@ -34,6 +34,29 @@ public enum SpiritTemplate: String, Codable, Hashable, CaseIterable, Sendable {
     case mourner    // the grieving, the one who carries loss
     case artisan    // the maker, the smith, the builder
     case merchant   // the trader, the traveler, the one who connected
+
+    /// Baseline identity requirements for this template.
+    public var identityRequirements: IdentityRequirements {
+        switch self {
+        case .warden:
+            // Wardens abhor grave robbers
+            return IdentityRequirements(forbiddenTaboos: [.graveRobbing])
+        case .prophet:
+            // Prophets demand a baseline of purity
+            return IdentityRequirements(minimumPurity: 0.6)
+        case .sovereign:
+            // Sovereigns are strict and demand clean protocol
+            return IdentityRequirements(forbiddenTaboos: [.uncleanSacrifice, .falseName])
+        case .butcher:
+            // Butchers don't care about purity, but they are dangerous
+            return IdentityRequirements()
+        case .guardian:
+            // Guardians abhor oath breakers
+            return IdentityRequirements(forbiddenTaboos: [.oathBreaking])
+        default:
+            return IdentityRequirements()
+        }
+    }
 }
 
 /// Intrinsic personality traits — fixed at template binding, not alterable by the practitioner.

@@ -52,6 +52,16 @@ public struct AuthorityTokens: Codable, Hashable, Sendable {
     }
 }
 
+/// Canonical violations of the cosmological order.
+public enum Taboo: String, Codable, Hashable, CaseIterable, Sendable {
+    case bloodshed          // violence committed at a site or in ritual
+    case graveRobbing       // removing fragments without ritual compensation
+    case falseName          // attempting to bind a spirit using a deliberately wrong name
+    case uncleanSacrifice   // using heavily corrupted fragments at high-sanctity sites
+    case oathBreaking       // betraying a loyal spirit
+    case tophethPact        // performing sacrifices at a Topheth site
+}
+
 /// The practitioner's accumulated behavioral record.
 public struct PractitionerProfile: Codable, Sendable, Identifiable {
     public let id: UUID
@@ -81,6 +91,9 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
     /// Authority credentials.
     public var tokens: AuthorityTokens
 
+    /// Violations that permanently mark the practitioner.
+    public var taboosBroken: Set<Taboo>
+
     /// Per-region suspicion history.
     public var suspicionByRegion: [UUID: Double]
 
@@ -98,8 +111,14 @@ public struct PractitionerProfile: Codable, Sendable, Identifiable {
         self.domainExperience = [:]
         self.entropyFootprint = 0.0
         self.tokens = AuthorityTokens()
+        self.taboosBroken = []
         self.suspicionByRegion = [:]
         self.spiritRelationships = [:]
+    }
+
+    /// The Noob Catalyst principle: a completely unburdened practitioner.
+    public var cleanHands: Bool {
+        totalRituals == 0 && taboosBroken.isEmpty && tokens.corpseContagion == 0.0
     }
 
     /// Record a completed ritual and update the profile.
