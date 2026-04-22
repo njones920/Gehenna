@@ -55,6 +55,10 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
     /// The baseline disposition when manifesting as this epoch.
     public let baselineDisposition: Disposition
 
+    /// Strict requirements the practitioner must meet to manifest this epoch.
+    /// Overrides the template's baseline requirements.
+    public let identityRequirements: IdentityRequirements?
+
     public init(
         id: UUID = UUID(),
         name: String,
@@ -66,7 +70,8 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
         preferredSiteType: SiteType? = nil,
         corruptionThreshold: Double? = nil,
         personalityTraits: [PersonalityTrait] = [],
-        baselineDisposition: Disposition = .calm
+        baselineDisposition: Disposition = .calm,
+        identityRequirements: IdentityRequirements? = nil
     ) {
         self.id = id
         self.name = name
@@ -79,6 +84,7 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
         self.corruptionThreshold = corruptionThreshold
         self.personalityTraits = personalityTraits
         self.baselineDisposition = baselineDisposition
+        self.identityRequirements = identityRequirements
     }
 }
 

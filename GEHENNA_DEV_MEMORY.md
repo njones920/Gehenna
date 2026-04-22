@@ -338,8 +338,9 @@ Based on this audit, the most valuable next work is:
 2. ~~**Add `Codable` to `JournalEntry`** and its associated enums. This is the smallest step toward persistence.~~ **Done** (`fd216b8`). Added Codable to ThresholdEvent, EventType, EventSource, EventSeverity, JournalEntry, JournalEntryType.
 3. ~~**Derive `WorldTiming` from `WorldClock`** tick count.~~ **Done** (`a137bf4`). 7 ticks per day (dawn → deepNight), 8-day lunar cycle (56-tick full cycle). Deterministic, replayable. 3 new tests added.
 4. ~~**Stabilize root identity IDs** with deterministic UUID generation.~~ **Done, then tightened in the local working tree.** Root identity IDs are now derived from a canonical seed built from normalized name, culture, native era, core tags, and epoch descriptors before hashing into a stable Version 8 UUID. This reduces collisions compared with the earlier `trueName + culture + nativeEra` seed.
-5. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay. ← **next**
-6. **Split the CLI** into multiple files before it grows further.
+5. ~~**Identity / Accountability Layer (Zero-Trust Cosmology)** — spirits and epochs verify the practitioner's identity before manifesting.~~ **Done.** Added `Taboo` enum, `IdentityRequirements` struct, `SpiritTemplate.identityRequirements`, `Epoch.identityRequirements`, and Stage 11.8 (Spirit Verification) to the pipeline. 3 new tests in a dedicated `ZeroTrustCosmologyTests` suite. 82/82 tests pass.
+6. **Persist journal entries** to a local file (JSON lines or SQLite). This is the first real persistence step and enables replay. ← **next**
+7. **Split the CLI** into multiple files before it grows further.
 
 ## Architecture Decisions (Session 2026-04-20 Fixes)
 
@@ -370,6 +371,15 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: Same-named people in the same culture/era are plausible in a historical dataset. The wider canonical seed materially reduces accidental collisions before canon IDs exist.
 - **Implication**: Root identity IDs remain deterministic across runs, but they are now more robust against future canon expansion. The exploratory `test_crypto.swift` scratch file was also removed; the package still avoids CryptoKit dependencies.
 
+### Identity / Accountability Layer (Zero-Trust Cosmology)
+- **Decision**: Spirits and epochs now act as active verification nodes in the resolution pipeline. A new Stage 11.8 (Spirit Verification) runs after template selection and epoch resolution. The pipeline extracts `IdentityRequirements` from the resolved epoch (if any) or the template, then evaluates the practitioner's `PractitionerProfile` against those requirements.
+- **New Types**: `Taboo` enum (6 canonical violations: bloodshed, graveRobbing, falseName, uncleanSacrifice, oathBreaking, tophethPact). `IdentityRequirements` struct (forbiddenTaboos, requiredTokens, minimumPurity, requiresCleanHands). `PractitionerProfile.taboosBroken` (permanent set of broken taboos). `PractitionerProfile.cleanHands` (the Noob Catalyst computed property).
+- **Rationale**: The original design agent identified the Identity/Authorization layer as the single most important conceptual gap. Rituals are not just syntax + world state; they must be syntax + world state + speaker identity, with spirits acting as verification nodes. This is the Zero-Trust Cosmology principle.
+- **Rejection Logic**: If verification fails and the practitioner is heavily corrupted (conflict > 0.5 or effectivePurity < 0.3), the outcome shifts to `.hostile`. Otherwise it shifts to `.failure` and the spirit refuses to manifest. The autopsy records the specific rejection reason.
+- **Template Defaults**: Wardens forbid `.graveRobbing`. Prophets require `minimumPurity: 0.6`. Sovereigns forbid `.uncleanSacrifice` and `.falseName`. Guardians forbid `.oathBreaking`. Butchers have no requirements. All other templates have empty requirements.
+- **Epoch Override**: Any `Epoch` can define its own `identityRequirements` that override the template defaults. This enables specific canonical manifestations to be stricter or more permissive than their template class.
+- **Implication**: The pipeline now enforces the "consequence is content" principle at the deepest level. A practitioner who breaks taboos will find entire categories of spirits closed to them. A brand-new practitioner with Clean Hands can access epochs that a corrupted master cannot. Power comes through relationships and accountability, not stat growth.
+
 ## Repository Maintenance (Session 2026-04-20)
 
 ### GitHub Actions Checkout Updated To v5
@@ -395,3 +405,6 @@ Based on this audit, the most valuable next work is:
 - Tag constellation merges preserve order while removing exact duplicates.
 - Rumor spread is site- and faction-weighted, not globally uniform.
 - Root identity IDs are deterministic from a widened canonical identity seed, not a thin three-field seed.
+- Spirits and epochs verify practitioner identity via IdentityRequirements before manifesting (Stage 11.8).
+- Taboos are permanent and cumulative — the world remembers transgressions.
+- The Noob Catalyst (cleanHands) is a first-class pipeline concept, not a hack.
