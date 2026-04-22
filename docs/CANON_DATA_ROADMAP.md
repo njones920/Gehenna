@@ -7,7 +7,7 @@ Age and Late Bronze Age southern Levant: people, places, burial practices,
 ritual technologies, polities, languages, cultic institutions, artifacts,
 social roles, trade routes, conflicts, taboos, and underworld concepts.
 
-The current `0.4.20` build is a playable engine seed. Its Ridge of Elah content is a
+The current `0.4.21` build is a playable engine seed. Its Ridge of Elah content is a
 small vertical slice, not the final canon density.
 
 ## Current State
@@ -83,6 +83,6 @@ records what happened; the canon bundle defines what can exist.
 5. Add validation so missing provenance is visible during canon compilation.
 6. Teach the arena to report which historical/canon tags drove major outcomes.
 
-The `0.4.20` build should invite people to clone and play. The next canon milestone
+The `0.4.21` build should invite people to clone and play. The next canon milestone
 should invite historians, archaeologists, and lore-focused agents to make the
 world deeper without weakening the simulation.

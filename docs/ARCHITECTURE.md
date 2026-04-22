@@ -1,6 +1,6 @@
 # GEHENNA Architecture
 
-This is the current implementation shape for the `0.4.20` world seed.
+This is the current implementation shape for the `0.4.21` world seed.
 
 ```mermaid
 flowchart TD

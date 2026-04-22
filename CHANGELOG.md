@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.4.21 - Zero-Trust Cosmology
+
+Identity/Accountability layer and engine stabilization.
+
+### Added
+
+- Identity/Accountability layer (Zero-Trust Cosmology): spirits and epochs now act as verification nodes in the resolution pipeline.
+- `Taboo` enum with 6 canonical violations: bloodshed, graveRobbing, falseName, uncleanSacrifice, oathBreaking, tophethPact.
+- `IdentityRequirements` struct: forbiddenTaboos, requiredTokens, minimumPurity, requiresCleanHands.
+- `PractitionerProfile.taboosBroken` and `.cleanHands` (Noob Catalyst principle).
+- Stage 11.8 (Spirit Verification) in the resolution pipeline.
+- `SpiritTemplate.identityRequirements` baseline defaults (wardens reject grave robbers, prophets demand purity, etc.).
+- `Epoch.identityRequirements` override for specific canonical manifestations.
+- `ZeroTrustCosmologyTests` test suite (3 tests).
+- Deterministic root identity IDs via `UUID.deterministic(from:)` using FNV-1a hash (Version 8 UUID).
+- WorldClock-derived `currentTimeOfDay` (7 ticks/day) and `currentLunarPhase` (56-tick cycle).
+- `Codable` conformance for `JournalEntry`, `ThresholdEvent`, and associated event enums.
+- Site- and faction-weighted rumor propagation.
+
+### Changed
+
+- Engine version is now `0.4.21`.
+- Resolution pipeline now has 14 effective stages (13 original + Stage 11.8 Spirit Verification).
+- Root identity IDs use a widened canonical seed (name + culture + era + coreTags + epochs) instead of random UUIDs.
+- `summonerCapacity` typo fixed from `summmonerCapacity`.
+
+### Verified
+
+- 82 tests across 19 suites pass on Linux x86_64 and macOS.
+- `swift run gehenna-arena --bots 12 --ticks 100` completes with stable world state.
+- Identity verification correctly blocks corrupted practitioners and enables Clean Hands access.
+
 ## 0.4.20 - World Seed
 
 Initial public seed build for the Ridge of Elah terminal prototype.

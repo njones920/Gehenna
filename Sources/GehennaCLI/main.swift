@@ -127,7 +127,7 @@ final class GameSession: @unchecked Sendable {
         ║   A physics engine for ancient cosmology,    ║
         ║           disguised as a game.               ║
         ║                                              ║
-        ║          Ridge of Elah — v0.4.20             ║
+        ║          Ridge of Elah — v0.4.21             ║
         ║                                              ║
         ╚══════════════════════════════════════════════╝
 

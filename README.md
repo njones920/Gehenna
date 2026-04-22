@@ -8,7 +8,7 @@ GEHENNA is an early Swift implementation of the Codex concept in this repository
 
 ## World Seed
 
-Version: `0.4.20`
+Version: `0.4.21`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
 
@@ -69,14 +69,18 @@ What is live:
 - Seven ritual inputs: Remains, Site, True Name, Life Artifact, Memory Trace, Libation, Timing.
 - Coherence, Resonance, Conflict, Apotropaic Rule, Mutation checks, tiering, personality, and manifestation.
 - Ridge of Elah vertical-slice content as a small prototype canon seed.
-- WorldClock for command/travel/rest time advancement.
+- WorldClock for command/travel/rest time advancement with deterministic day/night and lunar cycles.
 - Site-local memory: scarring, traces, suspicion, witness exposure.
 - WorldDirector v1 for unsolicited world narration.
 - NPC interiority and slow suspicion/trust drift.
-- Journal entries with source, severity, region/site IDs, NPC IDs, and tags.
+- Journal entries with source, severity, region/site IDs, NPC IDs, and tags (Codable, ready for persistence).
 - Codex entries and epoch manifestation support.
+- Deterministic root identity IDs from canonical identity seeds.
+- Identity/accountability layer (Zero-Trust Cosmology): spirits and epochs verify the practitioner's identity before manifesting.
+- Taboo system: 6 canonical violations that permanently mark the practitioner and close categories of spirits.
+- Clean Hands / Noob Catalyst: brand-new practitioners can access epochs that corrupted veterans cannot.
 - Headless shared-world bot arena for local multiplayer simulation.
-- Swift Testing suite.
+- Swift Testing suite (82 tests across 19 suites).
 
 What is not live yet:
 
@@ -84,11 +88,10 @@ What is not live yet:
 - Public API.
 - Networked multiplayer server.
 - Deep historically grounded canon dataset.
-- Identity/accountability layer.
 - Full rumor chains.
-- Taboo shock and clean-channel catalyst systems.
 - Oracle Network.
 - Evidence chain.
+- Spirit persistence after manifestation.
 - LLM-backed Expression Layer.
 - Graphics.
 
@@ -199,7 +202,7 @@ Read in this order:
 
 Archived provenance:
 
-- `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the `0.4.20` release.
+- `docs/archive/GEHENNA_CODEX_TWO.txt` — superseded historical source. v3 leads to the `0.4.21` release.
 
 ## Art Direction
 
@@ -220,14 +223,13 @@ Near-term work should improve world autonomy, not add generic RPG surface area.
 Priority sequence:
 
 1. Persistence for world/site/profile/Codex/journal state.
-2. Stable canon IDs and historically grounded canon data expansion.
-3. Stronger site-local timelines.
-4. Rumor engine with propagation and mutation.
-5. Witness system.
-6. Spirit persistence and relationship memory.
-7. Taboo shock cascades.
-8. Clean-channel/noob catalyst events.
-9. Ridge of Elah proof playthrough.
+2. CLI modularization.
+3. Historically grounded canon data expansion.
+4. Stronger site-local timelines.
+5. Rumor engine with propagation and mutation.
+6. Witness system and evidence chains.
+7. Spirit persistence and relationship memory.
+8. Ridge of Elah proof playthrough.
 
 Preserve the core rule: the Expression Layer renders state; it does not decide simulation truth.
 
