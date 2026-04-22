@@ -19,6 +19,7 @@ Identity/Accountability layer and engine stabilization.
 - `Codable` conformance for `JournalEntry`, `ThresholdEvent`, and associated event enums.
 - Site- and faction-weighted rumor propagation.
 - Typed single-player snapshot persistence plus CLI `save` / `load`.
+- Repository git workflow documentation plus README release-flow diagram and badges.
 
 ### Changed
 
