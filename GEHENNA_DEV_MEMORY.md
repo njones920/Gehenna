@@ -425,3 +425,15 @@ Based on this audit, the most valuable next work is:
 - The Noob Catalyst (cleanHands) is a first-class pipeline concept, not a hack.
 - Ritual aftermath, not just test setup, now produces the first taboo and contamination writes.
 - A local single-player save boundary now exists via `gehenna-save.json`; journal persistence is no longer only theoretical.
+
+## Architecture Decisions (Session 2026-04-21)
+
+### CLI Modularization
+- **Decision**: Split the 1,200-line monolithic `GehennaCLI/main.swift` into `GameSession.swift`, `Commands.swift`, `Display.swift`, and a minimal `main.swift`.
+- **Rationale**: The core engine was already separate, but the CLI became too unwieldy to navigate. Grouping state/loop, interactive commands, and display/formatting into separate files lowers the friction for adding new mechanics.
+- **Implication**: `main.swift` is now just a top-level script runner. Any new CLI-specific logic should go into the appropriate `extension GameSession` file.
+
+### 0.4.22 Release Polish
+- **Decision**: Bumped version to `0.4.22` after validating CLI modularization. Added "Clean Hands" and Taboo reporting to the `profile` command, and an auto-save prompt on `quit`.
+- **Rationale**: User-facing consequence (Zero-Trust Cosmology) needs to be diegetic and readable. Auto-save ensures the newly added local persistence boundary actually gets used before exit.
+- **Implication**: Next features should build on this stable, modularized foundation, particularly expanding canon and social consequence (rumor chains).

@@ -1,6 +1,6 @@
 # GEHENNA
 
-![Version](https://img.shields.io/badge/version-0.4.21-7a3cff)
+![Version](https://img.shields.io/badge/version-0.4.22-7a3cff)
 ![Swift](https://img.shields.io/badge/swift-6-orange)
 ![Tests](https://img.shields.io/badge/tests-87%20passing-2ea44f)
 ![Releases](https://img.shields.io/badge/releases-tags%20on%20main-0a7ea4)

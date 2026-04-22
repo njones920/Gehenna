@@ -1,12 +1,12 @@
 # GEHENNA World Seed
 
-This file describes what exists in the public `0.4.21` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
+This file describes what exists in the public `0.4.22` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
 
 ## Build Identity
 
 | Field | Value |
 | --- | --- |
-| Version | `0.4.21` |
+| Version | `0.4.22` |
 | Codex | `3.0` |
 | Interface | SwiftPM engine, terminal CLI, headless bot arena |
 | Current region | Ridge of Elah |
