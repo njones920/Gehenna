@@ -8,6 +8,7 @@ This repo contains the early Swift implementation of GEHENNA, based on the Codex
 - `GEHENNA_DESIGN_HISTORY.md` reconciles Codex Two and v3 for implementation context.
 - `docs/CANON_DATA_ROADMAP.md` records the historical data gap and the intended canon expansion path.
 - `docs/DEPLOYMENT.md` records the SwiftPM/Linux/server deployment direction.
+- `docs/GIT_WORKFLOW.md` records the repository branch, PR, staging, and release/tag workflow.
 - `docs/archive/GEHENNA_CODEX_TWO.txt` is superseded historical context. Do not use it as implementation authority.
 - The current implementation is an engine/CLI prototype, not the full vertical slice.
 
@@ -55,6 +56,8 @@ Do not rush to graphics, combat, or conventional MMO avatar mechanics before the
 
 - Read `GEHENNA_DEV_MEMORY.md` before making substantial changes.
 - Read `GEHENNA_DESIGN_HISTORY.md` when changing product direction, architecture, or anything that interprets the Codex.
+- Read `docs/GIT_WORKFLOW.md` before changing repo process, release flow, or branch/tag guidance.
 - If you introduce a major architectural decision, update `GEHENNA_DEV_MEMORY.md` with the decision, rationale, and next implications.
+- If you make a release-visible, workflow-visible, or user-visible change, update `CHANGELOG.md` and any affected repo-facing docs (`README.md`, `WORLD_SEED.md`) in the same change when relevant.
 - If you add a new long-term invariant, update this file.
 - Leave the repo in a state where another agent can continue without guessing your intent.

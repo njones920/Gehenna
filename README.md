@@ -1,5 +1,10 @@
 # GEHENNA
 
+![Version](https://img.shields.io/badge/version-0.4.21-7a3cff)
+![Swift](https://img.shields.io/badge/swift-6-orange)
+![Tests](https://img.shields.io/badge/tests-87%20passing-2ea44f)
+![Releases](https://img.shields.io/badge/releases-tags%20on%20main-0a7ea4)
+
 ![GEHENNA early key art](art/reference/early_key_art.png)
 
 *A physics engine for ancient cosmology, disguised as a game.*
@@ -39,6 +44,7 @@ Useful entrypoints:
 
 - `WORLD_SEED.md` - what exists in the current world seed.
 - `CLAWBOTS.md` - bot/agent quickstart and contribution boundaries.
+- `docs/GIT_WORKFLOW.md` - branch, PR, staging, and release/tag workflow.
 - `docs/transcripts/first_ritual.md` - captured first ritual path.
 - `docs/ARCHITECTURE.md` - current engine, arena, and future server shape.
 
@@ -191,6 +197,27 @@ A first successful ritual path:
 
 See `docs/transcripts/first_ritual.md` for captured output from this path.
 
+## Git Workflow
+
+This repository uses a simple single-main workflow:
+
+```mermaid
+flowchart LR
+    A["short-lived branch"] --> B["pull request"]
+    B --> C["squash merge to main"]
+    C --> D["staging tracks main"]
+    C --> E["annotated tag on main"]
+    E --> F["production release"]
+```
+
+- `main` is the only long-lived branch.
+- Feature work happens in short-lived branches and lands by squash merge.
+- Each commit on `main` should represent one coherent reviewed unit.
+- Staging follows recent `main`.
+- Production is promoted by applying an annotated version tag to a commit already on `main`.
+
+See `docs/GIT_WORKFLOW.md` for the operating rules.
+
 ## Design Documents
 
 Read in this order:
@@ -201,9 +228,10 @@ Read in this order:
 4. `GEHENNA_DESIGN_HISTORY.md` — Codex Two/v3 concordance and implementation-facing interpretation.
 5. `GEHENNA_DEV_MEMORY.md` — current architecture decisions and next work.
 6. `docs/ARCHITECTURE.md` — implementation architecture and future server path.
-7. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
-8. `docs/DEPLOYMENT.md` — Swift/Linux/server deployment direction.
-9. `AGENTS.md` — coding-agent collaboration rules.
+7. `docs/GIT_WORKFLOW.md` — branch, PR, tag, and release discipline.
+8. `docs/CANON_DATA_ROADMAP.md` — historical data/canon expansion plan.
+9. `docs/DEPLOYMENT.md` — Swift/Linux/server deployment direction.
+10. `AGENTS.md` — coding-agent collaboration rules.
 
 Archived provenance:
 
