@@ -156,15 +156,15 @@ The Expression Layer renders. It must not decide simulation truth.
 - Kfar Shalem does not yet generate the level of ritual suspicion its design implies.
   → **Partially addressed**: ancestor shrine site type has 3x suspicion multiplier; rituals propagate rumors to NPCs via localSuspicion.
 - The Burning Ground is not yet dangerous enough as a systemic place.
-- Codex output can duplicate tags because tag merging concatenates arrays.
-- Root identity IDs are generated UUIDs and should become stable canon IDs before persistence.
+- ~~Codex output can duplicate tags because tag merging concatenates arrays.~~ **Resolved**: `TagConstellation.merged(with:)` now deduplicates exact duplicate tags while preserving first-seen order.
+- ~~Root identity IDs are generated UUIDs and should become stable canon IDs before persistence.~~ **Resolved**: root identity IDs are deterministic from a widened canonical seed (name + culture + era + core tags + epochs).
 - The historical canon/lore dataset is thin. Ridge content is a small seed, not the target reference canon.
 - Player-facing CLI still exposes several raw counts. Keep debug utility, but final interface should become more diegetic.
-- Ritual seeds are generated from wall-clock time in the CLI; eventual ritual history should record replayable envelopes.
-- No persistence yet.
+- ~~Ritual seeds are generated from wall-clock time in the CLI; eventual ritual history should record replayable envelopes.~~ **Resolved**: ritual and astragali entropy now derive from tick/state.
+- ~~No persistence yet.~~ **Resolved for local single-player CLI snapshots** via `gehenna-save.json`. Shared-world/server persistence is still open.
 - ~~No event journal yet.~~ **Resolved**: journal entries now carry source, severity, siteID, involvedNPCs, and tags. Queryable by site, tick, severity, tag, and NPC.
 - ~~No active world clock yet.~~ **Resolved**: WorldClock is the single entry point for time; CLI never calls world.tick() directly.
-- Rumor propagation is basic (seeding only, no mutation or chains). Full rumor engine is next milestone.
+- ~~Rumor propagation is basic (seeding only, no mutation or chains). Full rumor engine is next milestone.~~ **Resolved in local working tree**: the engine now has a typed rumor ledger with propagation, mutation, decay, carrier tracking, director integration, and a CLI `rumors` / `gossip` view.
 - WorldDirector uses authored templates only. No LLM generation yet; templates are keyed to site type and NPC state.
 
 ## Architecture Decisions (Session 2026-04-19)
@@ -300,10 +300,9 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 2. ~~**`PractitionerProfile.summmonerCapacity` has a typo** — triple 'm'.~~ **Resolved in `c8a0add`.** The field is now `summonerCapacity`, avoiding a bad serialized/public API name before persistence lands.
 
-3. **The CLI (`GehennaCLI/main.swift`) is 44KB in a single file.** This is manageable for a prototype but will become unwieldy as features are added. The arena is 16KB in one file, which is fine.
-   - *Recommendation*: Before adding persistence or richer CLI commands, split the CLI into at least `GameSession.swift`, `RitualFlow.swift`, `CommandParser.swift`, and `CLIRenderer.swift`.
+3. ~~**The CLI (`GehennaCLI/main.swift`) is 44KB in a single file.**~~ **Resolved in `0.4.22`.** The CLI is now split into `GameSession.swift`, `Commands.swift`, `Display.swift`, and a minimal `main.swift`.
 
-4. **Root identity IDs are generated UUIDs.** Already noted in Known Gaps. Before persistence, these should become stable, deterministic IDs (e.g., UUID v5 from a canonical namespace + the trueName or a stable content hash).
+4. ~~**Root identity IDs are generated UUIDs.**~~ **Resolved.** Root identity IDs now derive from a widened canonical seed and are stable across runs/snapshots.
 
 5. **`WorldShard.execute()` uses `world.regions.keys.first` to find the region ID.** This works with one region but will silently pick an arbitrary region if multiple regions exist. The shard should either track which region a site belongs to, or sites should carry a `regionID` reference.
 
@@ -326,7 +325,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, rumor attenuation, and deterministic root identity IDs are all tested. The gaps are in CLI behavior (no integration tests for the interactive loop) and persistence (not yet implemented). **79 tests as of 2026-04-20.**
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, rumor attenuation, deterministic root identity IDs, identity/accountability accrual, persistence snapshots, and the rumor engine are all tested. The main remaining gap is CLI integration coverage beyond smoke testing. **96 tests across 21 suites as of 2026-04-22.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -341,7 +340,7 @@ Based on this audit, the most valuable next work is:
 5. ~~**Identity / Accountability Layer (Zero-Trust Cosmology)** — spirits and epochs verify the practitioner's identity before manifesting.~~ **Done.** Added `Taboo` enum, `IdentityRequirements` struct, `SpiritTemplate.identityRequirements`, `Epoch.identityRequirements`, and Stage 11.8 (Spirit Verification) to the pipeline. 3 new tests in a dedicated `ZeroTrustCosmologyTests` suite. 82/82 tests pass.
 6. ~~**Make identity/accountability earned in play** rather than only test/setup state.~~ **Done in local working tree.** `PractitionerProfile.applyRitualConsequences` now accrues contagion, purity damage, and the first concrete taboo writes from actual ritual actions. Mortuary rituals without compensation mark `.graveRobbing`; corrupted fragments at high-sanctity sites mark `.uncleanSacrifice`; blood or mimic-blood sacrifice at a `topheth` marks `.tophethPact`. Both CLI and `WorldShard` call the same engine hook. 4 focused tests added.
 7. ~~**Persist journal entries** to a local file (JSON lines or SQLite).~~ **Done in local working tree, with a broader but still narrow cut.** Added typed single-player snapshot persistence (`SinglePlayerSnapshot`, `SnapshotStore`) and CLI `save` / `load` commands. The saved snapshot now carries world state, journal, practitioner profile, Codex, sites, inventory, NPCs, root identities, and clock in one JSON file (`gehenna-save.json`).
-8. **Split the CLI** into multiple files before it grows further. ← **next**
+8. ~~**Split the CLI** into multiple files before it grows further.~~ **Done in `0.4.22`.**
 9. **Broaden persistence coverage for shared-world/server paths** (`PractitionerSession`, shard snapshots, replay/import format) once the CLI save boundary settles.
 
 ## Architecture Decisions (Session 2026-04-20 Fixes)
@@ -437,3 +436,16 @@ Based on this audit, the most valuable next work is:
 - **Decision**: Bumped version to `0.4.22` after validating CLI modularization. Added "Clean Hands" and Taboo reporting to the `profile` command, and an auto-save prompt on `quit`.
 - **Rationale**: User-facing consequence (Zero-Trust Cosmology) needs to be diegetic and readable. Auto-save ensures the newly added local persistence boundary actually gets used before exit.
 - **Implication**: Next features should build on this stable, modularized foundation, particularly expanding canon and social consequence (rumor chains).
+
+### Rumor Engine Integration
+- **Decision**: Replaced the earlier rumor splash logic with a typed rumor engine built around `Rumor`, `RumorLedger`, and `RumorPropagationEvent`. Ritual aftermath now seeds rumors into the ledger; per-tick world advancement propagates them, allows mutated retellings, decays stale entries, and tracks explicit carriers on NPCs.
+- **Rationale**: The old site/faction weighting was a useful attenuation rule, but it was not yet a rumor system. The project needed actual social state that could survive beyond the first witnesses, mutate in the telling, and feed back into `WorldDirector` and the CLI.
+- **Integration Surface**: `WorldSimulation` now owns `rumorLedger`; `WorldClock` advances rumor propagation/decay; `WorldShard` and the interactive CLI both seed rumors through the same engine hook; `WorldDirector` can render actual carried rumors through `lastHeardRumorID`; NPCs persist carried rumor IDs in snapshots; the CLI exposes a `rumors` / `gossip` command.
+- **Polish Decision**: Traders now act as the natural cross-faction bridge during propagation, which prevents village chatter from stalling inside the first witness faction set while keeping faction weighting intact.
+- **Verification**: Added focused rumor-engine tests for seeding, blood/mutation typing, propagation growth, mutation forking, decay, NPC carrier state, and backward-compatible snapshot decoding. `swift test` now passes with **96 tests across 21 suites**; `swift build` also passes.
+- **Implication**: The next rumor work should move outward, not inward: region-scale rumor ecology, witness/evidence chains, and faction action on rumor history rather than more local CLI-only behavior.
+
+### 0.4.23 Release Bump
+- **Decision**: Treat the rumor engine integration as `0.4.23`, not a silent post-`0.4.22` patch.
+- **Rationale**: This is a meaningful engine surface change: new persistent rumor types, new CLI command surface, new world/director behavior, new snapshot fields, and new tests. It is too large to hide under an unreleased note.
+- **Implication**: Version-bearing surfaces now report `0.4.23` across the engine constant, CLI splash, arena splash, README, world-seed docs, and changelog.

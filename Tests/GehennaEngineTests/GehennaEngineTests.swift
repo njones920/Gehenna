@@ -1641,3 +1641,244 @@ struct WorldShardTests {
         #expect(seenBySecond.narration.first == "[Battlefield Ridge]")
     }
 }
+
+// MARK: - Rumor Engine Tests
+
+@Suite("Rumor Engine Tests")
+struct RumorEngineTests {
+    private func testNPC(name: String = "Probe", faction: Faction = .elders) -> NPC {
+        NPC(
+            name: name,
+            role: "Test",
+            faction: faction,
+            register: VoiceRegister(style: .vernacular),
+            interiority: NPCInteriority(
+                interiorVoice: "",
+                privateTruth: "",
+                unsatisfiedWant: "",
+                wound: "",
+                threshold: ""
+            )
+        )
+    }
+
+    @Test("A ritual at a village shrine seeds a rumor in the ledger")
+    func seedingFromRitualPlantsRumor() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8)])
+        world.currentTick = 10
+
+        var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        site.recordRitualPerformed()
+
+        var npcs = [
+            testNPC(name: "Elder", faction: .elders),
+            testNPC(name: "Priest", faction: .priesthood),
+            testNPC(name: "Trader", faction: .traders),
+        ]
+
+        let rumorID = world.seedRitualRumor(
+            site: site,
+            wasMutation: false,
+            libation: .fermentedWine,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: "Amoz",
+            npcs: &npcs
+        )
+
+        #expect(rumorID != nil)
+        let rumor = try #require(rumorID.flatMap { world.rumorLedger.rumors[$0] })
+        #expect(rumor.kind == .ritual)
+        #expect(rumor.originSiteName == "Kfar Shalem")
+        #expect(rumor.sentence.contains("Amoz"))
+        #expect(!rumor.hearers.isEmpty)
+        #expect(npcs[0].hasHeardRumors)
+        #expect(npcs[0].heardRumorIDs.contains(rumor.id))
+    }
+
+    @Test("Blood libation produces a blood-offering rumor")
+    func bloodLibationTagsRumor() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8)])
+        var site = RitualSite(name: "The Burning Ground", type: .topheth, affinity: .fire)
+        site.recordRitualPerformed()
+        var npcs = [testNPC(faction: .priesthood)]
+
+        let rumorID = world.seedRitualRumor(
+            site: site,
+            wasMutation: false,
+            libation: .bloodOffering,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: nil,
+            npcs: &npcs
+        )
+
+        let rumor = try #require(rumorID.flatMap { world.rumorLedger.rumors[$0] })
+        #expect(rumor.kind == .bloodOffering)
+    }
+
+    @Test("Mutation events seed a mutation rumor")
+    func mutationFlagsRumor() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8)])
+        var site = RitualSite(name: "Nahal Caves", type: .burialCave, affinity: .earth)
+        site.recordRitualPerformed()
+        var npcs = [testNPC(faction: .priesthood)]
+
+        let rumorID = world.seedRitualRumor(
+            site: site,
+            wasMutation: true,
+            libation: .water,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: nil,
+            npcs: &npcs
+        )
+
+        let rumor = try #require(rumorID.flatMap { world.rumorLedger.rumors[$0] })
+        #expect(rumor.kind == .mutation)
+    }
+
+    @Test("Quiet site with no reach does not seed a rumor")
+    func lowReachDropsRumor() {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.9)])
+        let quietSite = RitualSite(name: "Hidden Niche", type: .ossuaryNiche, affinity: .earth)
+        var npcs = [testNPC(faction: .elders)]
+
+        let rumorID = world.seedRitualRumor(
+            site: quietSite,
+            wasMutation: false,
+            libation: .water,
+            timing: WorldTiming(),
+            practitionerName: nil,
+            npcs: &npcs
+        )
+
+        #expect(rumorID == nil)
+    }
+
+    @Test("Propagation reaches new carriers over ticks")
+    func propagationReachesNewCarriers() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8)])
+        var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        for _ in 0..<3 { site.recordRitualPerformed() }
+
+        var npcs: [NPC] = (0..<6).map { i in
+            testNPC(name: "NPC\(i)", faction: [.elders, .priesthood, .traders][i % 3])
+        }
+
+        let rumorID = try #require(world.seedRitualRumor(
+            site: site,
+            wasMutation: false,
+            libation: .fermentedWine,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: "Amoz",
+            npcs: &npcs
+        ))
+
+        let initialHearerCount = world.rumorLedger.rumors[rumorID]?.hearers.count ?? 0
+
+        for _ in 1...8 {
+            world.currentTick += 1
+            world.tickRumors(npcs: &npcs)
+        }
+
+        let descendantCarrierIDs = world.rumorLedger.rumors.values
+            .filter { $0.id == rumorID || $0.ancestorID == rumorID }
+            .flatMap(\.hearers)
+        let uniqueCarriers = Set(descendantCarrierIDs)
+        #expect(uniqueCarriers.count > initialHearerCount)
+    }
+
+    @Test("Mutation-heavy rumors fork child rumors")
+    func mutationProducesChild() {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8)])
+        var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        for _ in 0..<5 { site.recordRitualPerformed() }
+
+        var npcs: [NPC] = (0..<8).map { i in
+            testNPC(name: "NPC\(i)", faction: [.elders, .priesthood, .traders][i % 3])
+        }
+
+        guard let rumorID = world.seedRitualRumor(
+            site: site,
+            wasMutation: true,
+            libation: .bloodOffering,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: "Amoz",
+            npcs: &npcs
+        ) else {
+            Issue.record("failed to seed mutation-heavy rumor")
+            return
+        }
+
+        var sawChild = false
+        for _ in 1...20 {
+            world.currentTick += 1
+            world.tickRumors(npcs: &npcs)
+            if world.rumorLedger.rumors.values.contains(where: { $0.ancestorID == rumorID }) {
+                sawChild = true
+                break
+            }
+        }
+
+        #expect(sawChild)
+    }
+
+    @Test("Rumors decay and eventually go extinct")
+    func decayRemovesStaleRumors() {
+        var ledger = RumorLedger()
+        let rumorID = UUID()
+        ledger.rumors[rumorID] = Rumor(
+            id: rumorID,
+            originTick: 0,
+            originSiteID: nil,
+            kind: .ritual,
+            originSiteName: "nowhere",
+            subjectDescriptor: "a stranger",
+            act: "spoke",
+            timeDescriptor: "at night",
+            strength: 0.2,
+            lastPropagatedTick: 0
+        )
+
+        for tick in 1...300 {
+            ledger.decay(tick: tick)
+        }
+
+        #expect(ledger.rumors[rumorID] == nil)
+    }
+
+    @Test("NPC hearing a rumor records carrier state and bumps suspicion")
+    func npcHearRecordsCarrier() {
+        var npc = testNPC(faction: .priesthood)
+        let rumor = Rumor(
+            originTick: 0,
+            originSiteID: nil,
+            kind: .mutation,
+            originSiteName: "the caves",
+            subjectDescriptor: "a stranger",
+            act: "called something wrong",
+            timeDescriptor: "in deep night",
+            strength: 0.6
+        )
+
+        let priorSuspicion = npc.personalSuspicion
+        npc.hear(rumor, at: 5)
+
+        #expect(npc.hasHeardRumors)
+        #expect(npc.heardRumorIDs.contains(rumor.id))
+        #expect(npc.lastHeardRumorID == rumor.id)
+        #expect(npc.personalSuspicion > priorSuspicion)
+    }
+
+    @Test("Legacy world snapshots without rumor ledger still decode")
+    func legacySnapshotDecodesWithoutLedger() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "Legacy")])
+        world.currentTick = 42
+        let encoded = try JSONEncoder().encode(world)
+        var jsonObject = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        jsonObject.removeValue(forKey: "rumorLedger")
+        let legacy = try JSONSerialization.data(withJSONObject: jsonObject)
+
+        let decoded = try JSONDecoder().decode(WorldSimulation.self, from: legacy)
+        #expect(decoded.currentTick == 42)
+        #expect(decoded.rumorLedger.rumors.isEmpty)
+    }
+}

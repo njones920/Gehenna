@@ -102,7 +102,10 @@ public struct WorldClock: Codable, Sendable {
                 npcs[i].tickState()
             }
 
-            // 4. Collect threshold events from this tick
+            // 4. Rumor propagation + decay
+            world.tickRumors(npcs: &npcs)
+
+            // 5. Collect threshold events from this tick
             for event in world.pendingEvents {
                 collectedEvents.append(WorldEvent(
                     type: .thresholdCrossed,

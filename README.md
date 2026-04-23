@@ -1,8 +1,8 @@
 # GEHENNA
 
-![Version](https://img.shields.io/badge/version-0.4.22-7a3cff)
+![Version](https://img.shields.io/badge/version-0.4.23-7a3cff)
 ![Swift](https://img.shields.io/badge/swift-6-orange)
-![Tests](https://img.shields.io/badge/tests-87%20passing-2ea44f)
+![Tests](https://img.shields.io/badge/tests-96%20passing-2ea44f)
 ![Releases](https://img.shields.io/badge/releases-tags%20on%20main-0a7ea4)
 
 ![GEHENNA early key art](art/reference/early_key_art.png)
@@ -13,7 +13,7 @@ GEHENNA is an early Swift implementation of the Codex concept in this repository
 
 ## World Seed
 
-Version: `0.4.21`
+Version: `0.4.23`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
 
@@ -26,6 +26,7 @@ This build is intended as the first public "world seed" build: clone it, build i
 | Ritual compiler | Live |
 | Site memory and healable scarring | Live |
 | NPC suspicion/trust drift | Live |
+| Rumor ledger, propagation, mutation, and decay | Live |
 | Local shared-world bot arena | Live |
 | Persistence | Local single-player save/load via `gehenna-save.json`; no server/backend persistence yet |
 | Networked multiplayer server | Not live yet |
@@ -86,7 +87,8 @@ What is live:
 - Taboo system: 6 canonical violations that permanently mark the practitioner and close categories of spirits.
 - Clean Hands / Noob Catalyst: brand-new practitioners can access epochs that corrupted veterans cannot.
 - Headless shared-world bot arena for local multiplayer simulation.
-- Swift Testing suite (87 tests across 20 suites).
+- Rumor ledger with seed, propagation, mutation, decay, and carrier tracking, surfaced in the CLI through `rumors`.
+- Swift Testing suite (96 tests across 21 suites).
 
 What is not live yet:
 
@@ -94,7 +96,7 @@ What is not live yet:
 - Public API.
 - Networked multiplayer server.
 - Deep historically grounded canon dataset.
-- Full rumor chains.
+- Region-scale rumor ecology and faction action on rumor history.
 - Oracle Network.
 - Evidence chain.
 - Spirit persistence after manifestation.
@@ -146,6 +148,7 @@ cast
 ritual
 world
 village
+rumors
 codex
 save
 load
@@ -154,7 +157,8 @@ quit
 ```
 
 `save` writes the current single-player state to `gehenna-save.json` in the
-current working directory. `load` restores from that file.
+current working directory. `load` restores from that file. `rumors` shows the
+active rumor ledger as the village currently carries it.
 
 ## Bot Arena
 

@@ -101,7 +101,12 @@ public struct WorldDirector: Sendable {
 
         // 7. Rumor propagation — have rituals been noticed?
         if events.count < maxEventsPerEval,
-           let rumorEvent = checkRumorPropagation(npcs: npcs, sites: sites, clock: clock) {
+           let rumorEvent = checkRumorPropagation(
+                npcs: npcs,
+                sites: sites,
+                clock: clock,
+                ledger: world.rumorLedger
+           ) {
             events.append(rumorEvent)
         }
 
@@ -279,25 +284,62 @@ public struct WorldDirector: Sendable {
         return nil
     }
 
-    private func checkRumorPropagation(npcs: [NPC], sites: [RitualSite], clock: WorldClock) -> DirectorEvent? {
+    private func checkRumorPropagation(
+        npcs: [NPC],
+        sites: [RitualSite],
+        clock: WorldClock,
+        ledger: RumorLedger
+    ) -> DirectorEvent? {
         // Check if any recently-used site with high localSuspicion would generate rumors
         let recentRitualSites = sites.filter { site in
             guard let lastTick = site.lastRitualTick else { return false }
-            return clock.currentTick - lastTick < 10 && site.localSuspicion > 0.1
+            return clock.currentTick - lastTick < 20 && site.localSuspicion > 0.05
         }
 
-        guard !recentRitualSites.isEmpty else { return nil }
-
-        // Check if any NPC recently heard rumors
-        let suspiciousNPCs = npcs.filter { $0.hasHeardRumors && $0.personalSuspicion > 0.3 }
-        guard !suspiciousNPCs.isEmpty else { return nil }
+        let suspiciousNPCs = npcs.filter {
+            ($0.hasHeardRumors || !$0.heardRumorIDs.isEmpty) && $0.personalSuspicion > 0.2
+        }
+        guard !suspiciousNPCs.isEmpty || !recentRitualSites.isEmpty else { return nil }
 
         // Only fire occasionally.
         guard shouldEmit(clockTick: clock.currentTick, salt: recentRitualSites.count + suspiciousNPCs.count, interval: 4) else { return nil }
 
-        let orderedNPCs = suspiciousNPCs.sorted { lhs, rhs in
-            lhs.stableEventSalt < rhs.stableEventSalt
+        let carriers = suspiciousNPCs.filter { $0.lastHeardRumorID != nil }
+        if !carriers.isEmpty {
+            let orderedCarriers = carriers.sorted { $0.stableEventSalt < $1.stableEventSalt }
+            let npc = orderedCarriers[(clock.currentTick + recentRitualSites.count) % orderedCarriers.count]
+            if let rumorID = npc.lastHeardRumorID,
+               let rumor = ledger.rumors[rumorID],
+               !rumor.isExtinct {
+                let framing: String = switch npc.faction {
+                case .priesthood:
+                    "\(npc.name) murmurs to another priest: \""
+                case .elders:
+                    "Two of the elders are talking near the well. \(npc.name) stops you to ask: \""
+                case .traders:
+                    "\(npc.name) leans in over the trade stall, voice low: \""
+                }
+
+                let tail: String = switch npc.faction {
+                case .priesthood:
+                    "\" They do not look away when they see you."
+                case .elders:
+                    "\" They watch your face as they ask."
+                case .traders:
+                    "\" They are not asking to warn you."
+                }
+
+                return DirectorEvent(
+                    type: .rumorPropagation,
+                    description: framing + rumor.sentence + tail,
+                    severity: rumor.kind == .mutation || rumor.kind == .tabooViolation ? .significant : .notable,
+                    npcID: npc.id
+                )
+            }
         }
+
+        let orderedNPCs = suspiciousNPCs.sorted { $0.stableEventSalt < $1.stableEventSalt }
+        guard !orderedNPCs.isEmpty else { return nil }
         let npc = orderedNPCs[(clock.currentTick + recentRitualSites.count) % orderedNPCs.count]
         let text: String = switch npc.faction {
         case .priesthood:

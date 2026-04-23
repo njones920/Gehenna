@@ -1,12 +1,12 @@
 # GEHENNA World Seed
 
-This file describes what exists in the public `0.4.22` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
+This file describes what exists in the public `0.4.23` seed. It is an orientation layer for humans, bots, and future agents. It is not the full canon.
 
 ## Build Identity
 
 | Field | Value |
 | --- | --- |
-| Version | `0.4.22` |
+| Version | `0.4.23` |
 | Codex | `3.0` |
 | Interface | SwiftPM engine, terminal CLI, headless bot arena |
 | Current region | Ridge of Elah |
@@ -32,19 +32,20 @@ GEHENNA is currently a runnable seed of the ritual grammar, world clock, site me
 - Site-local state: scarring, suspicion, witness exposure, active traces, visit ticks, ritual ticks, and recent event count.
 - Healable site scarring through quiet recovery and purification hooks.
 - NPC interiority with trust, suspicion, rumor exposure, and temporal drift.
-- Site- and faction-weighted rumor propagation.
+- Rumor ledger with site- and faction-weighted seeding, propagation, mutation, decay, and carrier tracking.
 - Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths, persisted inside local single-player snapshots.
 - `WorldShard` actor as a single shared-world authority for local multiplayer simulation.
 - Headless arena where multiple bot practitioners share sites, NPCs, and consequences.
 - Local single-player snapshot save/load via `gehenna-save.json`.
-- Swift Testing suite (87 tests across 20 suites).
+- CLI `rumors` / `gossip` command for reading the active rumor field.
+- Swift Testing suite (96 tests across 21 suites).
 
 ## Not Live Yet
 
 - Shared-world/server persistence and replay import/export.
 - Networked multiplayer server.
 - Public API.
-- Full rumor propagation and mutation chains.
+- Region-scale rumor ecology and faction response beyond one settlement.
 - Witness system and evidence chains.
 - Spirit persistence after manifestation.
 - Deep historically grounded canon dataset.
@@ -95,13 +96,12 @@ The arena is a stress and emergence harness. It is not final gameplay. Current b
 
 Near-term work should make the world more autonomous before adding conventional game surface:
 
-1. CLI modularization.
-2. Shared-world/server persistence.
-3. Historically grounded canon data expansion.
-4. Stronger site-local timelines.
-5. Rumor propagation and mutation.
-6. Witness state and evidence chains.
-7. Spirit persistence and relationship memory.
-8. Network server wrapping `WorldShard`.
+1. Shared-world/server persistence.
+2. Historically grounded canon data expansion.
+3. Stronger site-local timelines.
+4. Witness state and evidence chains.
+5. Faction action and movement driven by rumor history.
+6. Spirit persistence and relationship memory.
+7. Network server wrapping `WorldShard`.
 
 Core invariant: the Expression Layer renders state. It does not decide simulation truth.

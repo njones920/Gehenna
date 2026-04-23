@@ -12,7 +12,7 @@ extension GameSession {
         ║   A physics engine for ancient cosmology,    ║
         ║           disguised as a game.               ║
         ║                                              ║
-        ║          Ridge of Elah — v0.4.22             ║
+        ║          Ridge of Elah — v0.4.23             ║
         ║                                              ║
         ╚══════════════════════════════════════════════╝
 
@@ -147,6 +147,7 @@ extension GameSession {
             cast / bones     Cast the astragali (diagnostic bones)
             codex (c)        Browse your Codex of the Dead
             village (v)      Talk to the people of Kfar Shalem
+            rumors / gossip  What the village is saying
             world (w)        Read the state of the region
             wait / rest      Let time pass
             profile (p)      View your practitioner record

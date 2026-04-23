@@ -53,6 +53,7 @@ That means:
 - Use annotated semantic tags:
   - `v0.4.21`
   - `v0.4.22`
+  - `v0.4.23`
 - Tags should point to commits already on `main`.
 - Treat the tag as the production truth for that release.
 

@@ -327,19 +327,17 @@ extension GameSession {
         }
         sites[currentSiteIndex].lastRitualTick = clock.currentTick
 
-        // Advance time — rituals cost standard time
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        world.seedRitualRumor(
+            site: sites[currentSiteIndex],
+            wasMutation: result.spirit?.isMutation == true,
+            libation: chosenLibation?.type,
+            timing: timing,
+            practitionerName: nil,
+            npcs: &npcs
+        )
 
-        // Propagate rumors to nearby NPCs based on site suspicion
-        let rumorSite = sites[currentSiteIndex]
-        if rumorSite.localSuspicion > 0.05 {
-            for i in npcs.indices {
-                let rumorStrength = rumorSite.rumorStrength(for: npcs[i].faction)
-                if rumorStrength > 0.01 {
-                    npcs[i].hearRumor(strength: rumorStrength)
-                }
-            }
-        }
+        // Advance time — rumor propagation runs inside the clock tick.
+        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
 
         // Process world events and director narration
         processWorldEvents(events)
@@ -399,6 +397,29 @@ extension GameSession {
 
         // The director gets a chance to speak after rest
         processDirectorEvents()
+    }
+
+    func showRumors() {
+        let activeRumors = world.rumorLedger.active
+        print("\n  ── What The Village Is Hearing ──")
+        if activeRumors.isEmpty {
+            print("    Nothing carries your name yet. The bones have not yet reached the well.")
+            return
+        }
+
+        for rumor in activeRumors.prefix(8) {
+            let carriers = npcs.filter { rumor.hearers.contains($0.id) }
+            let factions = Set(carriers.map(\.faction)).map(\.rawValue).sorted().joined(separator: ", ")
+            let descriptor = factions.isEmpty ? "not yet carried" : "carried by \(factions)"
+            let strengthWord = rumor.strength > 0.5 ? "loud" : rumor.strength > 0.2 ? "steady" : "faint"
+            let mutationTag = rumor.mutationCount > 0 ? " — retold \(rumor.mutationCount)x" : ""
+            print("    • \(rumor.sentence) [\(strengthWord), \(descriptor)\(mutationTag)]")
+        }
+
+        let extinctCount = world.rumorLedger.rumors.count - activeRumors.count
+        if extinctCount > 0 {
+            print("    (\(extinctCount) rumor(s) have faded.)")
+        }
     }
 
     func saveGame() {

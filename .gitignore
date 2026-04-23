@@ -12,3 +12,4 @@ Tests/.DS_Store
 xcuserdata/
 
 gehenna-save.json
+.claude/

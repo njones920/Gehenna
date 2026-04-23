@@ -82,6 +82,8 @@ final class GameSession: @unchecked Sendable {
                 showCodex()
             case "village", "v", "talk":
                 villageMenu()
+            case "rumors", "gossip":
+                showRumors()
             case "world", "w":
                 showWorldState()
             case "wait", "rest":

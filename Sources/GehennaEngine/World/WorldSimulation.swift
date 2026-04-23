@@ -131,6 +131,9 @@ public struct WorldSimulation: Codable, Sendable {
     /// Regions in Mot state (terminal cosmology).
     public var motRegions: Set<UUID>
 
+    /// The rumor ledger — all circulating rumors and their carriers.
+    public var rumorLedger: RumorLedger
+
     public init(regions: [RegionState], adjacency: [UUID: [UUID]] = [:]) {
         self.regions = Dictionary(uniqueKeysWithValues: regions.map { ($0.id, $0) })
         self.adjacency = adjacency
@@ -140,6 +143,25 @@ public struct WorldSimulation: Codable, Sendable {
         self.activeThresholds = [:]
         self.sebittiActive = false
         self.motRegions = []
+        self.rumorLedger = RumorLedger()
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case regions, adjacency, currentTick, journal, pendingEvents
+        case activeThresholds, sebittiActive, motRegions, rumorLedger
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.regions = try c.decode([UUID: RegionState].self, forKey: .regions)
+        self.adjacency = try c.decode([UUID: [UUID]].self, forKey: .adjacency)
+        self.currentTick = try c.decode(Int.self, forKey: .currentTick)
+        self.journal = try c.decode([JournalEntry].self, forKey: .journal)
+        self.pendingEvents = try c.decode([ThresholdEvent].self, forKey: .pendingEvents)
+        self.activeThresholds = try c.decode([UUID: Set<ThresholdEvent.EventType>].self, forKey: .activeThresholds)
+        self.sebittiActive = try c.decode(Bool.self, forKey: .sebittiActive)
+        self.motRegions = try c.decode(Set<UUID>.self, forKey: .motRegions)
+        self.rumorLedger = try c.decodeIfPresent(RumorLedger.self, forKey: .rumorLedger) ?? RumorLedger()
     }
 
     // MARK: - Simulation Tick
@@ -235,6 +257,128 @@ public struct WorldSimulation: Codable, Sendable {
             siteID: site.id,
             tags: tags
         ))
+    }
+
+    @discardableResult
+    public mutating func seedRitualRumor(
+        site: RitualSite,
+        wasMutation: Bool,
+        libation: LibationType?,
+        timing: WorldTiming,
+        practitionerName: String?,
+        npcs: inout [NPC]
+    ) -> UUID? {
+        let kind: RumorKind = {
+            if wasMutation { return .mutation }
+            if libation == .bloodOffering || libation == .mimicBlood { return .bloodOffering }
+            return .ritual
+        }()
+
+        let factionReaches = Faction.allCases.map { faction in
+            adjustedRumorReach(for: faction, at: site, kind: kind)
+        }
+        let peakReach = factionReaches.max() ?? 0.0
+        guard peakReach > 0.02 else { return nil }
+
+        let act: String = {
+            switch kind {
+            case .ritual: "spoke to the dead"
+            case .mutation: "called something that came through wrong"
+            case .bloodOffering: "poured blood on the stones"
+            case .tabooViolation: "broke an old rule"
+            case .spiritSighting: "was with something that was not alive"
+            case .siteDisturbance: "disturbed the ground"
+            }
+        }()
+
+        let timeDescriptor: String = switch timing.timeOfDay {
+        case .deepNight, .night: "in the deep night"
+        case .dusk: "at dusk"
+        case .dawn: "before first light"
+        default: "during the day"
+        }
+
+        let subject = practitionerName.map { "the one called \($0)" } ?? "a stranger"
+        let rumor = Rumor(
+            originTick: currentTick,
+            originSiteID: site.id,
+            kind: kind,
+            originSiteName: site.name,
+            subjectDescriptor: subject,
+            act: act,
+            timeDescriptor: timeDescriptor,
+            strength: min(1.0, 0.35 + peakReach),
+            lastPropagatedTick: currentTick
+        )
+        let rumorID = rumorLedger.seed(rumor)
+
+        let audibilityThreshold = max(0.05, peakReach * 0.5)
+        for i in npcs.indices {
+            let reach = adjustedRumorReach(for: npcs[i].faction, at: site, kind: kind)
+            guard reach >= audibilityThreshold else { continue }
+
+            var seededRumor = rumorLedger.rumors[rumorID] ?? rumor
+            seededRumor.strength = min(seededRumor.strength, max(0.12, reach))
+            rumorLedger.rumors[rumorID] = seededRumor
+            npcs[i].hear(seededRumor, at: currentTick)
+            rumorLedger.recordHearing(rumorID: rumorID, by: npcs[i].id, at: currentTick)
+        }
+
+        journal.append(JournalEntry(
+            tick: currentTick,
+            type: .rumorSeed,
+            description: "Rumor begins to circulate: \(rumor.sentence)",
+            source: .site,
+            severity: kind == .mutation ? .significant : .notable,
+            siteID: site.id,
+            involvedNPCs: Array(rumorLedger.rumors[rumorID]?.hearers ?? []),
+            tags: Set(["rumor", "kind:\(kind.rawValue)", "rumor-id:\(rumorID.uuidString)"])
+        ))
+
+        return rumorID
+    }
+
+    public mutating func tickRumors(npcs: inout [NPC]) {
+        let events = rumorLedger.propagate(npcs: &npcs, tick: currentTick)
+        for event in events where event.mutated {
+            guard let newID = event.newRumorID,
+                  let mutatedRumor = rumorLedger.rumors[newID] else { continue }
+
+            journal.append(JournalEntry(
+                tick: currentTick,
+                type: .rumorSeed,
+                description: "A rumor has changed in the retelling: \(mutatedRumor.sentence)",
+                source: .npc,
+                severity: .ambient,
+                involvedNPCs: [event.fromNPC, event.toNPC],
+                tags: Set(["rumor", "mutation", "rumor-id:\(newID.uuidString)"])
+            ))
+        }
+
+        rumorLedger.decay(tick: currentTick)
+    }
+
+    private func adjustedRumorReach(for faction: Faction, at site: RitualSite, kind: RumorKind) -> Double {
+        let baseReach = site.rumorStrength(for: faction)
+        let sensationalBoost: Double = switch kind {
+        case .mutation: 0.09
+        case .bloodOffering, .tabooViolation: 0.06
+        case .spiritSighting, .siteDisturbance: 0.03
+        case .ritual: 0.0
+        }
+
+        let factionWeight: Double = switch (faction, kind) {
+        case (.priesthood, .mutation), (.priesthood, .bloodOffering), (.priesthood, .tabooViolation):
+            1.0
+        case (.elders, .mutation), (.elders, .tabooViolation):
+            0.45
+        case (.traders, .mutation), (.traders, .bloodOffering):
+            0.25
+        default:
+            0.0
+        }
+
+        return min(1.0, baseReach + sensationalBoost * factionWeight)
     }
 
     // MARK: - Threshold Evaluation

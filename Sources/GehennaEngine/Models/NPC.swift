@@ -16,7 +16,7 @@
 import Foundation
 
 /// The faction an NPC belongs to — determines their social role and suspicion response.
-public enum Faction: String, Codable, Hashable, Sendable {
+public enum Faction: String, Codable, Hashable, CaseIterable, Sendable {
     case elders          // the village leadership, conservative, protective
     case traders         // merchant class, pragmatic, information-connected
     case priesthood      // religious authority, hostile to necromancy, network of informants
@@ -106,6 +106,14 @@ public struct NPC: Codable, Hashable, Sendable, Identifiable {
     /// Whether this NPC has directly witnessed the practitioner practicing.
     public var hasWitnessedDirectly: Bool
 
+    /// Specific rumors this NPC carries, keyed by rumor ID.
+    /// Authoritative content lives in the ledger; this is the NPC's carrier set.
+    public var heardRumorIDs: Set<UUID>
+
+    /// The strongest rumor this NPC last heard.
+    /// This is a presentation hint; the ledger remains authoritative.
+    public var lastHeardRumorID: UUID?
+
     /// Voice register for the Expression Layer.
     public let register: VoiceRegister
 
@@ -129,6 +137,8 @@ public struct NPC: Codable, Hashable, Sendable, Identifiable {
         personalSuspicion: Double = 0.0,
         hasHeardRumors: Bool = false,
         hasWitnessedDirectly: Bool = false,
+        heardRumorIDs: Set<UUID> = [],
+        lastHeardRumorID: UUID? = nil,
         register: VoiceRegister,
         tags: TagConstellation = TagConstellation(),
         interiority: NPCInteriority
@@ -141,10 +151,37 @@ public struct NPC: Codable, Hashable, Sendable, Identifiable {
         self.personalSuspicion = personalSuspicion
         self.hasHeardRumors = hasHeardRumors
         self.hasWitnessedDirectly = hasWitnessedDirectly
+        self.heardRumorIDs = heardRumorIDs
+        self.lastHeardRumorID = lastHeardRumorID
         self.register = register
         self.tags = tags
         self.interiority = interiority
         self.lastInteractionTick = nil
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, role, faction, trust, personalSuspicion
+        case hasHeardRumors, hasWitnessedDirectly
+        case heardRumorIDs, lastHeardRumorID
+        case register, tags, interiority, lastInteractionTick
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(UUID.self, forKey: .id)
+        self.name = try c.decode(String.self, forKey: .name)
+        self.role = try c.decode(String.self, forKey: .role)
+        self.faction = try c.decode(Faction.self, forKey: .faction)
+        self.trust = try c.decode(Double.self, forKey: .trust)
+        self.personalSuspicion = try c.decode(Double.self, forKey: .personalSuspicion)
+        self.hasHeardRumors = try c.decode(Bool.self, forKey: .hasHeardRumors)
+        self.hasWitnessedDirectly = try c.decode(Bool.self, forKey: .hasWitnessedDirectly)
+        self.heardRumorIDs = try c.decodeIfPresent(Set<UUID>.self, forKey: .heardRumorIDs) ?? []
+        self.lastHeardRumorID = try c.decodeIfPresent(UUID.self, forKey: .lastHeardRumorID)
+        self.register = try c.decode(VoiceRegister.self, forKey: .register)
+        self.tags = try c.decode(TagConstellation.self, forKey: .tags)
+        self.interiority = try c.decode(NPCInteriority.self, forKey: .interiority)
+        self.lastInteractionTick = try c.decodeIfPresent(Int.self, forKey: .lastInteractionTick)
     }
 
     // MARK: - Behavioral Methods
@@ -160,6 +197,30 @@ public struct NPC: Codable, Hashable, Sendable, Identifiable {
         }
         personalSuspicion = min(1.0, personalSuspicion + strength * factionMultiplier)
         trust = max(0.0, trust - strength * 0.3)
+    }
+
+    /// Record a specific rumor reaching this NPC.
+    /// This preserves the carried rumor ID for later rendering and
+    /// applies the existing suspicion/trust consequences.
+    public mutating func hear(_ rumor: Rumor, at tick: Int) {
+        guard !heardRumorIDs.contains(rumor.id) else { return }
+        heardRumorIDs.insert(rumor.id)
+        lastHeardRumorID = rumor.id
+        lastInteractionTick = tick
+        hearRumor(strength: rumor.strength * rumorImpactMultiplier(for: rumor.kind))
+    }
+
+    private func rumorImpactMultiplier(for kind: RumorKind) -> Double {
+        switch (faction, kind) {
+        case (.priesthood, .tabooViolation), (.priesthood, .bloodOffering), (.priesthood, .mutation):
+            return 1.3
+        case (.elders, .tabooViolation), (.elders, .siteDisturbance):
+            return 1.1
+        case (.traders, .ritual), (.traders, .spiritSighting):
+            return 0.85
+        default:
+            return 1.0
+        }
     }
 
     /// Process a positive interaction — trade, conversation, aid.

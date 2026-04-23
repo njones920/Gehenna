@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.4.23 - Rumor Engine
+
+Rumor engine salvage and integration work released after `0.4.22`.
+
+### Added
+
+- Typed rumor ledger (`Rumor`, `RumorLedger`, `RumorPropagationEvent`) in the engine.
+- CLI `rumors` / `gossip` command for inspecting what the village is currently carrying.
+- Backward-compatible snapshot decode for older saves that predate rumor-ledger fields on `WorldSimulation` and `NPC`.
+
+### Changed
+
+- Ritual rumor seeds now propagate across ticks, mutate in retellings, decay over time, and track explicit carriers instead of behaving like one-shot suspicion splashes.
+- `WorldClock`, `WorldShard`, the interactive CLI, and `WorldDirector` now read from the same rumor system instead of partially duplicating rumor behavior.
+- Traders now act as the natural cross-faction bridge for rumor spread, which lets village chatter escape its initial witness set without flattening faction differences.
+- Repository-local Claude workspace artifacts under `.claude/` are now ignored.
+
+### Verified
+
+- `swift test` passes with 96 tests across 21 suites.
+- `swift build` passes.
+
 ## 0.4.22 - CLI Modularization & UI Polish
 
 Structural refactoring and user-facing polish.
@@ -16,6 +38,7 @@ Structural refactoring and user-facing polish.
   - `Commands.swift` (Interactive actions)
   - `Display.swift` (Rendering and read-only views)
   - `main.swift` (Entrypoint)
+
 ## 0.4.21 - Zero-Trust Cosmology
 
 Identity/Accountability layer and engine stabilization.
@@ -48,7 +71,7 @@ Identity/Accountability layer and engine stabilization.
 
 ### Verified
 
-- 87 tests across 20 suites pass on macOS.
+- 87 tests across 20 suites pass on macOS at release time.
 - `swift run gehenna-arena --bots 12 --ticks 100` completes with stable world state.
 - Identity verification correctly blocks corrupted practitioners and enables Clean Hands access.
 - `swift run gehenna` save/load smoke passes with `gehenna-save.json`.

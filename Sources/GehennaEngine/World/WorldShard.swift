@@ -361,19 +361,17 @@ public actor WorldShard {
             )
         }
 
-        // Advance time
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        world.seedRitualRumor(
+            site: sites[session.currentSiteIndex],
+            wasMutation: wasMutation,
+            libation: intent.libationType,
+            timing: intent.timing,
+            practitionerName: session.name,
+            npcs: &npcs
+        )
 
-        // Propagate rumors
-        let rumorSite = sites[session.currentSiteIndex]
-        if rumorSite.localSuspicion > 0.05 {
-            for i in npcs.indices {
-                let rumorStrength = rumorSite.rumorStrength(for: npcs[i].faction)
-                if rumorStrength > 0.01 {
-                    npcs[i].hearRumor(strength: rumorStrength)
-                }
-            }
-        }
+        // Advance time — rumor propagation runs inside the clock tick.
+        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
 
         // Build narration
         var narration: [String] = []
