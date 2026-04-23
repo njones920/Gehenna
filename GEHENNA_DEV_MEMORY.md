@@ -325,7 +325,7 @@ Linux x86_64 is now a **verified** target. ARM64 Linux and AWS Graviton remain i
 
 3. **The Content/Grammar/Models/World/Diagnostics directory structure is clean and should be preserved.** Content (RidgeOfElah) is separated from models, grammar (pipeline + DSL), world systems, and diagnostics. New regions should go in Content/. New systems should go in World/.
 
-4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, rumor attenuation, deterministic root identity IDs, identity/accountability accrual, persistence snapshots, and the rumor engine are all tested. The main remaining gap is CLI integration coverage beyond smoke testing. **96 tests across 21 suites as of 2026-04-22.**
+4. **The test suite covers the right things.** Deterministic resolution, NPC state drift, site scarring, Veil computation, era alignment, affinity opposition, journal queries, mastery-phase autopsy, shared-world practitioner interaction, clock-derived timing, tag deduplication, rumor attenuation, deterministic root identity IDs, identity/accountability accrual, persistence snapshots, and the rumor engine are all tested. The main remaining gap is CLI integration coverage beyond smoke testing. **98 tests across 21 suites as of 2026-04-23.**
 
 5. **`Sendable` conformance is thorough.** Every model type is `Sendable`. The `WorldShard` is an `actor`. This is correct for the Swift 6 concurrency model and will make the server path straightforward.
 
@@ -449,3 +449,10 @@ Based on this audit, the most valuable next work is:
 - **Decision**: Treat the rumor engine integration as `0.4.23`, not a silent post-`0.4.22` patch.
 - **Rationale**: This is a meaningful engine surface change: new persistent rumor types, new CLI command surface, new world/director behavior, new snapshot fields, and new tests. It is too large to hide under an unreleased note.
 - **Implication**: Version-bearing surfaces now report `0.4.23` across the engine constant, CLI splash, arena splash, README, world-seed docs, and changelog.
+
+### Rumor Pressure Feeds Regional Suspicion
+- **Decision**: `WorldSimulation.tickRumors` now bleeds sustained rumor pressure back into `RegionState.suspicion` before rumor decay runs.
+- **Rationale**: The rumor engine and the inquisition system were previously parallel systems. NPCs could become suspicious and hostile, but organized regional suspicion never rose from rumor spread, so `inquisitionTriggered` still depended only on direct ritual entropy. That broke the intended "the village talks itself into a hunt" path.
+- **Scope**: This hook is currently limited to the **sole-region prototype path**. Until sites and NPCs carry explicit region ownership, rumor pressure only writes back when `regions.count == 1`. That keeps the current Ridge of Elah simulation causal without inventing fake multi-region routing.
+- **Companion Fix**: `seedRitualRumor` no longer overwrites the canonical ledger rumor strength while walking initial hearers. NPCs still hear a reach-scaled rumor, but the ledger keeps the actual rumor strength, which restored stable propagation and mutation behavior.
+- **Verification**: Added focused tests proving that rumor carriers raise regional suspicion over time and that a watchful low-stability region can tip into `inquisitionTriggered` from rumor pressure on the following tick. `swift test` now passes with **98 tests across 21 suites**.

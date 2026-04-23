@@ -317,10 +317,9 @@ public struct WorldSimulation: Codable, Sendable {
             let reach = adjustedRumorReach(for: npcs[i].faction, at: site, kind: kind)
             guard reach >= audibilityThreshold else { continue }
 
-            var seededRumor = rumorLedger.rumors[rumorID] ?? rumor
-            seededRumor.strength = min(seededRumor.strength, max(0.12, reach))
-            rumorLedger.rumors[rumorID] = seededRumor
-            npcs[i].hear(seededRumor, at: currentTick)
+            var heardRumor = rumorLedger.rumors[rumorID] ?? rumor
+            heardRumor.strength = min(heardRumor.strength, max(0.12, reach))
+            npcs[i].hear(heardRumor, at: currentTick)
             rumorLedger.recordHearing(rumorID: rumorID, by: npcs[i].id, at: currentTick)
         }
 
@@ -355,6 +354,7 @@ public struct WorldSimulation: Codable, Sendable {
             ))
         }
 
+        applyRumorSuspicionPressure(from: npcs)
         rumorLedger.decay(tick: currentTick)
     }
 
@@ -379,6 +379,33 @@ public struct WorldSimulation: Codable, Sendable {
         }
 
         return min(1.0, baseReach + sensationalBoost * factionWeight)
+    }
+
+    private mutating func applyRumorSuspicionPressure(from npcs: [NPC]) {
+        let activeRumors = rumorLedger.active
+        let carriers = npcs.filter { !$0.heardRumorIDs.isEmpty && $0.personalSuspicion > 0.1 }
+
+        guard carriers.count >= 2,
+              !activeRumors.isEmpty,
+              regions.count == 1,
+              let regionID = regions.keys.first else { return }
+
+        let rumorIntensity = activeRumors.reduce(0.0) { $0 + $1.strength } / Double(activeRumors.count)
+        let averageCarrierSuspicion = carriers.reduce(0.0) { $0 + $1.personalSuspicion } / Double(carriers.count)
+        let carrierBreadth = min(1.0, Double(carriers.count) / Double(max(2, npcs.count)))
+        let sensationalMultiplier = activeRumors.contains {
+            $0.kind == .mutation || $0.kind == .bloodOffering || $0.kind == .tabooViolation || $0.kind == .spiritSighting
+        } ? 1.15 : 1.0
+
+        let suspicionDelta = min(
+            0.004,
+            rumorIntensity * averageCarrierSuspicion * carrierBreadth * sensationalMultiplier * 0.02
+        )
+        guard suspicionDelta > 0 else { return }
+
+        guard var region = regions[regionID] else { return }
+        region.suspicion = min(1.0, region.suspicion + suspicionDelta)
+        regions[regionID] = region
     }
 
     // MARK: - Threshold Evaluation

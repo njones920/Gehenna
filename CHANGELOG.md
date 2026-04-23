@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+Rumor consequence follow-through after `0.4.23`.
+
+### Changed
+
+- Sustained rumor carriers now bleed suspicion back into the sole-region prototype path, allowing regional suspicion and inquisition pressure to reflect social spread instead of only direct ritual entropy.
+- Rumor seeding no longer overwrites the canonical ledger strength with per-hearer reach, so propagation and mutation now operate on the real rumor rather than a collapsed `0.12` floor.
+
+### Verified
+
+- `swift test` passes with 98 tests across 21 suites.
+
 ## 0.4.23 - Rumor Engine
 
 Rumor engine salvage and integration work released after `0.4.22`.

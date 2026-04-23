@@ -1821,6 +1821,68 @@ struct RumorEngineTests {
         #expect(sawChild)
     }
 
+    @Test("Rumor carriers raise regional suspicion over time")
+    func rumorPressureRaisesRegionSuspicion() throws {
+        var world = WorldSimulation(regions: [RegionState(name: "R", stability: 0.8, suspicion: 0.05)])
+        var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        for _ in 0..<5 { site.recordRitualPerformed() }
+
+        var npcs: [NPC] = (0..<8).map { i in
+            testNPC(name: "NPC\(i)", faction: [.elders, .priesthood, .traders][i % 3])
+        }
+
+        _ = try #require(world.seedRitualRumor(
+            site: site,
+            wasMutation: false,
+            libation: .fermentedWine,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: "Amoz",
+            npcs: &npcs
+        ))
+
+        let regionID = try #require(world.regions.keys.first)
+        let initialSuspicion = try #require(world.regions[regionID]?.suspicion)
+
+        for _ in 1...4 {
+            world.currentTick += 1
+            world.tickRumors(npcs: &npcs)
+        }
+
+        let finalSuspicion = try #require(world.regions[regionID]?.suspicion)
+        #expect(finalSuspicion > initialSuspicion)
+    }
+
+    @Test("Rumor pressure can tip a watchful region into inquisition")
+    func rumorPressureCanTriggerInquisition() throws {
+        var clock = WorldClock()
+        var world = WorldSimulation(regions: [
+            RegionState(name: "R", stability: 0.1, suspicion: 0.7995)
+        ])
+        var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
+        for _ in 0..<8 { site.recordRitualPerformed() }
+
+        var sites = [site]
+        var npcs: [NPC] = (0..<8).map { i in
+            testNPC(name: "NPC\(i)", faction: [.elders, .priesthood, .traders][i % 3])
+        }
+
+        _ = try #require(world.seedRitualRumor(
+            site: site,
+            wasMutation: true,
+            libation: .bloodOffering,
+            timing: WorldTiming(time: .deepNight, lunar: .newMoon),
+            practitionerName: "Amoz",
+            npcs: &npcs
+        ))
+
+        _ = clock.advance(by: 3, world: &world, sites: &sites, npcs: &npcs)
+
+        let triggeredInquisition = world.journal.contains { entry in
+            entry.type == .thresholdEvent && entry.tags.contains("inquisitionTriggered")
+        }
+        #expect(triggeredInquisition)
+    }
+
     @Test("Rumors decay and eventually go extinct")
     func decayRemovesStaleRumors() {
         var ledger = RumorLedger()
