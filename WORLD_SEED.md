@@ -35,9 +35,10 @@ GEHENNA is currently a runnable seed of the ritual grammar, world clock, site me
 - Rumor ledger with site- and faction-weighted seeding, propagation, mutation, decay, and carrier tracking.
 - Append-only journal metadata with source, severity, site IDs, NPC IDs, tags, and query paths, persisted inside local single-player snapshots.
 - `WorldShard` actor as a single shared-world authority for local multiplayer simulation.
-- Headless arena where multiple bot practitioners share sites, NPCs, and consequences.
+- Headless arena where multiple bot practitioners share sites, NPCs, and consequences. Includes a special `David vs Goliath` stress-test mode.
 - Local single-player snapshot save/load via `gehenna-save.json`.
 - CLI `rumors` / `gossip` command for reading the active rumor field.
+- `purifySite` (Namburbi Rite) command with physical `ritualFatigue` mechanics.
 - Swift Testing suite (96 tests across 21 suites).
 
 ## Not Live Yet
@@ -88,9 +89,10 @@ Run a local shared-world bot simulation:
 
 ```sh
 swift run gehenna-arena --bots 12 --ticks 100 --report 25
+swift run gehenna-arena --david-vs-goliath --goliath-type reckless --ticks 200
 ```
 
-The arena is a stress and emergence harness. It is not final gameplay. Current bots tend to drive entropy, scarring, suspicion, and NPC refusal when scaled hard. Treat that as a useful signal about the systems, not as the intended player loop.
+The arena is a stress and emergence harness. It is not final gameplay. Current bots tend to drive entropy, scarring, suspicion, and NPC refusal when scaled hard. Treat that as a useful signal about the systems, not as the intended player loop. The `David vs Goliath` mode explicitly tests this by pitting a slow human-proxy against an aggressive bot to simulate gameplay friction.
 
 ## Current Development Pressure
 

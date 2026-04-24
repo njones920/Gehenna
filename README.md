@@ -170,6 +170,16 @@ swift run gehenna-arena --bots 8 --ticks 500 --verbose
 swift run gehenna-arena --bots 12 --ticks 1000 --report 100
 ```
 
+Alternatively, run the explicit **David vs Goliath** stress-test mode:
+
+```sh
+# Pits a slow human-proxy against an aggressive reckless bot
+swift run gehenna-arena --david-vs-goliath --ticks 200
+
+# Test how a world survives a high-frequency healer bot starting with a corrupted profile
+swift run gehenna-arena --david-vs-goliath --goliath-type healer --veteran-goliath --ticks 200
+```
+
 The arena creates N bot practitioners with different strategies:
 
 - **Scholar** — explores, reads carefully, rituals with preparation

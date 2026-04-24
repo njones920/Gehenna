@@ -14,6 +14,14 @@ Minor architectural cleanup, multi-region prep, and rumor consequence follow-thr
 - Multi-Region Hardcode Fix: Added `regionID` to `RitualSite`. `WorldShard` now uses `site.regionID` instead of blindly grabbing the first region in the dictionary, ensuring future multi-region compatibility.
 - `RidgeOfElah.createWorld()` now explicitly links initialized sites to the created region.
 
+### Added
+
+- `David vs Goliath` simulation mode to `GehennaArena` (`--david-vs-goliath`). Pits a slow, deliberate human-proxy bot against a high-frequency bot to expose the entropy asymmetry.
+- Two new bot strategies: `.humanProxy` (acts once every 15 ticks, respectful) and `.healer` (acts constantly but focuses on site purification and building trust).
+- `--goliath-type [reckless|healer]` and `--veteran-goliath` flags to `GehennaArena` for testing specific adversary profiles against the world state.
+- `.purifySite` (Namburbi Rite) command to `PlayerCommand` and `WorldShard`. It actively lowers site corruption/scarring but induces heavy `ritualFatigue`.
+- `.look` command now slowly recovers `ritualFatigue`, allowing practitioners to rest and recover from purification.
+
 ### Verified
 
 - `swift test` passes with 98 tests across 21 suites.

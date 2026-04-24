@@ -16,6 +16,7 @@ public enum PlayerCommand: Sendable {
     case talkTo(npcIndex: Int, action: ConversationAction)
     case castAstragali
     case performRitual(RitualIntent)
+    case purifySite
 
     public enum ConversationAction: Sendable {
         case friendly

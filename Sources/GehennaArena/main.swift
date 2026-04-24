@@ -22,12 +22,14 @@ struct BotPersonality {
     let preferredFragmentIndex: Int
     let aggressiveness: Double  // 0.0 = cautious, 1.0 = reckless
 
-    enum Strategy {
-        case scholar      // explores, talks, reads carefully, rituals with preparation
-        case reckless     // performs rituals constantly, pushes the Veil
-        case social       // focuses on NPC relationships, builds trust
-        case explorer     // moves between sites, looks everywhere
-        case balanced     // mix of everything
+    enum Strategy: String {
+        case scholar
+        case reckless
+        case social
+        case explorer
+        case balanced
+        case humanProxy  // Represents a slow, deliberate human player
+        case healer      // Represents a bot optimizing for purification
     }
 }
 
@@ -161,6 +163,52 @@ func chooseCommand(
         case 16...17: return .talkTo(npcIndex: 0, action: .askRegion)
         default:      return .look
         }
+    case .humanProxy:
+        // Slow down the human. A human doesn't act 20 times a minute.
+        // E.g., one action every 15 ticks.
+        if tick % 15 != 0 { return .wait }
+        let humanPhase = (tick / 15) % 20
+        switch humanPhase {
+        case 0...1:   return .travel(siteIndex: 3) // Village
+        case 2...4:   return .talkTo(npcIndex: 0, action: .friendly)
+        case 5...6:   return .talkTo(npcIndex: 1, action: .friendly)
+        case 7:       return .travel(siteIndex: bot.preferredSiteIndex)
+        case 8...10:  return .look
+        case 11:
+            return .performRitual(RitualIntent(
+                fragmentIndex: bot.preferredFragmentIndex % session.inventory.fragments.count,
+                trueName: trueName(for: bot.preferredFragmentIndex),
+                artifactIndex: 0,
+                libationType: .water,
+                timing: WorldTiming(time: .dawn)
+            ))
+        case 12:      return .castAstragali
+        case 13...15: return .purifySite
+        default:      return .look
+        }
+
+    case .healer:
+        // Healer acts fast, but focuses on cleaning up the world.
+        let siteForPhase = phase % siteCount
+        switch phase {
+        case 0:       return .travel(siteIndex: siteForPhase)
+        case 1...2:   return .purifySite
+        case 3:       return .look
+        case 4:       return .travel(siteIndex: 3) // Village
+        case 5...6:   return .talkTo(npcIndex: phase % min(npcCount, 6), action: .friendly)
+        case 7:       return .travel(siteIndex: (siteForPhase + 1) % siteCount)
+        case 8...10:  return .purifySite
+        case 11...13:
+            // Safe, respectful rituals only
+            return .performRitual(RitualIntent(
+                fragmentIndex: bot.preferredFragmentIndex % session.inventory.fragments.count,
+                trueName: trueName(for: bot.preferredFragmentIndex),
+                libationType: .water,
+                timing: WorldTiming(time: .dawn)
+            ))
+        case 14...16: return .purifySite
+        default:      return .purifySite
+        }
     }
 }
 
@@ -185,6 +233,10 @@ struct GehennaArena {
         let verbose = args.contains("--verbose")
         let reportInterval = argValue(args, flag: "--report", default: 50)
 
+        let isDavidVsGoliath = args.contains("--david-vs-goliath")
+        let goliathTypeArg = argString(args, flag: "--goliath-type", default: "reckless")
+        let isVeteranGoliath = args.contains("--veteran-goliath")
+
         print("""
 
         ╔══════════════════════════════════════════════════╗
@@ -195,11 +247,14 @@ struct GehennaArena {
         ║                                                  ║
         ╚══════════════════════════════════════════════════╝
 
-          Bots: \(botCount)
           Ticks: \(totalTicks)
-          Mode: headless shared world
-
+          Mode: \(isDavidVsGoliath ? "David vs Goliath" : "Swarm (Bots: \(botCount))")
         """)
+
+        if isDavidVsGoliath {
+            print("          Goliath Strategy: \(goliathTypeArg)\(isVeteranGoliath ? " (VETERAN)" : "")")
+        }
+        print()
 
         // Create the shared world
         let content = RidgeOfElah.createWorld()
@@ -212,26 +267,51 @@ struct GehennaArena {
 
         // Register bots
         var botIDs: [(UUID, BotPersonality)] = []
-        for i in 0..<botCount {
-            let template = botNames[i % botNames.count]
-            let personality = BotPersonality(
-                name: template.0,
-                strategy: template.1,
-                preferredSiteIndex: template.2,
-                preferredFragmentIndex: template.3,
-                aggressiveness: template.4
-            )
+        
+        if isDavidVsGoliath {
+            let david = BotPersonality(name: "David (Human Proxy)", strategy: .humanProxy, preferredSiteIndex: 2, preferredFragmentIndex: 6, aggressiveness: 0.1)
+            let goliathStrategy: BotPersonality.Strategy = goliathTypeArg == "healer" ? .healer : .reckless
+            let goliath = BotPersonality(name: "Goliath (Bot)", strategy: goliathStrategy, preferredSiteIndex: 4, preferredFragmentIndex: 8, aggressiveness: 1.0)
+            
+            let dSession = PractitionerSession(name: david.name, fragments: content.fragments, artifacts: content.artifacts, memoryTraces: content.memoryTraces)
+            var gSession = PractitionerSession(name: goliath.name, fragments: content.fragments, artifacts: content.artifacts, memoryTraces: content.memoryTraces)
+            
+            if isVeteranGoliath {
+                gSession.ritualCount = 150
+                gSession.profile.totalRituals = 150
+                gSession.profile.taboosBroken.insert(.tophethPact)
+                gSession.profile.taboosBroken.insert(.uncleanSacrifice)
+            }
+            
+            let dID = await shard.addPractitioner(dSession)
+            let gID = await shard.addPractitioner(gSession)
+            botIDs.append((dID, david))
+            botIDs.append((gID, goliath))
+            
+            print("  ◈ Registered: \(david.name) (\(david.strategy))")
+            print("  ◈ Registered: \(goliath.name) (\(goliath.strategy))")
+        } else {
+            for i in 0..<botCount {
+                let template = botNames[i % botNames.count]
+                let personality = BotPersonality(
+                    name: template.0,
+                    strategy: template.1,
+                    preferredSiteIndex: template.2,
+                    preferredFragmentIndex: template.3,
+                    aggressiveness: template.4
+                )
 
-            let session = PractitionerSession(
-                name: personality.name,
-                fragments: content.fragments,
-                artifacts: content.artifacts,
-                memoryTraces: content.memoryTraces
-            )
+                let session = PractitionerSession(
+                    name: personality.name,
+                    fragments: content.fragments,
+                    artifacts: content.artifacts,
+                    memoryTraces: content.memoryTraces
+                )
 
-            let id = await shard.addPractitioner(session)
-            botIDs.append((id, personality))
-            print("  ◈ Registered: \(personality.name) (\(personality.strategy)) → \(content.sites[personality.preferredSiteIndex].name)")
+                let id = await shard.addPractitioner(session)
+                botIDs.append((id, personality))
+                print("  ◈ Registered: \(personality.name) (\(personality.strategy)) → \(content.sites[personality.preferredSiteIndex].name)")
+            }
         }
         print()
 
@@ -397,5 +477,13 @@ struct GehennaArena {
             return defaultValue
         }
         return value
+    }
+    
+    static func argString(_ args: [String], flag: String, default defaultValue: String) -> String {
+        guard let index = args.firstIndex(of: flag),
+              index + 1 < args.count else {
+            return defaultValue
+        }
+        return args[index + 1]
     }
 }

@@ -113,6 +113,8 @@ public actor WorldShard {
             result = executeCast(session: &session)
         case .performRitual(let intent):
             result = executeRitual(intent: intent, session: &session)
+        case .purifySite:
+            result = executePurify(session: &session)
         }
 
         // Write session back
@@ -137,6 +139,9 @@ public actor WorldShard {
 
         let site = sites[session.currentSiteIndex]
         var narration: [String] = []
+
+        // Resting and observing the world restores energy.
+        session.profile.tokens.ritualFatigue = max(0.0, session.profile.tokens.ritualFatigue - 0.05)
 
         narration.append("[\(site.name)]")
 
@@ -275,6 +280,55 @@ public actor WorldShard {
         }
 
         return CommandResult(narration: narration, worldEvents: events)
+    }
+
+    private func executePurify(session: inout PractitionerSession) -> CommandResult {
+        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        
+        let siteIndex = session.currentSiteIndex
+        var site = sites[siteIndex]
+        
+        let narration: [String]
+        
+        // Purification is hard physical and spiritual work. It requires energy.
+        if session.profile.tokens.ritualFatigue >= 1.0 {
+            return CommandResult(narration: ["You are too exhausted to attempt a Namburbi purification. Your body cannot bear it right now."], worldEvents: events)
+        }
+        
+        if site.scarring > 0 || site.corruption > 0 {
+            site.purifySite(strength: 0.5)
+            session.profile.tokens.ritualFatigue = min(1.0, session.profile.tokens.ritualFatigue + 0.15)
+            
+            narration = [
+                "You perform a Namburbi rite, working river clay and fresh water over the scarred stone.",
+                "The physical toll is heavy, but the air feels tangibly lighter as the clay absorbs the corruption."
+            ]
+            
+            // Add a journal entry for the purification
+            if let regionID = site.regionID ?? world.regions.keys.first {
+                world.journal.append(JournalEntry(
+                    tick: clock.currentTick,
+                    type: .practitionerAction,
+                    description: "\(session.name) performed a Namburbi purification at \(site.name).",
+                    source: .practitioner,
+                    severity: .notable,
+                    regionID: regionID,
+                    siteID: site.id,
+                    tags: Set(["purification", "namburbi", "practitioner:\(session.name)"])
+                ))
+            }
+        } else {
+            narration = ["The site is already clean. The Namburbi rite is unnecessary."]
+        }
+        
+        sites[siteIndex] = site
+
+        let directorEvents = director.evaluate(
+            world: world, sites: sites, npcs: npcs,
+            currentSiteIndex: session.currentSiteIndex, clock: clock
+        )
+
+        return CommandResult(narration: narration, worldEvents: events, directorEvents: directorEvents)
     }
 
     private func executeRitual(intent: RitualIntent, session: inout PractitionerSession) -> CommandResult {
