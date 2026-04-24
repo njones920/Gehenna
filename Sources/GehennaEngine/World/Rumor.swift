@@ -338,6 +338,14 @@ public struct RumorLedger: Codable, Sendable {
         seed &+= UInt64(fromID.uuid.0) << 16
         seed &+= UInt64(toID.uuid.0) << 8
         seed &+= UInt64(rumorID.uuid.15)
+        
+        // Avalanche bits to break linear correlation and prevent clustered rolls
+        seed ^= seed >> 30
+        seed &*= 0xbf58476d1ce4e5b9
+        seed ^= seed >> 27
+        seed &*= 0x94d049bb133111eb
+        seed ^= seed >> 31
+        
         return seed
     }
 

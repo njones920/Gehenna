@@ -1792,7 +1792,7 @@ struct RumorEngineTests {
         var site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
         for _ in 0..<5 { site.recordRitualPerformed() }
 
-        var npcs: [NPC] = (0..<8).map { i in
+        var npcs: [NPC] = (0..<50).map { i in
             testNPC(name: "NPC\(i)", faction: [.elders, .priesthood, .traders][i % 3])
         }
 
@@ -1809,7 +1809,7 @@ struct RumorEngineTests {
         }
 
         var sawChild = false
-        for _ in 1...20 {
+        for _ in 1...50 {
             world.currentTick += 1
             world.tickRumors(npcs: &npcs)
             if world.rumorLedger.rumors.values.contains(where: { $0.ancestorID == rumorID }) {
