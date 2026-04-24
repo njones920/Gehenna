@@ -456,3 +456,19 @@ Based on this audit, the most valuable next work is:
 - **Scope**: This hook is currently limited to the **sole-region prototype path**. Until sites and NPCs carry explicit region ownership, rumor pressure only writes back when `regions.count == 1`. That keeps the current Ridge of Elah simulation causal without inventing fake multi-region routing.
 - **Companion Fix**: `seedRitualRumor` no longer overwrites the canonical ledger rumor strength while walking initial hearers. NPCs still hear a reach-scaled rumor, but the ledger keeps the actual rumor strength, which restored stable propagation and mutation behavior.
 - **Verification**: Added focused tests proving that rumor carriers raise regional suspicion over time and that a watchful low-stability region can tip into `inquisitionTriggered` from rumor pressure on the following tick. `swift test` now passes with **98 tests across 21 suites**.
+
+## Architecture Decisions (Session 2026-04-23 Polish)
+
+### Explicit Site Suspicion Multipliers
+- **Decision**: Removed the `default` fallback in `RitualSite.suspicionMultiplier` and added explicit weights for `.springCaveMouth`, `.ossuaryNiche`, and `.wadiBed`.
+- **Rationale**: Prevents new site types from silently receiving untuned default suspicion behavior.
+- **Implication**: The compiler will enforce explicitly weighting any new site types added in the future.
+
+### Multi-Region Hardcode Removed
+- **Decision**: Added an optional `regionID` to `RitualSite`. `RidgeOfElah.createWorld()` now stamps this onto sites during initialization. `WorldShard` now uses `site.regionID ?? world.regions.keys.first`.
+- **Rationale**: The shard was previously assuming only one region existed and pulling the first dictionary key. This prepares the engine for multi-region mapping without breaking the 60+ test cases that build isolated sites without a region.
+- **Implication**: When full multi-region play is introduced, sites will correctly route their events and lookups to their parent region.
+
+### 0.4.24 Polish Release
+- **Decision**: Bumped version to `0.4.24` and pushed.
+- **Rationale**: Captures these two small but structurally important fixes before moving on to larger canon or rumor consequence changes.

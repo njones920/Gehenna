@@ -18,6 +18,6 @@
 /// - Entropy asymmetry: destabilization is fast, recovery is slow
 /// - The practitioner is the entropy
 public enum GehennaEngine {
-    public static let version = "0.4.23"
+    public static let version = "0.4.24"
     public static let codexVersion = "3.0"
 }

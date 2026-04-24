@@ -405,9 +405,15 @@ public enum RidgeOfElah {
         let allFragments = battlefieldFragments() + telKeshetFragments()
             + nahalCavesFragments() + burningGroundFragments()
 
+        let region = createRegion()
+        var sites = allSites()
+        for i in 0..<sites.count {
+            sites[i].regionID = region.id
+        }
+
         return (
-            region: createRegion(),
-            sites: allSites(),
+            region: region,
+            sites: sites,
             fragments: allFragments,
             artifacts: starterArtifacts(),
             memoryTraces: starterMemoryTraces()

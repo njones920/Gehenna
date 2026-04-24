@@ -240,7 +240,8 @@ public actor WorldShard {
     private func executeCast(session: inout PractitionerSession) -> CommandResult {
         let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
 
-        guard let regionID = world.regions.keys.first,
+        let site = sites[session.currentSiteIndex]
+        guard let regionID = site.regionID ?? world.regions.keys.first,
               let regionState = world.regions[regionID] else {
             return CommandResult(narration: ["The world is empty."])
         }
@@ -254,7 +255,6 @@ public actor WorldShard {
             return CommandResult(narration: ["You have no fragments to read against."], worldEvents: events)
         }
         let fragment = session.inventory.fragments[0]
-        let site = sites[session.currentSiteIndex]
         let config = RitualConfiguration(remains: fragment, site: site)
 
         let reading = astragali.cast(
@@ -284,7 +284,7 @@ public actor WorldShard {
 
         let fragment = session.inventory.fragments[intent.fragmentIndex]
         let site = sites[session.currentSiteIndex]
-        guard let regionID = world.regions.keys.first,
+        guard let regionID = site.regionID ?? world.regions.keys.first,
               let regionState = world.regions[regionID] else {
             return CommandResult(narration: ["The world is empty."])
         }

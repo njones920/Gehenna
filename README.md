@@ -1,6 +1,6 @@
 # GEHENNA
 
-![Version](https://img.shields.io/badge/version-0.4.23-7a3cff)
+![Version](https://img.shields.io/badge/version-0.4.24-7a3cff)
 ![Swift](https://img.shields.io/badge/swift-6-orange)
 ![Tests](https://img.shields.io/badge/tests-96%20passing-2ea44f)
 ![Releases](https://img.shields.io/badge/releases-tags%20on%20main-0a7ea4)
@@ -13,7 +13,7 @@ GEHENNA is an early Swift implementation of the Codex concept in this repository
 
 ## World Seed
 
-Version: `0.4.23`
+Version: `0.4.24`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
 

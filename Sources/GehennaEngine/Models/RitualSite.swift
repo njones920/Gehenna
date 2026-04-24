@@ -53,6 +53,9 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
     /// Narrative tags associated with this site's history.
     public var tags: TagConstellation
 
+    /// The ID of the region this site belongs to.
+    public var regionID: UUID?
+
     // -- Site History (accumulated over play) --
 
     /// Cumulative durable site damage from rituals, mutations, and taboo acts.
@@ -93,7 +96,8 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         veilThinness: Double = 0.3,
         sanctity: Double = 0.5,
         corruption: Double = 0.0,
-        tags: TagConstellation = TagConstellation()
+        tags: TagConstellation = TagConstellation(),
+        regionID: UUID? = nil
     ) {
         self.id = id
         self.name = name
@@ -104,6 +108,7 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         self.sanctity = sanctity
         self.corruption = corruption
         self.tags = tags
+        self.regionID = regionID
         self.scarring = 0.0
         self.localSuspicion = 0.0
         self.activeTraces = []
@@ -263,7 +268,9 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         case .burialCave:     return 0.3   // isolated
         case .collapsingTemple: return 0.4 // ruins attract scholars
         case .topheth:        return 0.2   // nobody goes there willingly
-        default:              return 1.0
+        case .springCaveMouth: return 0.6  // liminal, occasional water gatherers
+        case .ossuaryNiche:   return 1.5   // family visits, highly noticed
+        case .wadiBed:        return 0.4   // seasonal paths, somewhat isolated
         }
     }
 

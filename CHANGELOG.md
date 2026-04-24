@@ -2,12 +2,17 @@
 
 ## Unreleased
 
-Rumor consequence follow-through after `0.4.23`.
+## 0.4.24 - Architecture Polish & Rumor Consequence
+
+Minor architectural cleanup, multi-region prep, and rumor consequence follow-through.
 
 ### Changed
 
 - Sustained rumor carriers now bleed suspicion back into the sole-region prototype path, allowing regional suspicion and inquisition pressure to reflect social spread instead of only direct ritual entropy.
 - Rumor seeding no longer overwrites the canonical ledger strength with per-hearer reach, so propagation and mutation now operate on the real rumor rather than a collapsed `0.12` floor.
+- Explicit Site Suspicion Multipliers: `RitualSite.suspicionMultiplier` now strictly switches over all site types, removing the default fallback.
+- Multi-Region Hardcode Fix: Added `regionID` to `RitualSite`. `WorldShard` now uses `site.regionID` instead of blindly grabbing the first region in the dictionary, ensuring future multi-region compatibility.
+- `RidgeOfElah.createWorld()` now explicitly links initialized sites to the created region.
 
 ### Verified
 
