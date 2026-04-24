@@ -205,7 +205,7 @@ Implemented:
 - terminal CLI loop
 - tests covering core behavior
 
-Partially implemented in the 420 seed:
+Partially implemented in the 0.4.20 seed:
 
 - active world autonomy — WorldClock, WorldDirector, site-local state, and bot arena exist; the world acts between commands but does not yet have full cascade or rumor propagation
 - event journal — append-only journal with source, severity, site/NPC IDs, tags, and queries by site/tick/severity/tag/NPC; not yet persisted

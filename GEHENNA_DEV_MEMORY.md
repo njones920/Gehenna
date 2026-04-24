@@ -189,11 +189,11 @@ The Expression Layer renders. It must not decide simulation truth.
 - **Rationale**: Relationships should not be frozen between player commands. The drift is slow enough that the player's actions still dominate, but the world has temporal texture even when the player is away.
 - **Implication**: NPC movement/schedules are next. Currently NPCs are fixed at Kfar Shalem.
 
-## Architecture Decisions (Session 2026-04-19 420 Prep)
+## Architecture Decisions (Session 2026-04-19 0.4.20 Prep)
 
 ### 0.4.20 World Seed
 - **Decision**: Build identity is now `0.4.20`; Codex version is `3.0`; the CLI splash says `Ridge of Elah — v0.4.20`.
-- **Rationale**: Prepare the April 20 "420" world-seed build as a clear clone/build/play/dev artifact.
+- **Rationale**: Prepare the 0.4.20 world-seed build as a clear clone/build/play/dev artifact.
 - **Implication**: Future version bumps should update `GehennaEngine.version`, the CLI splash, `README.md`, and `CHANGELOG.md` together until package metadata is centralized.
 
 ### Public Clone Surface
@@ -213,17 +213,17 @@ The Expression Layer renders. It must not decide simulation truth.
 
 ### Codex Two Archived
 - **Decision**: Moved the superseded Codex Two text document to `docs/archive/GEHENNA_CODEX_TWO.txt`.
-- **Rationale**: The root should make the current hierarchy obvious: v3 is the active Codex, and it leads the 420 release.
+- **Rationale**: The root should make the current hierarchy obvious: v3 is the active Codex, and it leads the 0.4.20 release.
 - **Implication**: Agents should not treat Codex Two as a competing spec. Read it only for provenance after v3 and `GEHENNA_DESIGN_HISTORY.md`.
 
 ### Headless Bot Arena
 - **Decision**: Added `gehenna-arena`, `PlayerCommand`, `PractitionerSession`, and `WorldShard` as the local shared-world multiplayer proof.
-- **Rationale**: Bots and humans need one authoritative world before a network server matters. The arena proves multiple practitioners can scar the same sites, perturb the same NPCs, and write into one journal without adding TCP/server complexity to the 420 seed.
+- **Rationale**: Bots and humans need one authoritative world before a network server matters. The arena proves multiple practitioners can scar the same sites, perturb the same NPCs, and write into one journal without adding TCP/server complexity to the 0.4.20 seed.
 - **Implication**: This is local multiplayer simulation, not networked multiplayer. Future TCP/MUD work should wrap `WorldShard` rather than duplicating command logic. Keep ritual journal entries single-source and attributable; do not double-log practitioner rituals.
 
 ### Canon Data Gap
 - **Decision**: Added `docs/CANON_DATA_ROADMAP.md` and explicitly marked the Ridge content as a prototype canon seed.
-- **Rationale**: GEHENNA should be driven by structured historical data, not generic fantasy lore. The 420 build proves the engine and local bot arena, but the reference canon still needs deep real-world content from the period.
+- **Rationale**: GEHENNA should be driven by structured historical data, not generic fantasy lore. The 0.4.20 build proves the engine and local bot arena, but the reference canon still needs deep real-world content from the period.
 - **Implication**: Near-term work should add stable canon IDs, provenance metadata, typed canon files, and a much richer tag dictionary before claiming the Ridge feels historically deep.
 
 ### Deterministic Director Gating
