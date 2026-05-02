@@ -47,4 +47,35 @@ extension GameSession {
             print("    None found.")
         }
     }
+
+    func inspectFragment() {
+        if inventory.fragments.isEmpty {
+            print("  Your satchel contains no fragments.")
+            return
+        }
+
+        listFragments()
+
+        print("\n  Which fragment do you wish to inspect? (Enter a number)")
+        guard let input = readLine(), let index = Int(input), index > 0, index <= inventory.fragments.count else {
+            print("  You leave the bone where it lies.")
+            return
+        }
+
+        let frag = inventory.fragments[index - 1]
+
+        print("\n  ── Fragment Details ──")
+        print("    Type: \(describeRemainsType(frag.remainsType).capitalized)")
+        print("    Condition: \(describeIntegrity(frag.integrity)) (\(Int(frag.integrity.value * 100))%)")
+        print("    Era: \(describeEra(frag.era))")
+        print("    Domain: \(frag.domain.rawValue.capitalized)")
+        print("    Affinity: Aligned with \(frag.affinity.rawValue), Opposed to \(frag.affinity.opposition.rawValue)")
+        
+        if let name = frag.inscribedName {
+            print("    Inscribed Name: \"\(name)\"")
+        }
+        
+        print("    Intrinsic Traces: \(frag.tags.tags.map { $0.value }.joined(separator: ", "))")
+        print("    Coherence Weight: \(String(format: "%.2f", frag.coherenceWeight))")
+    }
 }
