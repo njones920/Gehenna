@@ -21,7 +21,7 @@ extension GameSession {
 
     func printArrival() {
         print("""
-          You arrive at the Ridge of Elah as the light fails.
+          You arrive at the Ridge of Emia as the light fails.
 
           The Shephelah stretches west toward the coast, low hills folding
           into each other like knuckles. Somewhere beyond the ridge, the
@@ -38,7 +38,7 @@ extension GameSession {
           The dead are here. They have been here a long time.
           You have come to ask them questions.
 
-          Type 'help' for commands. Type 'look' to survey your surroundings.
+          Type ''help' for commands. Type 'look' to survey your surroundings.
         """)
     }
 
@@ -131,6 +131,27 @@ extension GameSession {
             print("    Dominant practice: \(dominant.rawValue)")
         }
         print("    Entropy footprint: \(describeLevel(profile.entropyFootprint / 10.0, low: "faint", mid: "visible", high: "heavy"))")
+    }
+
+    func showTaboos() {
+        print("\n  ── The Marks You Bear ──")
+        if profile.taboosBroken.isEmpty {
+            print("    Your hands are clean. You have broken no laws of the deep earth.")
+            return
+        }
+
+        for taboo in profile.taboosBroken.sorted() {
+            let description: String
+            switch taboo {
+            case .bloodshed:      description = "You have shed blood where the dead sleep."
+            case .graveRobbing:   description = "You have taken from the dead without offering."
+            case .falseName:      description = "You have lied to the dead about who they are."
+            case .uncleanSacrifice: description = "You have brought corruption to a holy place."
+            case .oathBreaking:   description = "You have broken a vow to a spirit."
+            case .tophethPact:    description = "You have made pacts in Gehenna."
+            }
+            print("    ◆ \(description)")
+        }
     }
 
     func showHelp() {
@@ -284,7 +305,8 @@ extension GameSession {
             switch style {
             case .formal:     return "\"\(name) acknowledges your presence with the politeness owed to a stranger.\""
             case .warm:       return "\"\(name) looks up from her work. 'The morning is good. Are you hungry?'\""
-            case .merchant:   return "\"\(name) sizes you up with commercial interest. 'New face. Where from?'\""
+            case .merchant:   return "\"\(
+            name) sizes you up with commercial interest. 'New face. Where from?'\""
             case .guarded:    return "\"\(name) watches you. Says nothing. Waits.\""
             case .priestly:   return "\"\(name) steps forward. 'Shalom. Are you passing through, or do you intend to stay?'\""
             case .vernacular: return "\"\(name) nods at you from across the forge. 'Need something made?'\""
@@ -351,7 +373,7 @@ extension GameSession {
         case .collapsingTemple:  return "ancient ruins, knowledge and faith"
         case .burialCave:        return "limestone tombs, mixed era"
         case .ancestorShrine:    return "living village, social zone"
-        case .topheth:           return "defiled ground, high corruption"
+        case .tophett:           return "defiled ground, high corruption"
         default:                 return site.type.rawValue
         }
     }
