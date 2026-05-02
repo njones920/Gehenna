@@ -124,4 +124,40 @@ extension GameSession {
             }
         }
     }
+
+    func readCodexEntry() {
+        let entries = codex.recentEntries
+        if entries.isEmpty {
+            print("\n  The Codex lies empty. You have yet to call the dead back.")
+            return
+        }
+
+        print("\n  ── Entries in the Codex ──")
+        for (i, entry) in entries.enumerated() {
+            let name = entry.epochName ?? entry.knownName ?? "Unknown"
+            let tier = describeTier(entry.tier)
+            print("    \(i + 1). \(name) — \(entry.template.rawValue) (\(tier))")
+        }
+
+        print("\n  Which entry do you wish to read? (Enter a number)")
+        guard let choice = readLine()?.trimmingCharacters(in: .whitespaces),
+              let index = Int(choice) else {
+            print("  The pages remain closed.")
+            return
+        }
+
+        let idx = index - 1
+        guard idx >= 0, idx < entries.count else {
+            print("  That entry does not exist in the Codex.")
+            return
+        }
+
+        let selected = entries[idx]
+        let name = selected.epochName ?? selected.knownName ?? "Unknown"
+        let tier = describeTier(selected.tier)
+        print("\n  ── \(name) — \(tier) ──")
+        for note in selected.notes {
+            print("    \(note)")
+        }
+    }
 }
