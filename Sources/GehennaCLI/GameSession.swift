@@ -74,22 +74,32 @@ final class GameSession: @unchecked Sendable {
                 listArtifacts()
             case "inventory", "i", "inv":
                 showInventory()
+            case "inspect", "examine":
+                inspectFragment()
             case "ritual", "r":
                 ritualMenu()
             case "cast", "bones":
                 castAstragali()
             case "codex", "c":
                 showCodex()
+            case "read", "study":
+                readCodexEntry()
+            case "journal", "j":
+                showJournal()
+            case "search":
+                searchJournal()
             case "village", "v", "talk":
                 villageMenu()
             case "rumors", "gossip":
                 showRumors()
             case "world", "w":
                 showWorldState()
-            case "wait", "rest":
-                advanceTime()
+            case "wait", "rest", "camp":
+                campMenu()
             case "profile", "p":
                 showProfile()
+            case "taboos", "sins":
+                showTaboos()
             case "save":
                 saveGame()
             case "load":

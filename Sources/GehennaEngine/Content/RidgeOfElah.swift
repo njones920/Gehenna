@@ -395,6 +395,7 @@ public enum RidgeOfElah {
     // MARK: - Complete World Setup
 
     /// Create a complete game world with the Ridge of Elah vertical slice.
+    /// NPCs and root identities are loaded from the canon JSON bundle.
     public static func createWorld() -> (
         region: RegionState,
         sites: [RitualSite],
@@ -419,4 +420,58 @@ public enum RidgeOfElah {
             memoryTraces: starterMemoryTraces()
         )
     }
+
+    /// Load Kfar Shalem NPCs from the canon JSON bundle.
+    public static func kfarShalemNPCs() -> [NPC] {
+        do {
+            return try CanonDataLoader.loadNPCs()
+        } catch {
+            print("[GEHENNA] Warning: Failed to load NPCs from canon bundle: \(error)")
+            return []
+        }
+    }
+
+    /// Load all root identities from the canon JSON bundle.
+    public static func rootIdentities() -> [RootIdentity] {
+        do {
+            return try CanonDataLoader.loadRootIdentities()
+        } catch {
+            print("[GEHENNA] Warning: Failed to load root identities from canon bundle: \(error)")
+            return []
+        }
+    }
+
+    // MARK: - Named NPC Accessors (convenience — look up from canon bundle)
+
+    public static func abiGad() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Abi-Gad" }!
+    }
+    public static func tamarBatYoav() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Tamar bat Yoav" }!
+    }
+    public static func huramTheTrader() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Huram" }!
+    }
+    public static func yoelBenShimri() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Yoel ben Shimri" }!
+    }
+    public static func devorah() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Devorah" }!
+    }
+    public static func barukTheSmith() -> NPC {
+        kfarShalemNPCs().first { $0.name == "Baruk" }!
+    }
+
+    // MARK: - Named RootIdentity Accessors (convenience — look up from canon bundle)
+
+    public static func hiramSonOfDagon() -> RootIdentity {
+        rootIdentities().first { $0.trueName == "Hiram, son of Dagon" }!
+    }
+    public static func scribeOfBaal() -> RootIdentity {
+        rootIdentities().first { $0.trueName == nil && $0.culture == "Canaanite" }!
+    }
+    public static func abdiResheph() -> RootIdentity {
+        rootIdentities().first { $0.trueName == "Abdi-Resheph" }!
+    }
 }
+
