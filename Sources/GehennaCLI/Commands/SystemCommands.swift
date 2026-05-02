@@ -93,7 +93,13 @@ extension GameSession {
         case "1":
             print("    Name the lowest weight you seek: ambient, notable, significant, or rupture?")
             guard let severityInput = readLine()?.trimmingCharacters(in: .whitespaces).lowercased() else { return }
-            guard let severity = EventSeverity(rawValue: severityInput) else {
+            let severity: EventSeverity
+            switch severityInput {
+            case "ambient": severity = .ambient
+            case "notable": severity = .notable
+            case "significant": severity = .significant
+            case "rupture": severity = .rupture
+            default:
                 print("    That weight is not recognized. The chronicle remains closed.")
                 return
             }
