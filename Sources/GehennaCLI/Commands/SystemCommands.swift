@@ -2,10 +2,41 @@ import Foundation
 import GehennaEngine
 
 extension GameSession {
-    func advanceTime() {
-        print("\n  You wait. The night passes.")
+    func campMenu() {
+        print("\n  ── Rest & Recovery ──")
+        print("  1. Sleep through the night")
+        print("  2. Wash and purify")
+        print("  0. Cancel")
 
-        // Rest advances more time — the world has room to change
+        guard let input = readLine()?.trimmingCharacters(in: .whitespaces),
+              let choice = Int(input),
+              (choice == 1 || choice == 2) else {
+            print("  You turn back to your work.")
+            return
+        }
+
+        if choice == 1 {
+            print("\n  You find a safe corner and close your eyes.")
+            profile.tokens.ritualFatigue = max(0.0, profile.tokens.ritualFatigue - 0.1)
+        } else {
+            print("\n  You attempt to wash the ash from your skin.")
+            if let waterIndex = inventory.libations.firstIndex(of: .water) {
+                print("  Use water from your satchel for a deeper cleanse? (y/n): ", terminator: "")
+                let response = readLine()?.trimmingCharacters(in: .whitespaces).lowercased()
+                if response == "y" {
+                    inventory.libations.remove(at: waterIndex)
+                    profile.purify(strength: 0.5)
+                    print("  The clean water washes away the unseen weight.")
+                } else {
+                    profile.purify(strength: 0.2)
+                    print("  You scrub with dry dust. It helps, but only slightly.")
+                }
+            } else {
+                profile.purify(strength: 0.2)
+                print("  You scrub with dry dust. It helps, but only slightly.")
+            }
+        }
+
         let events = clock.advanceForRest(world: &world, sites: &sites, npcs: &npcs)
 
         if events.isEmpty {
@@ -14,7 +45,6 @@ extension GameSession {
             processWorldEvents(events)
         }
 
-        // The director gets a chance to speak after rest
         processDirectorEvents()
     }
 
@@ -44,7 +74,7 @@ extension GameSession {
     func saveGame() {
         do {
             try SnapshotStore.save(makeSnapshot(), to: saveURL)
-            print("  The record is sealed at tick \(clock.currentTick). [\(saveURL.lastPathComponent)]")
+            print("  The record is sealed at tick \(clock.currentcurrentTick). [\(saveURL.lastPathComponent)]")
         } catch {
             print("  The record would not hold. Save failed: \(error.localizedDescription)")
         }
