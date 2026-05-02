@@ -64,4 +64,17 @@ extension GameSession {
             print("  No intact record could be opened. Load failed: \(error.localizedDescription)")
         }
     }
+
+    func showJournal() {
+        let entries = world.journal.reversed().prefix(10)
+        print("\n  ── The Chronicle of Events ──")
+        if entries.isEmpty {
+            print("    The pages are blank. No deeds have yet been recorded.")
+            return
+        }
+
+        for entry in entries {
+            print("    Tick \(entry.tick) — \(entry.type.rawValue) | \(entry.source.rawValue)")
+        }
+    }
 }
