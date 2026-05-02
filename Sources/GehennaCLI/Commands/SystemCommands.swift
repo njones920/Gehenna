@@ -77,4 +77,45 @@ extension GameSession {
             print("    Tick \(entry.tick) — \(entry.type.rawValue) | \(entry.source.rawValue)")
         }
     }
+
+    func searchJournal() {
+        print("\n  ── Search the Chronicle ──")
+        print("    How do you wish to look?")
+        print("    1 — By weight of the event (Severity)")
+        print("    2 — By the mark left upon it (Tag)")
+        print("    3 — By the greatest fractures (Recent Ruptures)")
+        
+        guard let choice = readLine()?.trimmingCharacters(in: .whitespaces) else { return }
+        
+        let entries: [JournalEntry]
+        
+        switch choice {
+        case "1":
+            print("    Name the lowest weight you seek: ambient, notable, significant, or rupture?")
+            guard let severityInput = readLine()?.trimmingCharacters(in: .whitespaces).lowercased() else { return }
+            guard let severity = EventSeverity(rawValue: severityInput) else {
+                print("    That weight is not recognized. The chronicle remains closed.")
+                return
+            }
+            entries = world.events(severity: severity)
+        case "2":
+            print("    Speak the mark you seek.")
+            guard let tag = readLine()?.trimmingCharacters(in: .whitespaces) else { return }
+            entries = world.events(tagged: tag)
+        case "3":
+            entries = world.recentRuptures()
+        default:
+            print("    The chronicle remains closed.")
+            return
+        }
+        
+        if entries.isEmpty {
+            print("    The search yields nothing. The pages hold no such echoes.")
+        } else {
+            print("\n  ── The Chronicle of Events ──")
+            for entry in entries.reversed() {
+                print("    Tick \(entry.tick) — \(entry.type.rawValue) | \(entry.source.rawValue)")
+            }
+        }
+    }
 }
