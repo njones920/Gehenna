@@ -273,8 +273,8 @@ struct GehennaArena {
             let goliathStrategy: BotPersonality.Strategy = goliathTypeArg == "healer" ? .healer : .reckless
             let goliath = BotPersonality(name: "Goliath (Bot)", strategy: goliathStrategy, preferredSiteIndex: 4, preferredFragmentIndex: 8, aggressiveness: 1.0)
             
-            let dSession = PractitionerSession(name: david.name, fragments: content.fragments, artifacts: content.artifacts, memoryTraces: content.memoryTraces)
-            var gSession = PractitionerSession(name: goliath.name, fragments: content.fragments, artifacts: content.artifacts, memoryTraces: content.memoryTraces)
+            let dSession = PractitionerSession(name: david.name, fragments: [], artifacts: [], memoryTraces: [])
+            var gSession = PractitionerSession(name: goliath.name, fragments: [], artifacts: [], memoryTraces: [])
             
             if isVeteranGoliath {
                 gSession.ritualCount = 150
@@ -303,9 +303,9 @@ struct GehennaArena {
 
                 let session = PractitionerSession(
                     name: personality.name,
-                    fragments: content.fragments,
-                    artifacts: content.artifacts,
-                    memoryTraces: content.memoryTraces
+                    fragments: [],
+                    artifacts: [],
+                    memoryTraces: []
                 )
 
                 let id = await shard.addPractitioner(session)

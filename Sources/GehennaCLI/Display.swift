@@ -140,7 +140,7 @@ extension GameSession {
             return
         }
 
-        for taboo in profile.taboosBroken.sorted() {
+        for taboo in profile.taboosBroken.sorted(by: { $0.rawValue < $1.rawValue }) {
             let description: String
             switch taboo {
             case .bloodshed:      description = "You have shed blood where the dead sleep."
@@ -305,8 +305,7 @@ extension GameSession {
             switch style {
             case .formal:     return "\"\(name) acknowledges your presence with the politeness owed to a stranger.\""
             case .warm:       return "\"\(name) looks up from her work. 'The morning is good. Are you hungry?'\""
-            case .merchant:   return "\"\(
-            name) sizes you up with commercial interest. 'New face. Where from?'\""
+            case .merchant:   return "\"\(name) sizes you up with commercial interest. 'New face. Where from?'\""
             case .guarded:    return "\"\(name) watches you. Says nothing. Waits.\""
             case .priestly:   return "\"\(name) steps forward. 'Shalom. Are you passing through, or do you intend to stay?'\""
             case .vernacular: return "\"\(name) nods at you from across the forge. 'Need something made?'\""
@@ -373,7 +372,7 @@ extension GameSession {
         case .collapsingTemple:  return "ancient ruins, knowledge and faith"
         case .burialCave:        return "limestone tombs, mixed era"
         case .ancestorShrine:    return "living village, social zone"
-        case .tophett:           return "defiled ground, high corruption"
+        case .topheth:           return "defiled ground, high corruption"
         default:                 return site.type.rawValue
         }
     }

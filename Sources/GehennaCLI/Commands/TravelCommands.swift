@@ -98,4 +98,43 @@ extension GameSession {
         processDirectorEvents()
         sites[currentSiteIndex].lastVisitTick = clock.currentTick
     }
+
+    func scavengeSite() {
+        var site = sites[currentSiteIndex]
+        var foundAnything = false
+
+        if !site.fragments.isEmpty {
+            inventory.fragments.append(contentsOf: site.fragments)
+            print("  You uncover \(site.fragments.count) bone fragment(s).")
+            site.fragments.removeAll()
+            foundAnything = true
+        }
+
+        if !site.artifacts.isEmpty {
+            inventory.artifacts.append(contentsOf: site.artifacts)
+            print("  You unearth \(site.artifacts.count) life artifact(s).")
+            site.artifacts.removeAll()
+            foundAnything = true
+        }
+
+        if !site.memoryTraces.isEmpty {
+            inventory.memoryTraces.append(contentsOf: site.memoryTraces)
+            print("  You discover \(site.memoryTraces.count) memory trace(s).")
+            site.memoryTraces.removeAll()
+            foundAnything = true
+        }
+
+        if foundAnything {
+            site.localSuspicion = min(1.0, site.localSuspicion + 0.3)
+            sites[currentSiteIndex] = site
+            print("\n  You spend hours digging. The earth yields its secrets, but you feel watched.")
+            let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+            if !events.isEmpty {
+                processWorldEvents(events)
+            }
+            processDirectorEvents()
+        } else {
+            print("  You search the area, but the earth yields nothing.")
+        }
+    }
 }

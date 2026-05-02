@@ -1571,9 +1571,9 @@ struct WorldShardTests {
 
         let session = PractitionerSession(
             name: "Test Practitioner",
-            fragments: content.fragments,
-            artifacts: content.artifacts,
-            memoryTraces: content.memoryTraces
+            fragments: [Fragment(remains: .longBone, era: .ironAgeII, domain: .war, affinity: .earth)],
+            artifacts: [],
+            memoryTraces: []
         )
         let playerID = await shard.addPractitioner(session)
 
@@ -1609,15 +1609,15 @@ struct WorldShardTests {
 
         let first = PractitionerSession(
             name: "First Practitioner",
-            fragments: content.fragments,
-            artifacts: content.artifacts,
-            memoryTraces: content.memoryTraces
+            fragments: [Fragment(remains: .longBone, era: .ironAgeII, domain: .war, affinity: .earth)],
+            artifacts: [],
+            memoryTraces: []
         )
         let second = PractitionerSession(
             name: "Second Practitioner",
-            fragments: content.fragments,
-            artifacts: content.artifacts,
-            memoryTraces: content.memoryTraces
+            fragments: [Fragment(remains: .longBone, era: .ironAgeII, domain: .war, affinity: .earth)],
+            artifacts: [],
+            memoryTraces: []
         )
 
         let firstID = await shard.addPractitioner(first)

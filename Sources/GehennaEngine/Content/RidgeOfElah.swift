@@ -46,7 +46,8 @@ public enum RidgeOfElah {
                 NarrativeTag(.deathContext, "battle"),
                 NarrativeTag(.identity, "soldier"),
                 NarrativeTag(.cultural, "contested_borderland"),
-            ])
+            ]),
+            fragments: battlefieldFragments()
         )
     }
 
@@ -67,7 +68,9 @@ public enum RidgeOfElah {
                 NarrativeTag(.identity, "priest"),
                 NarrativeTag(.identity, "scribe"),
                 NarrativeTag(.cultural, "devoted_to_baal"),
-            ])
+            ]),
+            fragments: telKeshetFragments(),
+            artifacts: starterArtifacts()
         )
     }
 
@@ -88,7 +91,9 @@ public enum RidgeOfElah {
                 NarrativeTag(.deathContext, "burial"),
                 NarrativeTag(.cultural, "ancestor_veneration"),
                 NarrativeTag(.identity, "elder"),
-            ])
+            ]),
+            fragments: nahalCavesFragments(),
+            memoryTraces: starterMemoryTraces()
         )
     }
 
@@ -134,7 +139,8 @@ public enum RidgeOfElah {
                 NarrativeTag(.disposition, "grief"),
                 NarrativeTag(.disposition, "rage"),
                 NarrativeTag(.taboo, "will_not_speak_of_offering"),
-            ])
+            ]),
+            fragments: burningGroundFragments()
         )
     }
 
@@ -398,14 +404,8 @@ public enum RidgeOfElah {
     /// NPCs and root identities are loaded from the canon JSON bundle.
     public static func createWorld() -> (
         region: RegionState,
-        sites: [RitualSite],
-        fragments: [Fragment],
-        artifacts: [LifeArtifact],
-        memoryTraces: [MemoryTrace]
+        sites: [RitualSite]
     ) {
-        let allFragments = battlefieldFragments() + telKeshetFragments()
-            + nahalCavesFragments() + burningGroundFragments()
-
         let region = createRegion()
         var sites = allSites()
         for i in 0..<sites.count {
@@ -414,10 +414,7 @@ public enum RidgeOfElah {
 
         return (
             region: region,
-            sites: sites,
-            fragments: allFragments,
-            artifacts: starterArtifacts(),
-            memoryTraces: starterMemoryTraces()
+            sites: sites
         )
     }
 

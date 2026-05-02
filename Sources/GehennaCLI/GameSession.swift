@@ -32,9 +32,9 @@ final class GameSession: @unchecked Sendable {
         self.codex = CodexOfTheDead()
         self.sites = content.sites
         self.inventory = Inventory(
-            fragments: content.fragments,
-            artifacts: content.artifacts,
-            memoryTraces: content.memoryTraces,
+            fragments: [],
+            artifacts: [],
+            memoryTraces: [],
             libations: [.water, .water, .water, .fermentedWine, .fermentedWine]
         )
         self.currentSiteIndex = 0
@@ -88,6 +88,8 @@ final class GameSession: @unchecked Sendable {
                 showJournal()
             case "search":
                 searchJournal()
+            case "scavenge":
+                scavengeSite()
             case "village", "v", "talk":
                 villageMenu()
             case "rumors", "gossip":

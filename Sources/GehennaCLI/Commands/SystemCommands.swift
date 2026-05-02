@@ -25,14 +25,14 @@ extension GameSession {
                 let response = readLine()?.trimmingCharacters(in: .whitespaces).lowercased()
                 if response == "y" {
                     inventory.libations.remove(at: waterIndex)
-                    profile.purify(strength: 0.5)
+                    profile.tokens.purify(strength: 0.5)
                     print("  The clean water washes away the unseen weight.")
                 } else {
-                    profile.purify(strength: 0.2)
+                    profile.tokens.purify(strength: 0.2)
                     print("  You scrub with dry dust. It helps, but only slightly.")
                 }
             } else {
-                profile.purify(strength: 0.2)
+                profile.tokens.purify(strength: 0.2)
                 print("  You scrub with dry dust. It helps, but only slightly.")
             }
         }
@@ -74,7 +74,7 @@ extension GameSession {
     func saveGame() {
         do {
             try SnapshotStore.save(makeSnapshot(), to: saveURL)
-            print("  The record is sealed at tick \(clock.currentcurrentTick). [\(saveURL.lastPathComponent)]")
+            print("  The record is sealed at tick \(clock.currentTick). [\(saveURL.lastPathComponent)]")
         } catch {
             print("  The record would not hold. Save failed: \(error.localizedDescription)")
         }

@@ -1,0 +1,396 @@
+[
+  {
+    "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+    "trueName": "Hiram, son of Dagon",
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "soldier",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Philistine",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "captain",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "coastal_warrior",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "Ashkelon",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "battle",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "served_a_lord",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "name": "Bronze Captain",
+        "template": "warrior",
+        "era": 1,
+        "domain": "war",
+        "triggerTags": [
+          "soldier",
+          "captain",
+          "coastal_warrior",
+          "Ashkelon"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "duty",
+              "weight": 1.0
+            },
+            {
+              "dimension": "disposition",
+              "value": "pride",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "commanded_infantry",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "battlefield",
+        "personalityTraits": [
+          "prideful",
+          "loyal"
+        ],
+        "baselineDisposition": "honored"
+      },
+      {
+        "id": "22222222-2222-2222-2222-222222222222",
+        "name": "Ashkelon Butcher",
+        "template": "butcher",
+        "era": 1,
+        "domain": "war",
+        "triggerTags": [
+          "battle",
+          "rage",
+          "burning"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "rage",
+              "weight": 1.0
+            },
+            {
+              "dimension": "deathContext",
+              "value": "violent_end",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "topheth",
+        "corruptionThreshold": 0.4,
+        "personalityTraits": [
+          "spiteful",
+          "territorial"
+        ],
+        "baselineDisposition": "hostile"
+      },
+      {
+        "id": "33333333-3333-3333-3333-333333333333",
+        "name": "Nameless Shield-Bearer",
+        "template": "guardian",
+        "era": 1,
+        "domain": "war",
+        "triggerTags": [
+          "household",
+          "son_of",
+          "served_a_lord"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "devotion",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "protected_someone",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "ancestorShrine",
+        "personalityTraits": [
+          "protective",
+          "loyal"
+        ],
+        "baselineDisposition": "calm"
+      }
+    ],
+    "nativeEra": 1,
+    "culture": "Philistine"
+  },
+  {
+    "id": "B2C3D4E5-F6A7-8901-BCDE-F12345678901",
+    "trueName": null,
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "scribe",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Canaanite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "elder",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "temple_trained",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "devoted_to_baal",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "old_age",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "44444444-4444-4444-4444-444444444444",
+        "name": "Temple Scribe",
+        "template": "witness",
+        "era": 3,
+        "domain": "knowledge",
+        "triggerTags": [
+          "scribe",
+          "temple_trained",
+          "elder"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "pride",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "raised_apprentices",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "prideful",
+          "curious"
+        ],
+        "baselineDisposition": "curious"
+      },
+      {
+        "id": "55555555-5555-5555-5555-555555555555",
+        "name": "Voice of Baal",
+        "template": "prophet",
+        "era": 3,
+        "domain": "faith",
+        "triggerTags": [
+          "devoted_to_baal",
+          "priest",
+          "will_not_speak_yhwh"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "devotion",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_yhwh",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "territorial",
+          "prideful"
+        ],
+        "baselineDisposition": "honored"
+      }
+    ],
+    "nativeEra": 3,
+    "culture": "Canaanite"
+  },
+  {
+    "id": "C3D4E5F6-A7B8-9012-CDEF-123456789012",
+    "trueName": "Abdi-Resheph",
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "ruler",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "elder",
+          "weight": 1.0
+        },
+        {
+          "dimension": "era",
+          "value": "early_bronze_age",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "first_settlements",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "old_age",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "founded_a_lineage",
+          "weight": 1.0
+        },
+        {
+          "dimension": "taboo",
+          "value": "will_not_serve",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "66666666-6666-6666-6666-666666666666",
+        "name": "The Founder",
+        "template": "sovereign",
+        "era": 5,
+        "domain": "rule",
+        "triggerTags": [
+          "ruler",
+          "founded_a_lineage",
+          "first_settlements"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "authority",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "established_order",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "prideful",
+          "territorial"
+        ],
+        "baselineDisposition": "honored"
+      },
+      {
+        "id": "77777777-7777-7777-7777-777777777777",
+        "name": "Warden of the Deep",
+        "template": "warden",
+        "era": 5,
+        "domain": "death",
+        "triggerTags": [
+          "elder",
+          "ancestor_veneration",
+          "will_not_serve"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "authority",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_serve",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "territorial",
+          "resentful"
+        ],
+        "baselineDisposition": "hostile"
+      },
+      {
+        "id": "88888888-8888-8888-8888-888888888888",
+        "name": "First Ancestor",
+        "template": "guardian",
+        "era": 5,
+        "domain": "rule",
+        "triggerTags": [
+          "ancestor_veneration",
+          "household",
+          "peace"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "peace",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "ancestorShrine",
+        "personalityTraits": [
+          "protective",
+          "amusedByBoldness"
+        ],
+        "baselineDisposition": "calm"
+      }
+    ],
+    "nativeEra": 5,
+    "culture": "Canaanite/Early Bronze"
+  }
+]

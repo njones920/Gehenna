@@ -22,7 +22,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "GehennaEngine"),
+            name: "GehennaEngine",
+            resources: [
+                .process("Content/Data")
+            ]),
         .executableTarget(
             name: "GehennaCLI",
             dependencies: ["GehennaEngine"]),

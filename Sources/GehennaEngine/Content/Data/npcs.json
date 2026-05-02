@@ -1,0 +1,359 @@
+[
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-111111111111",
+    "name": "Abi-Gad",
+    "role": "Village Elder",
+    "faction": "elders",
+    "trust": 0.5,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "formal",
+      "references": [
+        "the old ways",
+        "the families",
+        "the hill country",
+        "the covenant"
+      ],
+      "avoids": [
+        "the dead",
+        "the caves",
+        "the night work"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "elder",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Israelite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "highland_clan",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "duty",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "I hold the families together because no one else will. The hill country is hard and the Philistines are close and the young ones do not understand what it costs to keep a village standing for three generations. I was not made for this. I was a younger son. But the elder brothers went to the wars and did not come back, and so here I am, and I will hold it until I cannot.",
+      "privateTruth": "He visited. Once. When his wife was dying and the physician from Lachish could not help. He went to the cave above the wadi and tried to speak to his dead mother. Nothing answered. He has never told anyone. He has never tried again. But he knows, now, what desperation feels like, and he recognizes it in others.",
+      "unsatisfiedWant": "He wants his eldest son to come home from Gath. The son went to trade and stayed. The son is alive and well and does not write. Abi-Gad will not say this.",
+      "wound": "The elder brothers who went to the wars. He was not good enough to go with them. He was the one who stayed. He has never forgiven himself for surviving.",
+      "threshold": "If the practitioner discovers the midnight visit — if they find evidence of his attempt — he will break open. Not with rage. With relief. Someone else knows."
+    }
+  },
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-222222222222",
+    "name": "Tamar bat Yoav",
+    "role": "Baker",
+    "faction": "elders",
+    "trust": 0.6,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "warm",
+      "references": [
+        "the children",
+        "the harvest",
+        "the bread",
+        "the morning"
+      ],
+      "avoids": [
+        "the war",
+        "the Philistines",
+        "things in the dark"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "adult_woman",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Israelite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "highland_clan",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "warmth",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "The bread rises or it does not. The flour is good or it is not. I have made bread every morning for twenty years and the simplicity of it is the thing that keeps me. The village talks and schemes and worries and I make bread. When the bread rises, the morning is good. I am not simple. I choose to do the simple thing because the complicated things are what kill people.",
+      "privateTruth": "She sees more than anyone thinks. She noticed the stranger carrying bone in their satchel. She noticed the oil lamp missing from the common store. She has not said anything because she is watching, and because she is not yet sure what she has seen.",
+      "unsatisfiedWant": "She wants to know what happens after. Whether the dead are somewhere. Whether her mother is somewhere. She would never ask the practitioner directly. But if someone she trusted said the dead can speak, she would listen.",
+      "wound": "Her mother died in the rains last spring. There was no one to sit with her at the end because Tamar was at the ovens. She arrived too late by the time it takes bread to cool.",
+      "threshold": "If the practitioner brings her something that belonged to her mother — even unknowingly, even a potsherd from the era and culture that matches — she will recognize it. And she will ask a question she has never asked anyone."
+    }
+  },
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-333333333333",
+    "name": "Huram",
+    "role": "Trader",
+    "faction": "traders",
+    "trust": 0.5,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "merchant",
+      "references": [
+        "the coast road",
+        "Ashkelon",
+        "copper",
+        "wine jars",
+        "the Egyptians"
+      ],
+      "avoids": [
+        "his family",
+        "debts",
+        "what he carries for others"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "trader",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "mixed_heritage",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "coast_and_hills",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "pragmatism",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "I move things from where they are to where they are wanted, and I take a portion. This is the oldest profession that isn't. I speak to Philistines in their tongue and to Israelites in theirs and to Egyptians in the trade pidgin and I am none of these things and all of them. A trader is the ghost of a person — present everywhere, belonging nowhere.",
+      "privateTruth": "He smuggles. Not just goods. Information. He carries messages between the coastal cities and the hill country, and some of those messages concern troop movements, and some of those messages have gotten people killed. He does not think about this if he can help it.",
+      "unsatisfiedWant": "He wants to stop. He wants a farm. A hill with olives. He wants to be from somewhere. He will never have this because the trade is the only thing he is good at and the debts never end.",
+      "wound": "He had a partner once. The partner was caught smuggling by the Philistine garrison at Ekron. Huram was not caught. He did not try to help. The partner's family does not know where Huram is.",
+      "threshold": "If the practitioner discovers his smuggling — or better, if the practitioner needs something moved that legitimate trade cannot move — Huram will drop the merchant mask entirely. He will be direct, honest, and dangerous."
+    }
+  },
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-444444444444",
+    "name": "Yoel ben Shimri",
+    "role": "Priest",
+    "faction": "priesthood",
+    "trust": 0.35,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "priestly",
+      "references": [
+        "the LORD",
+        "the Torah",
+        "the sanctuary",
+        "the ancestors",
+        "purity"
+      ],
+      "avoids": [
+        "the ba'alim",
+        "the foreign gods",
+        "the cave practices",
+        "the ov"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "young_man",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Levite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "priestly_lineage",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "devotion",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "fear",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "I am the priest of this place and I am twenty-three years old and I know less than the elders think I do. The sanctuary is my responsibility and the sanctuary is a room with an altar and the altar has not heard the voice of God in my lifetime. I perform the rites because the rites are what we do. I believe in the rites. I do not know if the rites believe in me.",
+      "privateTruth": "He has doubts. Real, consuming, theological doubts. The silence of the sanctuary is not peaceful to him — it is terrifying. He does not know if God speaks, and he is the one whose job it is to listen. If he admits this to anyone in his faction, he loses everything.",
+      "unsatisfiedWant": "He wants proof. He wants the heavens to answer. He wants to hear the voice that the scriptures promise. He is the priest of a silent god and the silence is eating him alive.",
+      "wound": "His father was the priest before him. His father had certainty — genuine, unshakeable, joyful certainty. Yoel watched his father die slowly of a stomach cancer that no prayer alleviated, and the certainty did not waver, and Yoel could not understand how that was possible.",
+      "threshold": "If the practitioner demonstrates — conclusively, undeniably, in front of him — that the dead can speak, Yoel will not report them. He will come back at night. He will ask to see it again. He will ask whether the dead know anything about God."
+    }
+  },
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-555555555555",
+    "name": "Devorah",
+    "role": "Herbalist",
+    "faction": "elders",
+    "trust": 0.55,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "guarded",
+      "references": [
+        "the plants",
+        "the wadi",
+        "the seasons",
+        "what grows where"
+      ],
+      "avoids": [
+        "her past",
+        "the coast",
+        "the old practices"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "elder_woman",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Israelite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "herbalist",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "caution",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "I know what the plants do because my grandmother knew, and her grandmother knew, and the knowledge goes back to a time before the village had a name. I do not call it practice. I call it knowing what grows. The priest calls the other things practice and he is probably right and I do not have those things and I do not want them. I had them once. That was enough. That was more than enough.",
+      "privateTruth": "She was, once, something very close to what the practitioner is now. In her youth, in another village, she learned more than herbs. She learned the other things — the fragment reading, the nightwork, the chirping and muttering. She stopped when someone she loved was hurt by it. She will not say who.",
+      "unsatisfiedWant": "She wants to know that the person she hurt has forgiven her. The person is dead. This is the kind of want the system cannot satisfy.",
+      "wound": "She hurt someone with the practice. Not a stranger. Someone close. The specifics she will never share unprompted, but the knowledge of what she did is in every cautious word she speaks.",
+      "threshold": "If the practitioner comes to her injured by the practice — if the work has gone wrong and they need help — she will recognize what has happened. She will help. And in helping, she will reveal that she knows exactly what the practitioner is, because she was one."
+    }
+  },
+  {
+    "id": "A9B8C7D6-E5F4-3210-ABCD-666666666666",
+    "name": "Baruk",
+    "role": "Smith",
+    "faction": "traders",
+    "trust": 0.45,
+    "personalSuspicion": 0.0,
+    "hasHeardRumors": false,
+    "hasWitnessedDirectly": false,
+    "heardRumorIDs": [],
+    "lastHeardRumorID": null,
+    "lastInteractionTick": null,
+    "register": {
+      "style": "vernacular",
+      "references": [
+        "iron",
+        "copper",
+        "the forge",
+        "the military",
+        "tools"
+      ],
+      "avoids": [
+        "the priest",
+        "the elders' politics",
+        "his own opinions"
+      ]
+    },
+    "tags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "smith",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Israelite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "craftsman",
+          "weight": 1.0
+        },
+        {
+          "dimension": "disposition",
+          "value": "practicality",
+          "weight": 1.0
+        }
+      ]
+    },
+    "interiority": {
+      "interiorVoice": "Iron is honest. You heat it and you hit it and it becomes what it becomes and if it breaks it is because you did something wrong and not because it decided to betray you. People are not honest. I prefer iron. I make what the village needs — plowshares, sickles, knives — and what the military needs when they come through, which is spearheads and arrowheads, and I do not ask which army they serve because iron does not care.",
+      "privateTruth": "He makes weapons for both sides of the conflict. He does not advertise this. The Philistine garrison at Gath places orders through Huram, and the Israelite militia places orders directly, and neither knows about the other, and Baruk sleeps fine.",
+      "unsatisfiedWant": "He wants to make something beautiful. Not a tool. Not a weapon. Something beautiful. He has never had time and will never have time and the one time he tried — a bronze mirror, years ago — his wife sold it for grain during a lean year. He said nothing.",
+      "wound": "The bronze mirror. His wife sold it because they were hungry and he knows she was right. He has never made anything for himself since.",
+      "threshold": "If the practitioner brings him a piece of ancient metalwork — genuine, old, beautiful — he will hold it and study it and forget to put on his professional face. For a moment he will be the person he might have been."
+    }
+  }
+]

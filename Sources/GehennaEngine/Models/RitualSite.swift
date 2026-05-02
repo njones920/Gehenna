@@ -56,6 +56,11 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
     /// The ID of the region this site belongs to.
     public var regionID: UUID?
 
+    // -- Scavengable contents --
+    public var fragments: [Fragment]
+    public var artifacts: [LifeArtifact]
+    public var memoryTraces: [MemoryTrace]
+
     // -- Site History (accumulated over play) --
 
     /// Cumulative durable site damage from rituals, mutations, and taboo acts.
@@ -97,7 +102,10 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         sanctity: Double = 0.5,
         corruption: Double = 0.0,
         tags: TagConstellation = TagConstellation(),
-        regionID: UUID? = nil
+        regionID: UUID? = nil,
+        fragments: [Fragment] = [],
+        artifacts: [LifeArtifact] = [],
+        memoryTraces: [MemoryTrace] = []
     ) {
         self.id = id
         self.name = name
@@ -109,6 +117,9 @@ public struct RitualSite: Codable, Hashable, Sendable, Identifiable {
         self.corruption = corruption
         self.tags = tags
         self.regionID = regionID
+        self.fragments = fragments
+        self.artifacts = artifacts
+        self.memoryTraces = memoryTraces
         self.scarring = 0.0
         self.localSuspicion = 0.0
         self.activeTraces = []
