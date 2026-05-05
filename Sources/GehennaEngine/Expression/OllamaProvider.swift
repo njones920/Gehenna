@@ -21,10 +21,10 @@ public actor OllamaProvider: ExpressionProvider {
     /// Create a provider targeting a local Ollama instance.
     /// - Parameters:
     ///   - baseURL: Ollama server URL (default: http://localhost:11434)
-    ///   - model: Model name to use (default: gemma4:26b)
+    ///   - model: Model name to use (default: gemma4:31b)
     public init(
         baseURL: String = "http://localhost:11434",
-        model: String = "gemma4:26b"
+        model: String = "gemma4:31b"
     ) {
         self.baseURL = baseURL
         self.model = model
