@@ -69,6 +69,8 @@ To bring the current scaffold into full compliance with the Codex vision, focus 
    Hide raw numbers behind a `debug` mode. Replace visible values with descriptions in profiles, inventory, rituals, and journals.
 7. **Make Kfar Shalem matter.**
    Wire the dialogue responses (`npcGreeting`, `friendlyResponse`, etc.) into `villageMenu`. Add journal entries for meaningful conversations and use thresholds to trigger unsolicited director events.
+8. **Implement Free-Form Chat.**
+   See `docs/PROPOSALS/FREEFORM_CHAT.md` for the blueprint to replace static dialogue options with custom practitioner inputs driven by the 31B LLM.
 
 ### Phase 4: Validation
 8. **Add tests around the new structure.**
