@@ -1,0 +1,131 @@
+[
+  {
+    "entityType": "npc",
+    "eventType": "greeting",
+    "culture": "highland_village",
+    "disposition": "neutral",
+    "text": "A nod. The eyes say more than the mouth.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "greeting",
+    "culture": "highland_village",
+    "disposition": "warm",
+    "text": "You are back. Good. Sit. The bread is fresh.",
+    "priority": 1
+  },
+  {
+    "entityType": "npc",
+    "eventType": "greeting",
+    "culture": "highland_village",
+    "disposition": "guarded",
+    "text": "What brings you here? I am busy.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "greeting",
+    "culture": "highland_village",
+    "disposition": "hostile",
+    "text": "Steps back. Will not meet your eyes.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "friendlyResponse",
+    "culture": null,
+    "disposition": "warm",
+    "text": "The harvest was thin this year. But we eat. The LORD provides, my father used to say.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "friendlyResponse",
+    "culture": null,
+    "disposition": "neutral",
+    "text": "The weather holds. The roads are passable. That is enough.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "regionResponse",
+    "culture": null,
+    "disposition": null,
+    "text": "The ridge has been quiet. Too quiet, some say. But I do not listen to some.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "deadResponse",
+    "culture": null,
+    "disposition": null,
+    "text": "A pause. The subject of the dead is never easy in this place.",
+    "priority": 0
+  },
+  {
+    "entityType": "npc",
+    "eventType": "deadResponse",
+    "culture": null,
+    "disposition": "suspicious",
+    "text": "Why do you ask about the dead? The dead are the dead. Leave them.",
+    "priority": 1
+  },
+  {
+    "entityType": "npc",
+    "eventType": "thresholdResponse",
+    "culture": null,
+    "disposition": null,
+    "registerKey": "formal",
+    "text": "Listen. I need to tell you something. I have been watching you, and I know what you do at night.",
+    "priority": 5
+  },
+  {
+    "entityType": "spirit",
+    "eventType": "spiritSpeech",
+    "culture": null,
+    "disposition": "calm",
+    "text": "You called. I came. What did you expect?",
+    "priority": 0
+  },
+  {
+    "entityType": "spirit",
+    "eventType": "spiritSpeech",
+    "culture": null,
+    "disposition": "hostile",
+    "text": "Who calls me? Who dares? I was resting.",
+    "priority": 0
+  },
+  {
+    "entityType": "spirit",
+    "eventType": "spiritSpeech",
+    "culture": null,
+    "disposition": "sorrowful",
+    "text": "I remember the sun. The sun was warm. Is it warm where you are?",
+    "priority": 0
+  },
+  {
+    "entityType": "spirit",
+    "eventType": "spiritRefusal",
+    "culture": null,
+    "disposition": null,
+    "text": "Silence. The dead do not always answer.",
+    "priority": 0
+  },
+  {
+    "entityType": "spirit",
+    "eventType": "spiritDeparture",
+    "culture": null,
+    "disposition": null,
+    "text": "Gone. As if they were never here.",
+    "priority": 0
+  },
+  {
+    "entityType": "world",
+    "eventType": "worldNarration",
+    "culture": null,
+    "disposition": null,
+    "text": "The wind shifts. Something in the air has changed.",
+    "priority": 0
+  }
+]

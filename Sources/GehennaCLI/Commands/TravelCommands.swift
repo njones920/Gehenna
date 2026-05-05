@@ -105,7 +105,10 @@ extension GameSession {
 
         if !site.fragments.isEmpty {
             inventory.fragments.append(contentsOf: site.fragments)
-            print("  You uncover \(site.fragments.count) bone fragment(s).")
+            print("  You search the ground. Your hands find what they find.")
+            if debugMode {
+                print("  [debug] Bone fragments found: \(site.fragments.count)")
+            }
             site.fragments.removeAll()
             foundAnything = true
         }

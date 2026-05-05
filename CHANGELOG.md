@@ -2,6 +2,31 @@
 
 ## Unreleased
 
+## 0.4.25 - Expression Layer & LLM Integration
+
+Completed the final stream of the V3 Codex roadmap, fully integrating dynamic, historically grounded, LLM-backed narrative generation.
+
+### Added
+
+- `ExpressionEngine` as the central orchestrator for rendering dynamic text. It utilizes a three-tier fallback pipeline (Ollama -> Authored Bank -> Fallback).
+- `OllamaProvider` connecting to a local Ollama instance (defaulting to `gemma4:26b`) for zero-cost, local LLM generation.
+- `ExpressionValidator` and `ExpressionCache` to enforce strict constraints (e.g., length, forbidden topics) and minimize redundant generation.
+- Structured data packets (`LightExpressionPacket` and `FullExpressionPacket`) and the `PacketAssembler` to pass strict world state and interiority constraints to the LLM.
+- `PLAYER_MANUAL.md` added to `docs/` detailing the interface, rituals, and mechanics of the CLI prototype.
+
+### Changed
+
+- Transitioned the entire `GehennaCLI` main loop (`GameSession.run`) and sub-menus (`villageMenu`, `ritualMenu`) to an asynchronous (`async`) architecture to support non-blocking LLM calls.
+- Wired village greetings, responses, and threshold events through the `ExpressionEngine`, replacing static strings with dynamic interaction.
+- Wired ritual outcomes in `RitualCommands` to utilize both the diegetic `RitualAutopsy` and the `ExpressionEngine` (for spirit speech).
+- Minor fixes in `OllamaProvider` to correctly handle `num_predict` with certain LLMs (dropped the `options` block to rely on server defaults).
+
+### Verified
+
+- `swift test` passes with 104 tests across 24 suites, including new tests for `ExpressionCache` and `ExpressionValidator`.
+- Live test coverage for the Ollama integration (`testOllamaLive`).
+
+
 ## 0.4.24 - Architecture Polish & Rumor Consequence
 
 Minor architectural cleanup, multi-region prep, and rumor consequence follow-through.

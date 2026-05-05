@@ -1,0 +1,698 @@
+{
+  "identity": [
+    {
+      "value": "soldier",
+      "description": "Professional military, garrison or campaign service",
+      "era_range": ["ironAgeI", "ironAgeII", "lateBronze"],
+      "cultures": ["Philistine", "Egyptian", "Israelite", "Canaanite"]
+    },
+    {
+      "value": "farmer",
+      "description": "Agricultural worker, tied to seasonal cycles and land tenure",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Canaanite", "Judahite"]
+    },
+    {
+      "value": "shepherd",
+      "description": "Pastoral nomad or settled herder, often marginal to urban centers",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Amorite", "Edomite", "Moabite"]
+    },
+    {
+      "value": "midwife",
+      "description": "Birth attendant, keeper of women's mysteries and infant rites",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician"]
+    },
+    {
+      "value": "potter",
+      "description": "Clay worker, shapes vessels for storage, ritual, and burial",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician", "Israelite"]
+    },
+    {
+      "value": "tanner",
+      "description": "Hide worker, ritually impure profession due to contact with carcasses",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Philistine"]
+    },
+    {
+      "value": "metalworker",
+      "description": "Smith of copper, bronze, or iron — a liminal profession with fire mastery",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Philistine", "Phoenician", "Kenite"]
+    },
+    {
+      "value": "scribe",
+      "description": "Literate professional, trained in cuneiform or alphabetic script",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Egyptian", "Canaanite", "Phoenician", "Israelite"]
+    },
+    {
+      "value": "sailor",
+      "description": "Seafarer of the great sea, knows coastal routes and foreign ports",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Phoenician", "Sea_Peoples", "Philistine"]
+    },
+    {
+      "value": "mercenary",
+      "description": "Hired sword, serves whoever pays — often foreign to the land",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Sea_Peoples", "Philistine", "Aramaean", "Egyptian"]
+    },
+    {
+      "value": "slave",
+      "description": "Bonded laborer, whether debt-slave, captive, or born into service",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Egyptian", "Israelite", "Philistine"]
+    },
+    {
+      "value": "widow",
+      "description": "Woman without male protection, marginal but sometimes powerful",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Canaanite", "Phoenician"]
+    },
+    {
+      "value": "orphan",
+      "description": "Child without parents, dependent on kin or community charity",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Canaanite", "Philistine"]
+    },
+    {
+      "value": "exile",
+      "description": "One driven from homeland by conquest, crime, or catastrophe",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Sea_Peoples", "Canaanite", "Israelite", "Aramaean"]
+    },
+    {
+      "value": "refugee",
+      "description": "Displaced by war or famine, arrived from elsewhere seeking shelter",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Sea_Peoples", "Canaanite", "Amorite"]
+    },
+    {
+      "value": "qedesha",
+      "description": "Cultic functionary at Canaanite shrines, served Asherah or other deities",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI"],
+      "cultures": ["Canaanite", "Phoenician"]
+    },
+    {
+      "value": "wet_nurse",
+      "description": "Woman who suckles another's child, often of higher status households",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Egyptian", "Canaanite", "Israelite"]
+    },
+    {
+      "value": "judge",
+      "description": "Arbitrator of disputes, sometimes military leader in pre-monarchic Israel",
+      "era_range": ["ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Judahite"]
+    },
+    {
+      "value": "watchman",
+      "description": "Guardian of gates, walls, or fields — sees what passes in the night",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Philistine"]
+    },
+    {
+      "value": "mourner_singer",
+      "description": "Professional keener, woman who leads funeral laments and death rites",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician"]
+    },
+    {
+      "value": "charioteer",
+      "description": "Elite warrior who drives war chariots, requires wealth and training",
+      "era_range": ["lateBronze", "ironAgeI"],
+      "cultures": ["Egyptian", "Canaanite", "Philistine"]
+    },
+    {
+      "value": "ba_al_ov",
+      "description": "Master of the ov, practitioner who consults the dead — the forbidden art",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite"]
+    },
+    {
+      "value": "diviner",
+      "description": "Reader of omens — entrails, flights of birds, cast lots",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician", "Aramaean"]
+    },
+    {
+      "value": "elder",
+      "description": "Senior member of community, holds authority through age and lineage",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Canaanite", "Philistine", "Edomite"]
+    },
+    {
+      "value": "priest",
+      "description": "Temple officiant, authorized to perform sacrifice and maintain cult",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician", "Egyptian"]
+    },
+    {
+      "value": "captain",
+      "description": "Military officer commanding infantry or garrison",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Philistine", "Egyptian", "Israelite"]
+    },
+    {
+      "value": "trader",
+      "description": "Merchant who moves goods between settlements and cultures",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Phoenician", "Canaanite", "Israelite", "Aramaean"]
+    },
+    {
+      "value": "child",
+      "description": "Young person, not yet adult, often unnamed in the record",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician", "Philistine"]
+    },
+    {
+      "value": "weaver",
+      "description": "Textile worker, often female, produces cloth and garments",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician"]
+    },
+    {
+      "value": "oil_presser",
+      "description": "Processor of olives, produces oil for lamps, food, and anointing",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Israelite", "Phoenician"]
+    }
+  ],
+  "deathContext": [
+    {
+      "value": "battle",
+      "description": "Died in combat — sword, spear, arrow, or siege",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "plague",
+      "description": "Died of pestilence — the arrows of Resheph, the striking hand",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "famine",
+      "description": "Died of hunger when the rains failed and the grain ran out",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "sacrifice_to_molek",
+      "description": "Offered at the Tophet, passed through the fire to Molek",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician"]
+    },
+    {
+      "value": "murder",
+      "description": "Killed by human hand outside of war — blood that cries from the ground",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "old_age",
+      "description": "Died full of years, gathered to the ancestors in proper time",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "childbirth",
+      "description": "Died bringing forth life — mother or infant at the dangerous hour",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "drowning",
+      "description": "Taken by water — sea, river, cistern, or flash flood",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "execution",
+      "description": "Put to death by authority — stoning, impalement, or blade",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "siege",
+      "description": "Died during the siege of a city — starvation, assault, or the final sack",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "fire",
+      "description": "Consumed by flames — accident, arson, or burning city",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "unknown",
+      "description": "Death circumstances lost to time — the bone remembers what the record forgot",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "exposure",
+      "description": "Left to die — infant, outcast, or wounded abandoned",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "ritual_death",
+      "description": "Died in cultic context — foundation deposit, accompany burial, or sacred killing",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze"],
+      "cultures": ["Canaanite", "Egyptian"]
+    },
+    {
+      "value": "accident",
+      "description": "Died by mischance — fall, collapse, animal, or failed work",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "died_alone",
+      "description": "No one present at the passing — no rites, no witnesses",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "died_in_company",
+      "description": "Surrounded by kin at the end — proper death, proper mourning",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    }
+  ],
+  "relational": [
+    {
+      "value": "served_a_lord",
+      "description": "Bound in service to a master — king, governor, or patriarch",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "buried_by_children",
+      "description": "Received proper burial from surviving offspring — the good death",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "died_alone",
+      "description": "No one came, no one mourned, no one performed the rites",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "betrayed_a_friend",
+      "description": "Broke faith with one who trusted — the weight never lifted",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "raised_apprentices",
+      "description": "Trained the next generation in a craft — hands shaped hands",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "founded_a_lineage",
+      "description": "First ancestor of a named house — the root others branch from",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "married_across_cultures",
+      "description": "Took a spouse from another people — mixed household, mixed loyalties",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "lost_a_child",
+      "description": "Outlived offspring — the grief that does not end",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "outlived_everyone",
+      "description": "Last survivor of household or generation — alone among strangers",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "owed_debts",
+      "description": "Died with obligations unfulfilled — to creditors, to gods, to kin",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "served_in_temple",
+      "description": "Gave service to the house of a god — priest, servant, or dedicated one",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "anointed_massebah",
+      "description": "Performed the oil rite at a standing stone — maintained the cult place",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "commanded_infantry",
+      "description": "Led soldiers in battle — responsible for lives and deaths",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "protected_someone",
+      "description": "Stood between another and harm — bodyguard, parent, or oath-bound",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "was_betrayed",
+      "description": "Trusted and was failed — the wound of broken faith",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "witnessed_the_collapse",
+      "description": "Saw the end of the Bronze Age world — the burning cities, the refugees",
+      "era_range": ["ironAgeI"],
+      "cultures": ["Canaanite", "Sea_Peoples", "Egyptian"]
+    },
+    {
+      "value": "attended_marzeah",
+      "description": "Participated in the funerary feast — communion with ancestors through wine",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician", "Israelite"]
+    }
+  ],
+  "cultural": [
+    {
+      "value": "Philistine",
+      "description": "Sea Peoples descendant settled in the pentapolis — Ashkelon, Ashdod, Ekron, Gath, Gaza",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "Israelite",
+      "description": "Highland dweller of the central hill country, worships Yahweh",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "Judahite",
+      "description": "Southern Israelite of Judah, centered on Jerusalem and Hebron",
+      "era_range": ["ironAgeII"]
+    },
+    {
+      "value": "Canaanite",
+      "description": "Indigenous population of the lowlands and coastal plain, pre-Israelite religion",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "Phoenician",
+      "description": "Coastal Canaanite of Tyre, Sidon, Byblos — seafarers and traders",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "Egyptian",
+      "description": "Subject or official of Pharaoh, from the empire that once ruled the land",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "Amorite",
+      "description": "Western Semitic people of the Middle Bronze Age, ancestors of many",
+      "era_range": ["earlyBronze", "middleBronze"]
+    },
+    {
+      "value": "Sea_Peoples",
+      "description": "Migrants who destroyed the Bronze Age world — arrived by ship, memory of another land",
+      "era_range": ["ironAgeI"]
+    },
+    {
+      "value": "Edomite",
+      "description": "Descendant of Esau, dweller in the red hills south of the Dead Sea",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "Moabite",
+      "description": "Dweller east of the Dead Sea, worships Chemosh",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "Aramaean",
+      "description": "Syrian highlander, speaks Aramaic, arrives in the Iron Age",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "devoted_to_baal",
+      "description": "Worships Baal Hadad, lord of storm and rain, rider of clouds",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "devoted_to_asherah",
+      "description": "Venerates Asherah, mother goddess — keeps her figurines, anoints her pole",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "devoted_to_yahweh",
+      "description": "Worships Yahweh, the god of Israel — pre-centralization, bamah worship",
+      "era_range": ["ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "devoted_to_dagon",
+      "description": "Venerates Dagon, Philistine deity of grain or fish, temples at Ashdod and Gaza",
+      "era_range": ["ironAgeI", "ironAgeII"],
+      "cultures": ["Philistine"]
+    },
+    {
+      "value": "devoted_to_resheph",
+      "description": "Venerates Resheph, plague-god and archer, Canaanite-Egyptian syncretism",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "devoted_to_el",
+      "description": "Worships El, father of the gods, creator — absorbed into Yahwism by Iron Age II",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "devoted_to_anat",
+      "description": "Venerates Anat, warrior goddess, sister-consort of Baal — blood and victory",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI"]
+    },
+    {
+      "value": "devoted_to_mot",
+      "description": "Acknowledges Mot, the death-god whose domain is Sheol — not worshipped but feared",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "syncretist",
+      "description": "Worships multiple deities, hedges bets across traditions",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "ancestor_venerator",
+      "description": "Maintains the cult of household dead — feeds them, consults them, remembers",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "bamah_worshipper",
+      "description": "Worships at high places — hilltop shrines with masseboth and asherim",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "marzeah_participant",
+      "description": "Attends the funerary banquet — wine, meat, and communion with the dead",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician", "Israelite"]
+    },
+    {
+      "value": "keeps_teraphim",
+      "description": "Maintains household gods — small figurines of ancestors or deities",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "keeps_asherah_figurine",
+      "description": "Possesses pillar figurine of Asherah — domestic worship despite official prohibition",
+      "era_range": ["ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Judahite"]
+    },
+    {
+      "value": "massebah_anointer",
+      "description": "Tends standing stones with oil — maintains the covenant marker",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "tophet_participant",
+      "description": "Present at the Burning Ground — witnessed or assisted the offering",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Canaanite", "Phoenician"]
+    },
+    {
+      "value": "practitioner_of_ov",
+      "description": "Consults the dead, chirps and mutters — the forbidden art",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "highland_clan",
+      "description": "From the central hill country — terrace farming, pastoralism, kinship networks",
+      "era_range": ["ironAgeI", "ironAgeII"],
+      "cultures": ["Israelite", "Judahite"]
+    },
+    {
+      "value": "coastal_city",
+      "description": "From the maritime settlements — Ashkelon, Gaza, Dor, Joppa, Acco",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"],
+      "cultures": ["Philistine", "Phoenician", "Canaanite"]
+    },
+    {
+      "value": "temple_compound",
+      "description": "Lived in or served the temple precinct — priests, servants, dedicants",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "garrison_town",
+      "description": "From a military settlement — Egyptian outpost or Philistine stronghold",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "trade_route",
+      "description": "Lived along the Way of the Sea or King's Highway — cosmopolitan, mixed",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "pastoral_camp",
+      "description": "From semi-nomadic herding groups — sheep, goats, seasonal movement",
+      "era_range": ["earlyBronze", "middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "temple_trained",
+      "description": "Educated in temple scribal school — literate, ritualized, hierarchical",
+      "era_range": ["middleBronze", "lateBronze", "ironAgeI", "ironAgeII"]
+    },
+    {
+      "value": "coastal_warrior",
+      "description": "Fights in Sea Peoples or Philistine military tradition — round shield, straight sword",
+      "era_range": ["ironAgeI", "ironAgeII"],
+      "cultures": ["Philistine", "Sea_Peoples"]
+    },
+    {
+      "value": "priestly_lineage",
+      "description": "Born to a family of cult officiants — Levite or Canaanite temple family",
+      "era_range": ["lateBronze", "ironAgeI", "ironAgeII"]
+    }
+  ],
+  "disposition": [
+    {
+      "value": "duty",
+      "description": "Bound by obligation — to lord, to lineage, to oath, to role"
+    },
+    {
+      "value": "rage",
+      "description": "Hot anger that outlasted death — grievance, violation, or thwarted will"
+    },
+    {
+      "value": "grief",
+      "description": "Sorrow that did not end with breathing — loss carried into Sheol"
+    },
+    {
+      "value": "pride",
+      "description": "Knows their worth — achievement, lineage, or skill demanded recognition"
+    },
+    {
+      "value": "devotion",
+      "description": "Gave self to something greater — god, master, love, or cause"
+    },
+    {
+      "value": "fear",
+      "description": "Terror that followed into death — of gods, of enemies, of the unknown"
+    },
+    {
+      "value": "pragmatism",
+      "description": "Did what worked — survival, deal-making, moral flexibility"
+    },
+    {
+      "value": "warmth",
+      "description": "Cared for others — parent, friend, healer, or generous stranger"
+    },
+    {
+      "value": "bitterness",
+      "description": "Tasted injustice and never forgot — cheated, overlooked, or wronged"
+    },
+    {
+      "value": "curiosity",
+      "description": "Wanted to know — the asking spirit that did not quiet in death"
+    },
+    {
+      "value": "regret",
+      "description": "Something left undone, unsaid, or wrong — the weight of what was not"
+    },
+    {
+      "value": "silence",
+      "description": "Keeps still — whether by choice, trauma, or the forgetting of ages"
+    },
+    {
+      "value": "authority",
+      "description": "Expects obedience — ruled in life, expects deference in death"
+    },
+    {
+      "value": "hunger",
+      "description": "Wants something — offerings, attention, warmth, what was denied"
+    }
+  ],
+  "taboo": [
+    {
+      "value": "will_not_speak_yhwh",
+      "description": "Refuses to name the Israelite god — devotee of another tradition",
+      "cultures": ["Canaanite", "Philistine", "Phoenician"]
+    },
+    {
+      "value": "will_not_speak_of_offering",
+      "description": "Cannot discuss what was given at the Tophet — the silence is absolute",
+      "cultures": ["Canaanite", "Phoenician"]
+    },
+    {
+      "value": "will_not_speak_of_parents",
+      "description": "Something terrible about origin — abandonment, shame, or violence"
+    },
+    {
+      "value": "will_not_serve",
+      "description": "Refuses commands — was sovereign, or was enslaved and will not be again"
+    },
+    {
+      "value": "will_not_name_the_god",
+      "description": "Cannot speak the divine name they served — sacred terror or broken faith"
+    },
+    {
+      "value": "will_not_cross_water",
+      "description": "Bound to the land — drowned, or never arrived, or the sea took everything"
+    },
+    {
+      "value": "will_not_leave_the_site",
+      "description": "Anchored to place of death or burial — cannot travel with the practitioner"
+    },
+    {
+      "value": "will_not_forgive",
+      "description": "Someone did them wrong and the wound does not close"
+    },
+    {
+      "value": "will_not_remember",
+      "description": "Part of the past is lost or suppressed — cannot or will not recall"
+    },
+    {
+      "value": "will_not_speak_of_children",
+      "description": "The topic of offspring produces silence — loss, sacrifice, or shame"
+    },
+    {
+      "value": "will_not_acknowledge_defeat",
+      "description": "Refuses to admit how things ended — pride or delusion that survived death"
+    },
+    {
+      "value": "will_not_name_betrayer",
+      "description": "Someone broke faith but the name is unspeakable — too painful or too dangerous"
+    }
+  ],
+  "era": [
+    {
+      "value": "iron_age_ii",
+      "description": "The present of the reference canon — ~1000-700 BCE. Israelite monarchy, Philistine pentapolis.",
+      "range": "1000-700 BCE"
+    },
+    {
+      "value": "iron_age_i",
+      "description": "The age of the Sea Peoples and collapse — ~1200-1000 BCE. Everything changed.",
+      "range": "1200-1000 BCE"
+    },
+    {
+      "value": "late_bronze",
+      "description": "The age of Ugarit and great kingdoms — ~1550-1200 BCE. Egyptian empire, Canaanite city-states.",
+      "range": "1550-1200 BCE"
+    },
+    {
+      "value": "middle_bronze",
+      "description": "The patriarchal age — ~2000-1550 BCE. Amorite kingdoms, Hyksos in Egypt.",
+      "range": "2000-1550 BCE"
+    },
+    {
+      "value": "early_bronze",
+      "description": "The first cities and temples — ~3300-2000 BCE. Urban dawn, Canaanite foundations.",
+      "range": "3300-2000 BCE"
+    },
+    {
+      "value": "antediluvian",
+      "description": "Before memory — the Rephaim, the giants, the deep past that even the dead have forgotten.",
+      "range": "Before record"
+    }
+  ]
+}

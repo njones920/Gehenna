@@ -419,56 +419,45 @@ public enum RidgeOfElah {
     }
 
     /// Load Kfar Shalem NPCs from the canon JSON bundle.
-    public static func kfarShalemNPCs() -> [NPC] {
-        do {
-            return try CanonDataLoader.loadNPCs()
-        } catch {
-            print("[GEHENNA] Warning: Failed to load NPCs from canon bundle: \(error)")
-            return []
-        }
+    public static func kfarShalemNPCs() throws -> [NPC] {
+        try CanonDataLoader.loadNPCs()
     }
 
     /// Load all root identities from the canon JSON bundle.
-    public static func rootIdentities() -> [RootIdentity] {
-        do {
-            return try CanonDataLoader.loadRootIdentities()
-        } catch {
-            print("[GEHENNA] Warning: Failed to load root identities from canon bundle: \(error)")
-            return []
-        }
+    public static func rootIdentities() throws -> [RootIdentity] {
+        try CanonDataLoader.loadRootIdentities()
     }
 
     // MARK: - Named NPC Accessors (convenience — look up from canon bundle)
 
-    public static func abiGad() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Abi-Gad" }!
+    public static func abiGad() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Abi-Gad" }
     }
-    public static func tamarBatYoav() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Tamar bat Yoav" }!
+    public static func tamarBatYoav() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Tamar bat Yoav" }
     }
-    public static func huramTheTrader() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Huram" }!
+    public static func huramTheTrader() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Huram" }
     }
-    public static func yoelBenShimri() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Yoel ben Shimri" }!
+    public static func yoelBenShimri() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Yoel ben Shimri" }
     }
-    public static func devorah() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Devorah" }!
+    public static func devorah() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Devorah" }
     }
-    public static func barukTheSmith() -> NPC {
-        kfarShalemNPCs().first { $0.name == "Baruk" }!
+    public static func barukTheSmith() -> NPC? {
+        try? CanonDataLoader.loadNPCs().first { $0.name == "Baruk" }
     }
 
     // MARK: - Named RootIdentity Accessors (convenience — look up from canon bundle)
 
-    public static func hiramSonOfDagon() -> RootIdentity {
-        rootIdentities().first { $0.trueName == "Hiram, son of Dagon" }!
+    public static func hiramSonOfDagon() -> RootIdentity? {
+        try? CanonDataLoader.loadRootIdentities().first { $0.trueName == "Hiram, son of Dagon" }
     }
-    public static func scribeOfBaal() -> RootIdentity {
-        rootIdentities().first { $0.trueName == nil && $0.culture == "Canaanite" }!
+    public static func scribeOfBaal() -> RootIdentity? {
+        try? CanonDataLoader.loadRootIdentities().first { $0.trueName == nil && $0.culture == "Canaanite" }
     }
-    public static func abdiResheph() -> RootIdentity {
-        rootIdentities().first { $0.trueName == "Abdi-Resheph" }!
+    public static func abdiResheph() -> RootIdentity? {
+        try? CanonDataLoader.loadRootIdentities().first { $0.trueName == "Abdi-Resheph" }
     }
 }
-

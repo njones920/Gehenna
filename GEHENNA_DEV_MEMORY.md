@@ -472,3 +472,11 @@ Based on this audit, the most valuable next work is:
 ### 0.4.24 Polish Release
 - **Decision**: Bumped version to `0.4.24` and pushed.
 - **Rationale**: Captures these two small but structurally important fixes before moving on to larger canon or rumor consequence changes.
+
+## Architecture Decisions (Session 2026-05-04 Expression Layer)
+
+### Expression Engine & 0.4.25 Release
+- **Decision**: Integrated the `ExpressionEngine` and `OllamaProvider` using `gemma4:26b` for dynamic narrative rendering. The engine version is now `0.4.25`.
+- **Rationale**: Replaces static string responses in Kfar Shalem and ritual aftermaths with a live LLM generation pipeline.
+- **Scope**: Includes a three-tier fallback pipeline (Ollama -> Authored Bank -> Fallback), structured constraint packets (`LightExpressionPacket`, `FullExpressionPacket`), and rigid validation (`ExpressionValidator`). The entire interactive CLI was refactored to `async` to support non-blocking LLM calls.
+- **Implication**: The simulation remains completely mathematically deterministic (`ResolutionPipeline`); the LLM acts only as a rendering layer, unable to hallucinate game state or break the physics engine. Added `PLAYER_MANUAL.md` to document the playable prototype.

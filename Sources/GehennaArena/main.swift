@@ -258,11 +258,19 @@ struct GehennaArena {
 
         // Create the shared world
         let content = RidgeOfElah.createWorld()
+        let npcs: [NPC]
+        let rootIdentities: [RootIdentity]
+        do {
+            npcs = try RidgeOfElah.kfarShalemNPCs()
+            rootIdentities = try RidgeOfElah.rootIdentities()
+        } catch {
+            fatalError("Canon load failed: \(error). Cannot start with empty world state.")
+        }
         let shard = WorldShard(
             world: WorldSimulation(regions: [content.region]),
             sites: content.sites,
-            npcs: RidgeOfElah.kfarShalemNPCs(),
-            rootIdentities: RidgeOfElah.rootIdentities()
+            npcs: npcs,
+            rootIdentities: rootIdentities
         )
 
         // Register bots

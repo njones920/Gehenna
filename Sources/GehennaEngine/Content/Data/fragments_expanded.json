@@ -1,0 +1,229 @@
+[
+  {
+    "id": "F001A001-0001-0001-0001-000000000001",
+    "remainsType": "skull",
+    "era": 2,
+    "domain": "war",
+    "affinity": "earth",
+    "integrity": { "value": 0.75 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "soldier", "weight": 1.0 },
+        { "dimension": "identity", "value": "Philistine", "weight": 1.0 },
+        { "dimension": "cultural", "value": "coastal_warrior", "weight": 1.0 },
+        { "dimension": "cultural", "value": "devoted_to_dagon", "weight": 0.8 },
+        { "dimension": "deathContext", "value": "battle", "weight": 1.0 },
+        { "dimension": "relational", "value": "served_a_lord", "weight": 1.0 },
+        { "dimension": "disposition", "value": "duty", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": "Achish",
+    "siteHint": "Battlefield Ridge",
+    "provenance": "Sea Peoples warrior generation skull, round shield-arm bone stress visible. Found with fragmentary Aegean-style pottery."
+  },
+  {
+    "id": "F002B002-0002-0002-0002-000000000002",
+    "remainsType": "handBones",
+    "era": 2,
+    "domain": "faith",
+    "affinity": "earth",
+    "integrity": { "value": 0.65 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "qedesha", "weight": 1.0 },
+        { "dimension": "identity", "value": "Canaanite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "devoted_to_asherah", "weight": 1.0 },
+        { "dimension": "cultural", "value": "bamah_worshipper", "weight": 1.0 },
+        { "dimension": "cultural", "value": "massebah_anointer", "weight": 0.9 },
+        { "dimension": "deathContext", "value": "murder", "weight": 1.0 },
+        { "dimension": "disposition", "value": "devotion", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_speak_yhwh", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "Tel Keshet",
+    "provenance": "Right hand bones with oil residue. Found near toppled massebah and burned asherah pole fragments. Finger bones show ritual scarification patterns."
+  },
+  {
+    "id": "F003C003-0003-0003-0003-000000000003",
+    "remainsType": "crematedBone",
+    "era": 2,
+    "domain": "death",
+    "affinity": "fire",
+    "integrity": { "value": 0.25 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "child", "weight": 1.0 },
+        { "dimension": "identity", "value": "Canaanite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "tophet_participant", "weight": 1.0 },
+        { "dimension": "deathContext", "value": "sacrifice_to_molek", "weight": 1.0 },
+        { "dimension": "disposition", "value": "silence", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_speak_of_offering", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_speak_of_parents", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "The Burning Ground",
+    "provenance": "Calcined infant remains. Recovered from Tophet deposit with votive pottery. Burning temperature consistent with deliberate cremation, not accidental fire."
+  },
+  {
+    "id": "F004D004-0004-0004-0004-000000000004",
+    "remainsType": "toothFragment",
+    "era": 3,
+    "domain": "knowledge",
+    "affinity": "silence",
+    "integrity": { "value": 0.85 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "scribe", "weight": 1.0 },
+        { "dimension": "identity", "value": "Egyptian", "weight": 1.0 },
+        { "dimension": "cultural", "value": "temple_trained", "weight": 1.0 },
+        { "dimension": "cultural", "value": "garrison_town", "weight": 0.8 },
+        { "dimension": "deathContext", "value": "siege", "weight": 1.0 },
+        { "dimension": "relational", "value": "outlived_everyone", "weight": 1.0 },
+        { "dimension": "disposition", "value": "regret", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": "Nes-pa",
+    "siteHint": "Tel Keshet",
+    "provenance": "Molar with gold filling — Egyptian dental work, Late Bronze Age. Found in destruction layer with hieratic ostraca. Last administrator of the outpost."
+  },
+  {
+    "id": "F005E005-0005-0005-0005-000000000005",
+    "remainsType": "longBone",
+    "era": 1,
+    "domain": "war",
+    "affinity": "fire",
+    "integrity": { "value": 0.55 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "soldier", "weight": 1.0 },
+        { "dimension": "identity", "value": "Israelite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "highland_clan", "weight": 1.0 },
+        { "dimension": "cultural", "value": "devoted_to_yahweh", "weight": 1.0 },
+        { "dimension": "deathContext", "value": "battle", "weight": 1.0 },
+        { "dimension": "relational", "value": "served_a_lord", "weight": 0.8 },
+        { "dimension": "disposition", "value": "pride", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "Battlefield Ridge",
+    "provenance": "Femur with healed battle wound and fresh fatal blow. Iron Age II warrior. Sword cut to lower leg, typical of infantry engagement."
+  },
+  {
+    "id": "F006F006-0006-0006-0006-000000000006",
+    "remainsType": "ossuaryChip",
+    "era": 2,
+    "domain": "faith",
+    "affinity": "earth",
+    "integrity": { "value": 0.45 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "priest", "weight": 1.0 },
+        { "dimension": "identity", "value": "Canaanite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "devoted_to_baal", "weight": 1.0 },
+        { "dimension": "cultural", "value": "marzeah_participant", "weight": 1.0 },
+        { "dimension": "cultural", "value": "temple_compound", "weight": 0.9 },
+        { "dimension": "deathContext", "value": "old_age", "weight": 1.0 },
+        { "dimension": "relational", "value": "raised_apprentices", "weight": 1.0 },
+        { "dimension": "disposition", "value": "pride", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "Nahal Caves",
+    "provenance": "Secondary burial fragment from ossuary with storm-god iconography. Baal priest, temple compound tradition. Wine residue on associated pottery indicates marzeah context."
+  },
+  {
+    "id": "F007A007-0007-0007-0007-000000000007",
+    "remainsType": "ribFragment",
+    "era": 2,
+    "domain": "death",
+    "affinity": "silence",
+    "integrity": { "value": 0.35 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "midwife", "weight": 1.0 },
+        { "dimension": "identity", "value": "Israelite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "highland_clan", "weight": 1.0 },
+        { "dimension": "cultural", "value": "keeps_asherah_figurine", "weight": 0.9 },
+        { "dimension": "cultural", "value": "devoted_to_asherah", "weight": 0.8 },
+        { "dimension": "deathContext", "value": "old_age", "weight": 1.0 },
+        { "dimension": "relational", "value": "buried_by_children", "weight": 1.0 },
+        { "dimension": "disposition", "value": "warmth", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": "Shiphrah",
+    "siteHint": "Kfar Shalem",
+    "provenance": "Rib fragment from elderly female burial. Found with pillar figurine and birthing amulets. Hands showed lifetime of physical labor — midwife or similar."
+  },
+  {
+    "id": "F008B008-0008-0008-0008-000000000008",
+    "remainsType": "skull",
+    "era": 5,
+    "domain": "rule",
+    "affinity": "earth",
+    "integrity": { "value": 0.9 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "elder", "weight": 1.0 },
+        { "dimension": "identity", "value": "Canaanite", "weight": 1.0 },
+        { "dimension": "cultural", "value": "first_settlements", "weight": 1.0 },
+        { "dimension": "cultural", "value": "ancestor_venerator", "weight": 1.0 },
+        { "dimension": "era", "value": "early_bronze_age", "weight": 1.0 },
+        { "dimension": "deathContext", "value": "old_age", "weight": 1.0 },
+        { "dimension": "relational", "value": "founded_a_lineage", "weight": 1.0 },
+        { "dimension": "disposition", "value": "authority", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_serve", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "Nahal Caves",
+    "provenance": "Plastered skull, Early Bronze Age. Face reconstructed in clay after death — ancestor veneration practice. Red ochre traces. The founder of something."
+  },
+  {
+    "id": "F009C009-0009-0009-0009-000000000009",
+    "remainsType": "handBones",
+    "era": 3,
+    "domain": "knowledge",
+    "affinity": "water",
+    "integrity": { "value": 0.7 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "sailor", "weight": 1.0 },
+        { "dimension": "identity", "value": "Phoenician", "weight": 1.0 },
+        { "dimension": "cultural", "value": "coastal_city", "weight": 1.0 },
+        { "dimension": "cultural", "value": "trade_route", "weight": 0.9 },
+        { "dimension": "deathContext", "value": "drowning", "weight": 1.0 },
+        { "dimension": "relational", "value": "married_across_cultures", "weight": 0.8 },
+        { "dimension": "disposition", "value": "pragmatism", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_cross_water", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": "Abdi-Ba'al",
+    "siteHint": "Nahal Caves",
+    "provenance": "Rope-worn hand bones. Phoenician trader who drowned — body recovered inland, unusual. Theophoric name indicates Baal devotion despite Phoenician origin."
+  },
+  {
+    "id": "F010D010-0010-0010-0010-000000000010",
+    "remainsType": "crematedBone",
+    "era": 2,
+    "domain": "death",
+    "affinity": "fire",
+    "integrity": { "value": 0.2 },
+    "tags": {
+      "tags": [
+        { "dimension": "identity", "value": "child", "weight": 1.0 },
+        { "dimension": "identity", "value": "Phoenician", "weight": 1.0 },
+        { "dimension": "cultural", "value": "tophet_participant", "weight": 1.0 },
+        { "dimension": "cultural", "value": "coastal_city", "weight": 0.8 },
+        { "dimension": "deathContext", "value": "sacrifice_to_molek", "weight": 1.0 },
+        { "dimension": "disposition", "value": "silence", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_speak_of_offering", "weight": 1.0 },
+        { "dimension": "taboo", "value": "will_not_speak_of_parents", "weight": 1.0 }
+      ]
+    },
+    "inscribedName": null,
+    "siteHint": "The Burning Ground",
+    "provenance": "Second Tophet deposit, separate stratum. Calcined fragments with traces of oil — anointed before offering. Votive stele nearby but inscription too weathered to read."
+  }
+]

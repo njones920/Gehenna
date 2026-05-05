@@ -4,7 +4,7 @@ import GehennaEngine
 extension GameSession {
     // MARK: - Ritual
 
-    func ritualMenu() {
+    func ritualMenu() async {
         let site = sites[currentSiteIndex]
         print("\n  ── Compose Ritual at \(site.name) ──")
         
@@ -24,8 +24,6 @@ extension GameSession {
         guard let input = readLine(), input.lowercased() != "c", let index = Int(input), index < inventory.fragments.count else {
             return
         }
-        
-        let fragment = inventory.fragments[index]
         
         print("\n  Speak a true name for this spirit (or leave blank if unknown):")
         print("  > ", terminator: "")
@@ -80,20 +78,14 @@ extension GameSession {
             timing: WorldTiming(time: clock.currentTimeOfDay)
         )
         
-        executeRitual(intent)
+        await executeRitual(intent)
     }
 
-    private func executeRitual(_ intent: RitualIntent) {
+    private func executeRitual(_ intent: RitualIntent) async {
         var site = sites[currentSiteIndex]
         let fragment = inventory.fragments.remove(at: intent.fragmentIndex)
         let artifact = intent.artifactIndex.map { inventory.artifacts.remove(at: $0) }
         let trace = intent.traceIndex.map { inventory.memoryTraces.remove(at: $0) }
-        
-        let inputTags = TagConstellation(
-            fragment.tags.tags + 
-            (artifact?.tags.tags ?? []) + 
-            (trace?.tags.tags ?? [])
-        )
         
         let config = RitualConfiguration(
             remains: fragment,
@@ -111,27 +103,29 @@ extension GameSession {
             regionState: world.regions.values.first ?? RegionState(name: "Unknown"),
             profile: profile,
             seed: UInt64(clock.currentTick),
-            rootIdentities: RidgeOfElah.rootIdentities()
+            rootIdentities: self.rootIdentities
         )
         
         print("\n  ── Ritual Result ──\n")
+        
+        let autopsyText = autopsyReader.interpret(result, configuration: config, masteryPhase: profile.masteryPhase)
+        print("\n  [Autopsy] \(autopsyText)\n")
+
         if let spirit = result.spirit {
-            let name = spirit.epochName ?? spirit.template.rawValue
-            print("  Spirit Manifests: \(name)")
-            print("  Tier: \(spirit.tier.rawValue)")
-            if result.outcomeClass == .targeted {
-                print("  The name was recognized.")
-            }
+            printManifestation(spirit, result: result)
+            
+            let speech = await expressionEngine.spiritSpeech(spirit, practitioner: profile)
+            print("  \"\(speech)\"")
             
             let sustained = profile.summonerCapacity > 0
             if sustained {
                 profile.summonerCapacity -= 1
-                print("  You anchor the spirit to your will.")
+                print("\n  You anchor the spirit to your will.")
             } else {
-                print("  Your capacity is exceeded. The spirit breaks free and dissipates.")
+                print("\n  Your capacity is exceeded. The spirit breaks free and dissipates.")
             }
         } else {
-            print("  The ritual fails. The libation sinks into the earth. Nothing answers.")
+            print("  The libation sinks into the earth. Nothing answers.")
         }
         
         if result.worldEffects.corruptionDelta > 0.3 {

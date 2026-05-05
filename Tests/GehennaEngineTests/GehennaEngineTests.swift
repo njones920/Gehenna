@@ -668,7 +668,7 @@ struct PersistenceTests {
     func singlePlayerSnapshotRoundTrip() throws {
         let region = RegionState(name: "Ridge of Elah", stability: 0.7)
         let site = RitualSite(name: "Kfar Shalem Shrine", type: .ancestorShrine, affinity: .earth)
-        let npc = RidgeOfElah.abiGad()
+        let npc = try #require(RidgeOfElah.abiGad())
 
         var world = WorldSimulation(regions: [region])
         var persistedSite = site
@@ -708,7 +708,7 @@ struct PersistenceTests {
             inventory: inventory,
             currentSiteIndex: 0,
             ritualCount: 3,
-            rootIdentities: RidgeOfElah.rootIdentities(),
+            rootIdentities: try RidgeOfElah.rootIdentities(),
             npcs: [npc],
             clock: WorldClock(startingTick: 12)
         )
@@ -787,8 +787,8 @@ struct EpochTests {
     }
 
     @Test("Epoch resolver selects warrior epoch for battlefield configuration")
-    func epochResolverSelectsWarrior() {
-        let identity = RidgeOfElah.hiramSonOfDagon()
+    func epochResolverSelectsWarrior() throws {
+        let identity = try #require(RidgeOfElah.hiramSonOfDagon())
         let resolver = EpochResolver()
 
         // Configure for the Bronze Captain: battlefield + soldier tags + war domain
@@ -815,8 +815,8 @@ struct EpochTests {
     }
 
     @Test("Dark epoch activates in corrupted conditions")
-    func darkEpochInCorruption() {
-        let identity = RidgeOfElah.hiramSonOfDagon()
+    func darkEpochInCorruption() throws {
+        let identity = try #require(RidgeOfElah.hiramSonOfDagon())
         let resolver = EpochResolver()
 
         // Configure for the Ashkelon Butcher: corrupted region + topheth site
@@ -847,8 +847,8 @@ struct EpochTests {
     }
 
     @Test("Pipeline with root identities resolves epoch")
-    func pipelineResolvesEpoch() {
-        let identities = RidgeOfElah.rootIdentities()
+    func pipelineResolvesEpoch() throws {
+        let identities = try RidgeOfElah.rootIdentities()
 
         let config = RitualConfiguration(
             remains: Fragment(
@@ -881,8 +881,8 @@ struct EpochTests {
     }
 
     @Test("Spirits from same root identity have same rootIdentityID")
-    func spiritsShareRootIdentity() {
-        let identities = RidgeOfElah.rootIdentities()
+    func spiritsShareRootIdentity() throws {
+        let identities = try RidgeOfElah.rootIdentities()
 
         // First: summon the warrior aspect
         let config1 = RitualConfiguration(
@@ -1005,14 +1005,74 @@ struct MasteryAutopsyTests {
     }
 }
 
+// MARK: - Canon Data Tests
+
+@Suite("Canon Data Tests")
+struct CanonDataTests {
+    @Test("Bundled NPC canon decodes with authored interiority")
+    func bundledNPCsDecodeWithInteriority() throws {
+        let npcs = try CanonDataLoader.loadNPCs()
+
+        #expect(npcs.count >= 6)
+        for npc in npcs {
+            #expect(!npc.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            #expect(!npc.interiority.interiorVoice.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            #expect(!npc.interiority.wound.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        }
+    }
+
+    @Test("Bundled root identity canon decodes with named epochs")
+    func bundledRootIdentitiesDecodeWithEpochs() throws {
+        let identities = try CanonDataLoader.loadRootIdentities()
+
+        #expect(identities.count >= 3)
+        for identity in identities {
+            #expect(!identity.epochs.isEmpty)
+            for epoch in identity.epochs {
+                #expect(!epoch.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+    }
+
+    @Test("NPC behavioral API updates trust and suspicion")
+    func npcBehavioralAPIUpdatesTrustAndSuspicion() {
+        var npc = NPC(
+            name: "Test Witness",
+            role: "Villager",
+            faction: .elders,
+            trust: 0.5,
+            personalSuspicion: 0.0,
+            register: VoiceRegister(style: .formal),
+            interiority: NPCInteriority(
+                interiorVoice: "I know what I saw.",
+                privateTruth: "They remember more than they say.",
+                unsatisfiedWant: "A quiet house.",
+                wound: "A night that would not end.",
+                threshold: "Enough silence."
+            )
+        )
+        let initialTrust = npc.trust
+
+        npc.positiveInteraction(strength: 0.3)
+        #expect(npc.trust > initialTrust)
+
+        let trustAfterPositiveInteraction = npc.trust
+        let initialSuspicion = npc.personalSuspicion
+        npc.witnessActivity(severity: 0.4)
+
+        #expect(npc.personalSuspicion > initialSuspicion)
+        #expect(npc.trust < trustAfterPositiveInteraction)
+    }
+}
+
 // MARK: - NPC Interiority Tests (v3 §5.7)
 
 @Suite("NPC Tests")
 struct NPCTests {
 
     @Test("NPC suspicion increases with rumors")
-    func suspicionFromRumors() {
-        var npc = RidgeOfElah.yoelBenShimri()
+    func suspicionFromRumors() throws {
+        var npc = try #require(RidgeOfElah.yoelBenShimri())
         let initialSuspicion = npc.personalSuspicion
 
         npc.hearRumor(strength: 0.2)
@@ -1023,9 +1083,9 @@ struct NPCTests {
     }
 
     @Test("Priest faction amplifies suspicion")
-    func priestAmplification() {
-        var priest = RidgeOfElah.yoelBenShimri()
-        var trader = RidgeOfElah.huramTheTrader()
+    func priestAmplification() throws {
+        var priest = try #require(RidgeOfElah.yoelBenShimri())
+        var trader = try #require(RidgeOfElah.huramTheTrader())
 
         priest.hearRumor(strength: 0.2)
         trader.hearRumor(strength: 0.2)
@@ -1035,8 +1095,8 @@ struct NPCTests {
     }
 
     @Test("Positive interactions build trust")
-    func trustFromInteraction() {
-        var npc = RidgeOfElah.tamarBatYoav()
+    func trustFromInteraction() throws {
+        var npc = try #require(RidgeOfElah.tamarBatYoav())
         let initialTrust = npc.trust
 
         npc.positiveInteraction(strength: 0.15)
@@ -1045,8 +1105,8 @@ struct NPCTests {
     }
 
     @Test("High suspicion and low trust cause refusal")
-    func npcRefusal() {
-        var npc = RidgeOfElah.abiGad()
+    func npcRefusal() throws {
+        var npc = try #require(RidgeOfElah.abiGad())
 
         // Repeatedly witness suspicious activity
         npc.witnessActivity(severity: 0.4)
@@ -1057,8 +1117,8 @@ struct NPCTests {
     }
 
     @Test("NPC tick state causes suspicion to decay")
-    func npcTickDecay() {
-        var npc = RidgeOfElah.huramTheTrader()
+    func npcTickDecay() throws {
+        var npc = try #require(RidgeOfElah.huramTheTrader())
         npc.hearRumor(strength: 0.3)
         let initialSuspicion = npc.personalSuspicion
 
@@ -1071,8 +1131,8 @@ struct NPCTests {
     }
 
     @Test("NPC wouldFlee with high suspicion and low trust")
-    func npcFleeCondition() {
-        var npc = RidgeOfElah.abiGad()
+    func npcFleeCondition() throws {
+        var npc = try #require(RidgeOfElah.abiGad())
         npc.witnessActivity(severity: 0.5)
         npc.witnessActivity(severity: 0.5)
 
@@ -1488,7 +1548,7 @@ struct WorldDirectorTests {
     }
 
     @Test("Director respects max events per evaluation")
-    func directorRespectsMaxEvents() {
+    func directorRespectsMaxEvents() throws {
         // Create an extremely volatile state that should trigger many conditions
         let world = WorldSimulation(regions: [
             RegionState(name: "Chaos", ghostActivity: 0.9, corruption: 0.8, stability: 0.1, spiritualPressure: 0.9)
@@ -1498,7 +1558,7 @@ struct WorldDirectorTests {
         site.recordRitualPerformed()
         site.recordMutation()
         let sites = [site]
-        let npcs = RidgeOfElah.kfarShalemNPCs()
+        let npcs = try RidgeOfElah.kfarShalemNPCs()
         let clock = WorldClock()
 
         let events = director.evaluate(
@@ -1510,13 +1570,13 @@ struct WorldDirectorTests {
     }
 
     @Test("Director fires NPC initiative at village")
-    func directorFiresNPCInitiativeAtVillage() {
+    func directorFiresNPCInitiativeAtVillage() throws {
         let world = WorldSimulation(regions: [RegionState(name: "Test")])
         let site = RitualSite(name: "Kfar Shalem", type: .ancestorShrine, affinity: .earth)
         let sites = [site]
 
         // Create an NPC that would approach
-        var npc = RidgeOfElah.tamarBatYoav()
+        var npc = try #require(RidgeOfElah.tamarBatYoav())
         npc.positiveInteraction(strength: 0.4)
         npc.positiveInteraction(strength: 0.4)  // trust > 0.85 → at threshold → would approach
         let npcs = [npc]
@@ -1560,13 +1620,13 @@ struct WorldDirectorTests {
 struct WorldShardTests {
 
     @Test("Ritual command records one journal entry and increments attempts")
-    func ritualCommandRecordsSingleJournalEntry() async {
+    func ritualCommandRecordsSingleJournalEntry() async throws {
         let content = RidgeOfElah.createWorld()
         let shard = WorldShard(
             world: WorldSimulation(regions: [content.region]),
             sites: content.sites,
-            npcs: RidgeOfElah.kfarShalemNPCs(),
-            rootIdentities: RidgeOfElah.rootIdentities()
+            npcs: try RidgeOfElah.kfarShalemNPCs(),
+            rootIdentities: try RidgeOfElah.rootIdentities()
         )
 
         let session = PractitionerSession(
@@ -1598,13 +1658,13 @@ struct WorldShardTests {
     }
 
     @Test("Practitioners share site scarring")
-    func practitionersShareSiteScarring() async {
+    func practitionersShareSiteScarring() async throws {
         let content = RidgeOfElah.createWorld()
         let shard = WorldShard(
             world: WorldSimulation(regions: [content.region]),
             sites: content.sites,
-            npcs: RidgeOfElah.kfarShalemNPCs(),
-            rootIdentities: RidgeOfElah.rootIdentities()
+            npcs: try RidgeOfElah.kfarShalemNPCs(),
+            rootIdentities: try RidgeOfElah.rootIdentities()
         )
 
         let first = PractitionerSession(

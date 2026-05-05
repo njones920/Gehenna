@@ -66,7 +66,7 @@ extension GameSession {
 
         print("\n  ── Fragment Details ──")
         print("    Type: \(describeRemainsType(frag.remainsType).capitalized)")
-        print("    Condition: \(describeIntegrity(frag.integrity)) (\(Int(frag.integrity.value * 100))%)")
+        print("    Condition: \(describeIntegrity(frag.integrity))")
         print("    Era: \(describeEra(frag.era))")
         print("    Domain: \(frag.domain.rawValue.capitalized)")
         print("    Affinity: Aligned with \(frag.affinity.rawValue), Opposed to \(frag.affinity.opposition.rawValue)")
@@ -76,6 +76,8 @@ extension GameSession {
         }
         
         print("    Intrinsic Traces: \(frag.tags.tags.map { $0.value }.joined(separator: ", "))")
-        print("    Coherence Weight: \(String(format: "%.2f", frag.coherenceWeight))")
+        if debugMode {
+            print("    [debug] Coherence Weight: \(String(format: "%.2f", frag.coherenceWeight))")
+        }
     }
 }

@@ -8,4 +8,4 @@ import Foundation
 import GehennaEngine
 
 let game = GameSession()
-game.run()
+await game.run()

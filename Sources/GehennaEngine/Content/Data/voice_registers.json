@@ -1,0 +1,157 @@
+[
+  {
+    "key": "philistine_soldier",
+    "displayName": "Philistine Soldier (Dagon Devotee)",
+    "culture": "Philistine",
+    "cadence": "spare",
+    "vocabulary": {
+      "divine": ["Dagon", "the fish-house", "the grain-lord", "the pillars of Ashdod"],
+      "geographic": ["the pentapolis", "Ashkelon", "Ashdod", "Ekron", "Gath", "Gaza", "the great sea", "the old country"],
+      "military": ["seren", "shield-wall", "the garrison", "the watch", "the bronze"],
+      "cultural": ["the feathered crown", "the hearth of the hall", "the wine of the coast"]
+    },
+    "avoidances": [
+      "Yahweh",
+      "the temple fell",
+      "name of the old country"
+    ],
+    "metaphorTradition": ["sea", "ships", "storms", "fish", "grain"],
+    "exampleLines": {
+      "neutral": "I served the seren of Gath. I stood at his left hand. My shield knew his shadow.",
+      "wrathful": "He will break you as he broke the sea. Do not test what came from the ships.",
+      "sorrowful": "We came on the ships. The old country is behind the water. Do not ask me its name."
+    }
+  },
+  {
+    "key": "israelite_elder",
+    "displayName": "Israelite Elder (Yahwist with Asherah Tension)",
+    "culture": "Israelite",
+    "cadence": "liturgical",
+    "vocabulary": {
+      "divine": ["the LORD", "the covenant", "the ancestors", "El", "the Most High"],
+      "geographic": ["the hill country", "the wadi", "the bamah", "the threshing floor", "the well"],
+      "social": ["the families", "the elders", "the young ones", "the tribe", "the inheritance"],
+      "objects": ["the massebah", "the oil", "the firstfruits", "the ephod"]
+    },
+    "avoidances": [
+      "wife's figurines",
+      "Asherah practices",
+      "visiting the cave to seek the dead"
+    ],
+    "metaphorTradition": ["land", "seasons", "inheritance", "flocks", "covenant"],
+    "exampleLines": {
+      "neutral": "My father worshipped at this stone. His father set it. I pour the oil because they did.",
+      "wrathful": "The LORD sees. The LORD judges. The sword comes for those who forget.",
+      "sorrowful": "My sons are gone to the coast. The stones stand but who will pour the oil?"
+    }
+  },
+  {
+    "key": "canaanite_temple_servant",
+    "displayName": "Canaanite Temple Servant (Baal/Asherah Devotee)",
+    "culture": "Canaanite",
+    "cadence": "liturgical",
+    "vocabulary": {
+      "divine": ["Baal Hadad", "the rider of clouds", "the lord of rain", "Asherah", "the lady", "the tree", "the mother"],
+      "cultObjects": ["massebah", "asherah pole", "the grove", "the oil", "the cult stand", "the bronze serpent"],
+      "actions": ["I anointed", "I tended", "I spoke for the lady", "I poured"],
+      "destruction": ["they cut", "they burned", "they broke", "the tree is gone"]
+    },
+    "avoidances": [
+      "Yahweh by name",
+      "forgiving the destroyers",
+      "the gods have abandoned her"
+    ],
+    "metaphorTradition": ["trees", "rain", "fertility", "growth", "seasons"],
+    "exampleLines": {
+      "neutral": "I anointed the stone with oil and I spoke the names and Baal heard me. The rain came.",
+      "wrathful": "Their god is one. Ours were many. Tell me which way is richer.",
+      "sorrowful": "The tree is gone. Who waters the tree? The asherah lies in the fire-pit and no one lifted it."
+    }
+  },
+  {
+    "key": "marzeah_participant",
+    "displayName": "Marzeah Participant",
+    "culture": "Canaanite",
+    "cadence": "flowing",
+    "vocabulary": {
+      "feast": ["the wine", "the bowl", "the bread", "the meat", "the couch"],
+      "ancestors": ["the fathers", "the rephaim", "the shades", "those who came before"],
+      "actions": ["we poured", "we reclined", "we remembered", "we spoke to them"],
+      "sensory": ["the smoke", "the oil", "the sound of the pipes", "the taste of the wine"]
+    },
+    "avoidances": [
+      "the practice was forbidden",
+      "the final feast",
+      "certain ancestors who attended"
+    ],
+    "metaphorTradition": ["feasting", "wine", "memory", "communion"],
+    "exampleLines": {
+      "neutral": "The smoke carries the offering. The wine carries the words. The dead are not far.",
+      "wrathful": "The prophets called it abomination. The prophets did not taste the wine.",
+      "sorrowful": "We reclined on the couches and the fathers drank with us. I saw my grandfather's shadow."
+    }
+  },
+  {
+    "key": "grieving_shade",
+    "displayName": "Grieving Shade (Recently Dead)",
+    "culture": null,
+    "cadence": "fractured",
+    "vocabulary": {
+      "domestic": ["the house", "the bread", "the fire", "the children", "the door"],
+      "confusion": ["where", "who", "when", "why"]
+    },
+    "avoidances": [
+      "how they died",
+      "the afterlife",
+      "staying on topic"
+    ],
+    "metaphorTradition": [],
+    "exampleLines": {
+      "neutral": "Where is the house? I was walking to the house. The sun was going down.",
+      "wrathful": "Who called me? Someone called my name. I heard it. I came.",
+      "sorrowful": "I need to tell her something. I forgot what. I will remember."
+    }
+  },
+  {
+    "key": "ancient_ancestor",
+    "displayName": "Ancient Ancestor (Early Bronze)",
+    "culture": null,
+    "cadence": "spare",
+    "vocabulary": {
+      "archaic": ["the wall", "the grain", "the fire", "stone on stone"],
+      "firstThings": ["the first fire", "the first wall", "the ones before"]
+    },
+    "avoidances": [
+      "later period words",
+      "understanding the practitioner",
+      "memory of many things"
+    ],
+    "metaphorTradition": ["stone", "grain", "first things"],
+    "exampleLines": {
+      "neutral": "The wall. I built the wall. Stone on stone. It stood.",
+      "wrathful": "You speak strangely. Your words are new. Mine are old.",
+      "sorrowful": "The fire. Where is the fire? I am cold. I have been cold."
+    }
+  },
+  {
+    "key": "tophet_voice",
+    "displayName": "Tophet Voice (The Burning Ground)",
+    "culture": null,
+    "cadence": "fractured",
+    "vocabulary": {
+      "minimal": ["mother", "father", "bright", "warm", "dark", "sleep"]
+    },
+    "avoidances": [
+      "accusing",
+      "describing what happened",
+      "naming parents",
+      "crying"
+    ],
+    "metaphorTradition": [],
+    "exampleLines": {
+      "neutral": "It was bright. Then it was dark. I sleep now.",
+      "wrathful": "I am not angry. I do not know what angry is for.",
+      "sorrowful": "Where is mother? She was here. She was holding me."
+    }
+  }
+]

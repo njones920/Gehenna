@@ -21,7 +21,7 @@ extension GameSession {
 
     func printArrival() {
         print("""
-          You arrive at the Ridge of Emia as the light fails.
+          You arrive at the Ridge of Elah as the light fails.
 
           The Shephelah stretches west toward the coast, low hills folding
           into each other like knuckles. Somewhere beyond the ridge, the
@@ -117,8 +117,20 @@ extension GameSession {
     func showProfile() {
         print("\n  ── The Practitioner ──")
         print("    Phase: \(profile.masteryPhase.rawValue.capitalized)")
-        print("    Rituals performed: \(profile.totalRituals)")
-        print("    Successful: \(profile.successfulRituals)")
+        switch profile.masteryPhase {
+        case .apprentice:
+            print("    You have attempted the rite only a few times. The grammar is still unfamiliar.")
+        case .practitioner:
+            print("    You have performed the rite enough times to know what failure feels like.")
+        case .adept:
+            print("    You have learned through repetition what cannot be taught.")
+        case .master:
+            print("    The rite is memory now. You no longer think about the steps.")
+        }
+        if debugMode {
+            print("    [debug] Rituals performed: \(profile.totalRituals)")
+            print("    [debug] Successful: \(profile.successfulRituals)")
+        }
         if profile.mutationRituals > 0 {
             print("    Mutations: \(profile.mutationRituals)")
         }

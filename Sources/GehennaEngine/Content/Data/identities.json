@@ -392,5 +392,699 @@
     ],
     "nativeEra": 5,
     "culture": "Canaanite/Early Bronze"
+  },
+  {
+    "id": "D4E5F6A7-B8C9-0123-DEFG-456789ABCD01",
+    "trueName": "Maacah",
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "adult_woman",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Israelite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "highland_clan",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "keeps_asherah_figurine",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "devoted_to_asherah",
+          "weight": 0.8
+        },
+        {
+          "dimension": "deathContext",
+          "value": "childbirth",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "lost_a_child",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "D1111111-1111-1111-1111-111111111111",
+        "name": "Keeper of the Figurines",
+        "template": "guardian",
+        "era": 2,
+        "domain": "faith",
+        "triggerTags": [
+          "keeps_asherah_figurine",
+          "devoted_to_asherah",
+          "household",
+          "mother"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "devotion",
+              "weight": 1.0
+            },
+            {
+              "dimension": "disposition",
+              "value": "warmth",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "protected_someone",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "ancestorShrine",
+        "personalityTraits": [
+          "protective",
+          "curious"
+        ],
+        "baselineDisposition": "calm"
+      },
+      {
+        "id": "D2222222-2222-2222-2222-222222222222",
+        "name": "The Mother Who Did Not Return",
+        "template": "mourner",
+        "era": 2,
+        "domain": "death",
+        "triggerTags": [
+          "childbirth",
+          "grief",
+          "lost_a_child"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "grief",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "lost_a_child",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "protective",
+          "resentful"
+        ],
+        "baselineDisposition": "sorrowful"
+      },
+      {
+        "id": "D3333333-3333-3333-3333-333333333333",
+        "name": "The Silenced Devotee",
+        "template": "witness",
+        "era": 2,
+        "domain": "faith",
+        "triggerTags": [
+          "devoted_to_asherah",
+          "will_not_speak_yhwh",
+          "bitterness",
+          "suppressed_cult"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "bitterness",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_yhwh",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "territorial",
+          "prideful"
+        ],
+        "baselineDisposition": "hostile"
+      }
+    ],
+    "nativeEra": 2,
+    "culture": "Israelite"
+  },
+  {
+    "id": "E5F6A7B8-C9D0-1234-EFG0-567890ABCD02",
+    "trueName": "Achish ben Peleset",
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "soldier",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Philistine",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "mercenary",
+          "weight": 0.8
+        },
+        {
+          "dimension": "cultural",
+          "value": "Sea_Peoples",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "coastal_warrior",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "devoted_to_dagon",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "battle",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "served_a_lord",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "E1111111-1111-1111-1111-111111111111",
+        "name": "Shield of the Seren",
+        "template": "warrior",
+        "era": 2,
+        "domain": "war",
+        "triggerTags": [
+          "soldier",
+          "served_a_lord",
+          "coastal_warrior",
+          "pride"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "pride",
+              "weight": 1.0
+            },
+            {
+              "dimension": "disposition",
+              "value": "duty",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "protected_someone",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "battlefield",
+        "personalityTraits": [
+          "loyal",
+          "prideful"
+        ],
+        "baselineDisposition": "honored"
+      },
+      {
+        "id": "E2222222-2222-2222-2222-222222222222",
+        "name": "The Exile Who Arrived",
+        "template": "witness",
+        "era": 2,
+        "domain": "knowledge",
+        "triggerTags": [
+          "Sea_Peoples",
+          "exile",
+          "refugee",
+          "witnessed_the_collapse"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "grief",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "witnessed_the_collapse",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "curious",
+          "protective"
+        ],
+        "baselineDisposition": "sorrowful"
+      },
+      {
+        "id": "E3333333-3333-3333-3333-333333333333",
+        "name": "Wrath of the Fallen Temple",
+        "template": "butcher",
+        "era": 2,
+        "domain": "faith",
+        "triggerTags": [
+          "devoted_to_dagon",
+          "rage",
+          "will_not_speak_yhwh"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "rage",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_yhwh",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "corruptionThreshold": 0.35,
+        "personalityTraits": [
+          "territorial",
+          "spiteful"
+        ],
+        "baselineDisposition": "hostile"
+      }
+    ],
+    "nativeEra": 2,
+    "culture": "Philistine/Sea Peoples"
+  },
+  {
+    "id": "F6A7B8C9-D0E1-2345-FG01-678901ABCD03",
+    "trueName": "Nes-pa-nefer-Ptah",
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "scribe",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Egyptian",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "elder",
+          "weight": 0.8
+        },
+        {
+          "dimension": "cultural",
+          "value": "garrison_town",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "temple_trained",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "siege",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "outlived_everyone",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "F1111111-1111-1111-1111-111111111111",
+        "name": "Administrator of the Outpost",
+        "template": "sovereign",
+        "era": 3,
+        "domain": "rule",
+        "triggerTags": [
+          "scribe",
+          "Egyptian",
+          "temple_trained",
+          "authority"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "authority",
+              "weight": 1.0
+            },
+            {
+              "dimension": "disposition",
+              "value": "pride",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "raised_apprentices",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "prideful",
+          "curious"
+        ],
+        "baselineDisposition": "honored"
+      },
+      {
+        "id": "F2222222-2222-2222-2222-222222222222",
+        "name": "The Last Functionary",
+        "template": "witness",
+        "era": 3,
+        "domain": "knowledge",
+        "triggerTags": [
+          "siege",
+          "outlived_everyone",
+          "witnessed_the_collapse"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "regret",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "outlived_everyone",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "protective",
+          "resentful"
+        ],
+        "baselineDisposition": "sorrowful"
+      },
+      {
+        "id": "F3333333-3333-3333-3333-333333333333",
+        "name": "Keeper of Records That No One Reads",
+        "template": "warden",
+        "era": 3,
+        "domain": "knowledge",
+        "triggerTags": [
+          "scribe",
+          "temple_trained",
+          "will_not_remember"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "duty",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_acknowledge_defeat",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "ancestorShrine",
+        "personalityTraits": [
+          "territorial",
+          "prideful"
+        ],
+        "baselineDisposition": "calm"
+      }
+    ],
+    "nativeEra": 3,
+    "culture": "Egyptian"
+  },
+  {
+    "id": "A7B8C9D0-E1F2-3456-GA12-789012ABCD04",
+    "trueName": null,
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "qedesha",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Canaanite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "priest",
+          "weight": 0.8
+        },
+        {
+          "dimension": "cultural",
+          "value": "devoted_to_asherah",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "devoted_to_baal",
+          "weight": 0.8
+        },
+        {
+          "dimension": "cultural",
+          "value": "bamah_worshipper",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "massebah_anointer",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "murder",
+          "weight": 1.0
+        },
+        {
+          "dimension": "relational",
+          "value": "served_in_temple",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "A1111111-1111-1111-1111-111111111111",
+        "name": "Servant of the Sacred Grove",
+        "template": "prophet",
+        "era": 2,
+        "domain": "faith",
+        "triggerTags": [
+          "qedesha",
+          "devoted_to_asherah",
+          "bamah_worshipper",
+          "devotion"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "devotion",
+              "weight": 1.0
+            },
+            {
+              "dimension": "disposition",
+              "value": "pride",
+              "weight": 0.8
+            },
+            {
+              "dimension": "relational",
+              "value": "anointed_massebah",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "prideful",
+          "protective"
+        ],
+        "baselineDisposition": "honored"
+      },
+      {
+        "id": "A2222222-2222-2222-2222-222222222222",
+        "name": "Witness to the Cutting",
+        "template": "witness",
+        "era": 2,
+        "domain": "death",
+        "triggerTags": [
+          "murder",
+          "witnessed_the_collapse",
+          "grief"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "grief",
+              "weight": 1.0
+            },
+            {
+              "dimension": "relational",
+              "value": "was_betrayed",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "burialCave",
+        "personalityTraits": [
+          "protective",
+          "resentful"
+        ],
+        "baselineDisposition": "sorrowful"
+      },
+      {
+        "id": "A3333333-3333-3333-3333-333333333333",
+        "name": "The One Who Tends What Was Destroyed",
+        "template": "mourner",
+        "era": 2,
+        "domain": "faith",
+        "triggerTags": [
+          "devoted_to_asherah",
+          "bitterness",
+          "will_not_speak_yhwh"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "bitterness",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_yhwh",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "collapsingTemple",
+        "personalityTraits": [
+          "territorial",
+          "spiteful"
+        ],
+        "baselineDisposition": "hostile"
+      }
+    ],
+    "nativeEra": 2,
+    "culture": "Canaanite"
+  },
+  {
+    "id": "B8C9D0E1-F2A3-4567-HB23-890123ABCD05",
+    "trueName": null,
+    "coreTags": {
+      "tags": [
+        {
+          "dimension": "identity",
+          "value": "child",
+          "weight": 1.0
+        },
+        {
+          "dimension": "identity",
+          "value": "Canaanite",
+          "weight": 1.0
+        },
+        {
+          "dimension": "cultural",
+          "value": "tophet_participant",
+          "weight": 1.0
+        },
+        {
+          "dimension": "deathContext",
+          "value": "sacrifice_to_molek",
+          "weight": 1.0
+        },
+        {
+          "dimension": "taboo",
+          "value": "will_not_speak_of_offering",
+          "weight": 1.0
+        },
+        {
+          "dimension": "taboo",
+          "value": "will_not_speak_of_parents",
+          "weight": 1.0
+        }
+      ]
+    },
+    "epochs": [
+      {
+        "id": "B1111111-1111-1111-1111-111111111111",
+        "name": "The Quiet One",
+        "template": "guardian",
+        "era": 2,
+        "domain": "death",
+        "triggerTags": [
+          "sacrifice_to_molek",
+          "child",
+          "silence",
+          "tophet_participant"
+        ],
+        "epochTags": {
+          "tags": [
+            {
+              "dimension": "disposition",
+              "value": "silence",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_of_offering",
+              "weight": 1.0
+            },
+            {
+              "dimension": "taboo",
+              "value": "will_not_speak_of_parents",
+              "weight": 1.0
+            }
+          ]
+        },
+        "preferredSiteType": "topheth",
+        "personalityTraits": [
+          "protective",
+          "curious"
+        ],
+        "baselineDisposition": "calm"
+      }
+    ],
+    "nativeEra": 2,
+    "culture": "Canaanite"
   }
 ]

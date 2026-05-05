@@ -17,6 +17,8 @@ final class GameSession: @unchecked Sendable {
     var npcs: [NPC]
     var clock: WorldClock
     var director: WorldDirector
+    var expressionEngine: ExpressionEngine
+    var debugMode: Bool = false
 
     struct Inventory {
         var fragments: [Fragment]
@@ -43,15 +45,20 @@ final class GameSession: @unchecked Sendable {
         self.autopsyReader = RitualAutopsy()
         self.ritualCount = 0
         self.running = true
-        self.rootIdentities = RidgeOfElah.rootIdentities()
-        self.npcs = RidgeOfElah.kfarShalemNPCs()
+        do {
+            self.rootIdentities = try RidgeOfElah.rootIdentities()
+            self.npcs = try RidgeOfElah.kfarShalemNPCs()
+        } catch {
+            fatalError("Canon load failed: \(error). Cannot start with empty world state.")
+        }
         self.clock = WorldClock()
         self.director = WorldDirector()
+        self.expressionEngine = ExpressionEngine()
     }
 
     // MARK: - Main Loop
 
-    func run() {
+    func run() async {
         printSplash()
         printArrival()
 
@@ -77,7 +84,7 @@ final class GameSession: @unchecked Sendable {
             case "inspect", "examine":
                 inspectFragment()
             case "ritual", "r":
-                ritualMenu()
+                await ritualMenu()
             case "cast", "bones":
                 castAstragali()
             case "codex", "c":
@@ -91,7 +98,7 @@ final class GameSession: @unchecked Sendable {
             case "scavenge":
                 scavengeSite()
             case "village", "v", "talk":
-                villageMenu()
+                await villageMenu()
             case "rumors", "gossip":
                 showRumors()
             case "world", "w":
