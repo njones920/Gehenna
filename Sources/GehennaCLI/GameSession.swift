@@ -60,6 +60,14 @@ final class GameSession: @unchecked Sendable {
 
     func run() async {
         printSplash()
+        
+        let llmReady = await expressionEngine.isLLMAvailable
+        if !llmReady {
+            print("  [SYSTEM WARNING] Local Ollama server not detected on port 11434.")
+            print("  [SYSTEM WARNING] The Expression Engine is falling back to static text.")
+            print()
+        }
+        
         printArrival()
 
         while running {

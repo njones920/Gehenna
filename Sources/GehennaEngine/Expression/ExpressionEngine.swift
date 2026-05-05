@@ -35,6 +35,13 @@ public actor ExpressionEngine {
         self.llmEnabled = llmEnabled
     }
 
+    /// Checks if the underlying LLM provider is currently available.
+    public var isLLMAvailable: Bool {
+        get async {
+            return await primary.isAvailable
+        }
+    }
+
     // MARK: - High-Level API
 
     /// Render an NPC greeting. Uses light packet (routine event).
