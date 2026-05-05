@@ -20,14 +20,14 @@ public actor OllamaProvider: ExpressionProvider {
 
     /// Create a provider targeting a local Ollama instance.
     /// - Parameters:
-    ///   - baseURL: Ollama server URL (default: http://localhost:11434)
-    ///   - model: Model name to use (default: gemma4:31b)
+    ///   - baseURL: Ollama server URL (default: http://localhost:11434 or OLLAMA_HOST env var)
+    ///   - model: Model name to use (default: gemma4:31b or OLLAMA_MODEL env var)
     public init(
-        baseURL: String = "http://localhost:11434",
-        model: String = "gemma4:31b"
+        baseURL: String? = nil,
+        model: String? = nil
     ) {
-        self.baseURL = baseURL
-        self.model = model
+        self.baseURL = baseURL ?? ProcessInfo.processInfo.environment["OLLAMA_HOST"] ?? "http://localhost:11434"
+        self.model = model ?? ProcessInfo.processInfo.environment["OLLAMA_MODEL"] ?? "gemma4:31b"
         self.validator = ExpressionValidator()
     }
 
