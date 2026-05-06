@@ -116,6 +116,16 @@ extension GameSession {
             
             let speech = await expressionEngine.spiritSpeech(spirit, practitioner: profile)
             print("  \"\(speech)\"")
+
+            // Archive this encounter in the Codex of the Dead.
+            let autopsyLines = autopsyText.components(separatedBy: ". ").filter { !$0.isEmpty }
+            _ = codex.recordEncounter(
+                spirit: spirit,
+                autopsy: autopsyLines,
+                ritualID: UUID(),
+                tick: clock.currentTick
+            )
+            codex.crossLinkEpochs()
             
             let sustained = profile.summonerCapacity > 0
             if sustained {
