@@ -22,6 +22,7 @@ public enum PlayerCommand: Sendable {
         case friendly
         case askRegion
         case askDead
+        case speakFreely(text: String)  // Free-form practitioner speech
     }
 }
 

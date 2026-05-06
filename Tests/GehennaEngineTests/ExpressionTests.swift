@@ -72,8 +72,13 @@ struct ExpressionValidatorTests {
         }
     }
     
-    @Test("Validator checks bounds")
-    func checksBounds() {
+    @Test("Validator accepts any non-empty text regardless of word count")
+    func lengthIsNotEnforced() {
+        // Length validation was removed deliberately:
+        // - LLMs are unreliable at counting words.
+        // - numPredict (token cap) in OllamaProvider handles the actual budget.
+        // - Post-hoc rejection of slightly long/short text only causes fallbacks,
+        //   not better output. Let the model breathe naturally.
         let validator = ExpressionValidator()
         let tags = TagConstellation([])
         let packet = FullExpressionPacket(
@@ -95,26 +100,105 @@ struct ExpressionValidatorTests {
             interactionHistory: 0,
             recentEvents: []
         )
-        
-        let validResult = validator.validate("One two three four five six.", packet: packet)
-        let tooShortResult = validator.validate("One two.", packet: packet)
-        let tooLongResult = validator.validate("One two three four five six seven eight nine ten eleven.", packet: packet)
-        
-        switch validResult {
-        case .valid: break
-        default: Issue.record("Expected valid")
-        }
-        
-        switch tooShortResult {
-        case .invalid(_, let issues): 
-            #expect(issues.contains(where: { $0.contains("Too short") }))
-        default: Issue.record("Expected invalid length")
-        }
-        
-        switch tooLongResult {
+
+        // All three pass — length is not the validator's job.
+        let short  = validator.validate("One two.", packet: packet)
+        let medium = validator.validate("One two three four five six.", packet: packet)
+        let long   = validator.validate("One two three four five six seven eight nine ten eleven.", packet: packet)
+
+        switch short  { case .valid: break; default: Issue.record("Expected valid for short text") }
+        switch medium { case .valid: break; default: Issue.record("Expected valid for medium text") }
+        switch long   { case .valid: break; default: Issue.record("Expected valid for long text") }
+
+        // Empty text still fails.
+        let empty = validator.validate("", packet: packet)
+        switch empty {
         case .invalid(_, let issues):
-            #expect(issues.contains(where: { $0.contains("Too long") }))
-        default: Issue.record("Expected invalid length")
+            #expect(issues.contains(where: { $0.contains("empty") }))
+        default: Issue.record("Expected invalid for empty text")
+        }
+    }
+}
+
+@Suite("Practitioner Input Tests")
+struct PractitionerInputTests {
+
+    @Test("Packet assembler includes practitionerInput in full packet")
+    func assemblerIncludesInput() {
+        let assembler = PacketAssembler()
+        let npc = NPC(
+            name: "Yoel",
+            role: "Elder",
+            faction: .elders,
+            register: VoiceRegister(style: .vernacular),
+            interiority: NPCInteriority(
+                interiorVoice: "He remembers the old ways.",
+                privateTruth: "The dead speak louder than the living.",
+                unsatisfiedWant: "Peace.",
+                wound: "His daughter's death.",
+                threshold: "Confronted with proof of the unseen."
+            )
+        )
+        let packet = assembler.fullPacket(
+            for: npc,
+            event: .playerChat,
+            practitionerInput: "Where are the bones of your fathers?"
+        )
+        #expect(packet.practitionerInput == "Where are the bones of your fathers?")
+        #expect(packet.eventType == ExpressionEvent.playerChat)
+    }
+
+    @Test("Cache key changes with different practitioner input")
+    func cacheKeyDistinguishesInput() async {
+        let cache = ExpressionCache()
+        let tags = TagConstellation([])
+        let packet1 = FullExpressionPacket(
+            entityType: .npc,
+            entityName: "Yoel",
+            entityTags: tags,
+            eventType: .playerChat,
+            practitionerInput: "Tell me about the dead."
+        )
+        let packet2 = FullExpressionPacket(
+            entityType: .npc,
+            entityName: "Yoel",
+            entityTags: tags,
+            eventType: .playerChat,
+            practitionerInput: "Where is the nearest shrine?"
+        )
+
+        await cache.set("Response about the dead.", for: packet1)
+        await cache.set("Response about shrines.", for: packet2)
+
+        let retrieved1 = await cache.get(for: packet1)
+        let retrieved2 = await cache.get(for: packet2)
+
+        #expect(retrieved1 == "Response about the dead.")
+        #expect(retrieved2 == "Response about shrines.")
+        #expect(retrieved1 != retrieved2)
+    }
+
+    @Test("Validator does not false-positive on practitioner words in forbidden topics")
+    func validatorIgnoresPractitionerInput() {
+        // The validator checks the NPC's *response*, not the practitioner's input.
+        // If "Yahweh" is forbidden and the practitioner said "Yahweh", that's fine —
+        // the NPC's response is what matters.
+        let validator = ExpressionValidator()
+        let tags = TagConstellation([])
+        let packet = FullExpressionPacket(
+            entityType: .npc,
+            entityName: "Baruk",
+            entityTags: tags,
+            eventType: .playerChat,
+            forbiddenTopics: ["Yahweh"],
+            practitionerInput: "Tell me about Yahweh."
+        )
+
+        // The NPC's response does not mention Yahweh — should pass.
+        let result = validator.validate("I know nothing of what you ask, stranger.", packet: packet)
+        switch result {
+        case .valid: break
+        default: Issue.record("Expected valid — the NPC didn't mention the forbidden topic")
         }
     }
 }

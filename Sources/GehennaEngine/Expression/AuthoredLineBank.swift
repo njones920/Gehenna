@@ -109,6 +109,8 @@ public struct AuthoredLineBank: Sendable {
             return "A pause. The subject of the dead is never easy."
         case .thresholdResponse:
             return "Something shifts. For a moment, you see them clearly."
+        case .playerChat:
+            return "They consider your words. A pause stretches."
         case .ritualAutopsy:
             return "The rite is complete. What remains tells its own story."
         case .codexEntry:

@@ -230,6 +230,11 @@ public actor WorldShard {
         case .askDead:
             npcs[npcIndex].witnessActivity(severity: 0.1)
             narration.append("You ask \(npc.name) about the dead. They pause. This question has weight.")
+        case .speakFreely:
+            // Free-form chat is neutral — no automatic trust/suspicion change.
+            // The shard doesn't own an ExpressionEngine; the caller (CLI, server, arena)
+            // handles LLM rendering for the response.
+            narration.append("\(npc.name) listens to what you have to say.")
         }
 
         npcs[npcIndex].lastInteractionTick = clock.currentTick

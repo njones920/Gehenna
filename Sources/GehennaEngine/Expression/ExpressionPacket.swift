@@ -27,6 +27,7 @@ public enum ExpressionEvent: String, Codable, Sendable {
     case regionResponse
     case deadResponse
     case thresholdResponse
+    case playerChat          // Free-form practitioner speech → NPC response
     // Ritual
     case ritualAutopsy
     case codexEntry
@@ -70,6 +71,9 @@ public struct LightExpressionPacket: Sendable, Codable, Hashable {
     /// Culture for voice register selection.
     public let culture: String?
 
+    /// Free-form practitioner speech (playerChat events only).
+    public let practitionerInput: String?
+
     public init(
         entityType: ExpressionEntity,
         entityName: String? = nil,
@@ -77,7 +81,8 @@ public struct LightExpressionPacket: Sendable, Codable, Hashable {
         disposition: String? = nil,
         trustLevel: Double? = nil,
         eventType: ExpressionEvent,
-        culture: String? = nil
+        culture: String? = nil,
+        practitionerInput: String? = nil
     ) {
         self.entityType = entityType
         self.entityName = entityName
@@ -86,6 +91,7 @@ public struct LightExpressionPacket: Sendable, Codable, Hashable {
         self.trustLevel = trustLevel
         self.eventType = eventType
         self.culture = culture
+        self.practitionerInput = practitionerInput
     }
 }
 
@@ -140,6 +146,9 @@ public struct FullExpressionPacket: Sendable, Codable, Hashable {
     public let wound: String?
     public let unsatisfiedWant: String?
 
+    /// Free-form practitioner speech (playerChat events only).
+    public let practitionerInput: String?
+
     public init(
         entityType: ExpressionEntity,
         entityName: String? = nil,
@@ -161,7 +170,8 @@ public struct FullExpressionPacket: Sendable, Codable, Hashable {
         interiorVoice: String? = nil,
         privateTruth: String? = nil,
         wound: String? = nil,
-        unsatisfiedWant: String? = nil
+        unsatisfiedWant: String? = nil,
+        practitionerInput: String? = nil
     ) {
         self.entityType = entityType
         self.entityName = entityName
@@ -184,5 +194,6 @@ public struct FullExpressionPacket: Sendable, Codable, Hashable {
         self.privateTruth = privateTruth
         self.wound = wound
         self.unsatisfiedWant = unsatisfiedWant
+        self.practitionerInput = practitionerInput
     }
 }

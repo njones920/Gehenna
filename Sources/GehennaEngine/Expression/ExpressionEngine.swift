@@ -90,6 +90,25 @@ public actor ExpressionEngine {
         return await renderLight(packet)
     }
 
+    /// Render an NPC's response to free-form practitioner speech.
+    /// Always uses a full packet — the practitioner speaking directly is an
+    /// important moment that deserves the full interiority context.
+    public func npcChat(
+        _ npc: NPC,
+        input: String,
+        recentEvents: [String] = [],
+        interactionCount: Int = 0
+    ) async -> String {
+        let packet = assembler.fullPacket(
+            for: npc,
+            event: .playerChat,
+            practitionerInput: input,
+            recentEvents: recentEvents,
+            interactionCount: interactionCount
+        )
+        return await renderFull(packet)
+    }
+
     // MARK: - Rendering Pipeline
 
     /// Render a light packet through the tiered pipeline.
@@ -106,8 +125,16 @@ public actor ExpressionEngine {
             case .generated(let text):
                 await cache.set(text, for: packet)
                 return text
-            case .validationFailed(_, _), .unavailable(_):
-                break // fall through to fallback
+            case .validationFailed(let text, let reason):
+                #if DEBUG
+                print("[ExpressionEngine] Validation failed (light/\(packet.eventType.rawValue)/\(packet.entityName ?? "?")):")
+                print("  Reason: \(reason)")
+                print("  Text:   \(text)")
+                #endif
+            case .unavailable(let reason):
+                #if DEBUG
+                print("[ExpressionEngine] LLM unavailable (light/\(packet.eventType.rawValue)): \(reason)")
+                #endif
             }
         }
 
@@ -135,8 +162,16 @@ public actor ExpressionEngine {
             case .generated(let text):
                 await cache.set(text, for: packet)
                 return text
-            case .validationFailed(_, _), .unavailable(_):
-                break // fall through to fallback
+            case .validationFailed(let text, let reason):
+                #if DEBUG
+                print("[ExpressionEngine] Validation failed (full/\(packet.eventType.rawValue)/\(packet.entityName ?? "?")):")
+                print("  Reason: \(reason)")
+                print("  Text:   \(text)")
+                #endif
+            case .unavailable(let reason):
+                #if DEBUG
+                print("[ExpressionEngine] LLM unavailable (full/\(packet.eventType.rawValue)): \(reason)")
+                #endif
             }
         }
 

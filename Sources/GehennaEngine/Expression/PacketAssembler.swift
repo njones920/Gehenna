@@ -29,10 +29,11 @@ public struct PacketAssembler: Sendable {
         )
     }
 
-    /// Build a full packet for an important NPC interaction (threshold, etc).
+    /// Build a full packet for an important NPC interaction (threshold, free-form chat, etc).
     public func fullPacket(
         for npc: NPC,
         event: ExpressionEvent,
+        practitionerInput: String? = nil,
         recentEvents: [String] = [],
         interactionCount: Int = 0
     ) -> FullExpressionPacket {
@@ -57,7 +58,8 @@ public struct PacketAssembler: Sendable {
             interiorVoice: npc.interiority.interiorVoice,
             privateTruth: npc.interiority.privateTruth,
             wound: npc.interiority.wound,
-            unsatisfiedWant: npc.interiority.unsatisfiedWant
+            unsatisfiedWant: npc.interiority.unsatisfiedWant,
+            practitionerInput: practitionerInput
         )
     }
 
@@ -113,6 +115,7 @@ public struct PacketAssembler: Sendable {
         case .greeting, .friendlyResponse: return 5
         case .regionResponse, .deadResponse: return 10
         case .thresholdResponse: return 15
+        case .playerChat: return 5
         case .ritualAutopsy, .codexEntry: return 20
         case .spiritSpeech: return 3
         case .spiritRefusal, .spiritDeparture: return 3
@@ -125,6 +128,7 @@ public struct PacketAssembler: Sendable {
         case .greeting, .friendlyResponse: return 40
         case .regionResponse, .deadResponse: return 60
         case .thresholdResponse: return 80
+        case .playerChat: return 60
         case .ritualAutopsy, .codexEntry: return 100
         case .spiritSpeech: return 30
         case .spiritRefusal, .spiritDeparture: return 20

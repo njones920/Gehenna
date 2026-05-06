@@ -49,6 +49,7 @@ extension GameSession {
         print("  [1] Friendly greeting")
         print("  [2] Ask about the region")
         print("  [3] Ask about the dead")
+        print("  [4] Speak freely...")
         print("  [c] Cancel")
         print("\n  > ", terminator: "")
         
@@ -59,6 +60,11 @@ extension GameSession {
         case 1: action = .friendly
         case 2: action = .askRegion
         case 3: action = .askDead
+        case 4:
+            print("\n  What do you say?\n  > ", terminator: "")
+            guard let playerText = readLine()?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !playerText.isEmpty else { return }
+            action = .speakFreely(text: playerText)
         default: return
         }
         
@@ -76,6 +82,15 @@ extension GameSession {
             let resp = await expressionEngine.npcResponse(targetNPC, event: .deadResponse)
             print("  \(resp)")
             npcs[mainIndex].witnessActivity(severity: 0.4)
+        case .speakFreely(let text):
+            // Free-form chat — neutral interaction. No trust/suspicion change.
+            let resp = await expressionEngine.npcChat(
+                targetNPC,
+                input: text,
+                recentEvents: [],
+                interactionCount: 1
+            )
+            print("  \(resp)")
         }
         npcs[mainIndex].lastInteractionTick = clock.currentTick
         

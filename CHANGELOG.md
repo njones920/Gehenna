@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+## 0.4.26 - Free-Form NPC Chat & Expression Hardening
+
+Added free-form chat capabilities allowing the practitioner to speak directly to NPCs and receive diegetic, LLM-rendered responses based on the NPC's world state and interiority. Hardened the Expression Layer to be robust for production use.
+
+### Added
+
+- `practitionerInput` field to `ExpressionPacket` and `.playerChat` event type to support free-form conversation.
+- `npcChat` high-level API to `ExpressionEngine` to handle practitioner-initiated dialogue using full interiority context.
+- `[4] Speak freely...` option in the CLI `village` menu to allow custom text input.
+- `.speakFreely(text:)` command to `PlayerCommand.ConversationAction` and routed it through `WorldShard` as a neutral-consequence interaction.
+- `PractitionerInputTests` to verify packet assembly, cache separation, and validation correctness.
+
+### Changed
+
+- **Prompt Engineering Overhaul:** Removed unreliable word-count constraints from Ollama prompts, letting `numPredict` handle token budgets naturally. Prompts now use structured turns (`The practitioner says to you: "..."`) for free-form input to prevent instruction injection.
+- **Cache Reliability:** Fixed a hash collision bug in `recentEvents` cache keying and made eviction tie-breaking deterministic. `practitionerInput` is now part of the cache key.
+- **Provider Stability:** Added a 5s connection timeout to `OllamaProvider.isAvailable`, implemented proper model verification (checking `/api/tags` for `gemma4:31b`), and added task cancellation checks to prevent hanging network calls.
+- **Validation:** Replaced substring-based forbidden topic checks with regex word-boundary matching to eliminate false positives. Removed unreliable length validation.
+- Expanded trust and suspicion prompt injection from 3 to 5 granular prose buckets for higher nuance in dialogue.
+
+### Verified
+
+- `swift test` passes with 108 tests across 26 suites. All new practitioner input and validation tests pass.
+
 ## 0.4.25 - Expression Layer & LLM Integration
 
 Completed the final stream of the V3 Codex roadmap, fully integrating dynamic, historically grounded, LLM-backed narrative generation.
