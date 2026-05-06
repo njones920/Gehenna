@@ -31,14 +31,12 @@ extension GameSession {
 
           You are between. That is where practitioners do their work.
 
-          In your satchel: bone fragments gathered from old battlefields
-          and older caves. A bronze spearhead green with oxide. Clay jars
-          of water and wine. Four sheep knucklebones, smooth from handling.
+          In your satchel: a set of clay jars — water and wine — and four
+          sheep knucklebones, smooth from handling. The bone fragments are
+          out there, waiting to be found. 'Scavenge' at each site to
+          collect them. The dead do not come to you.
 
-          The dead are here. They have been here a long time.
-          You have come to ask them questions.
-
-          Type ''help' for commands. Type 'look' to survey your surroundings.
+          Type 'help' for commands. Type 'look' to survey your surroundings.
         """)
     }
 
@@ -173,9 +171,11 @@ extension GameSession {
             look (l)         Survey your current location
             sites / map      List all known locations
             go (g)           Travel to another location
+            scavenge         Search the site for bone fragments and artifacts
             inventory (i)    View your satchel
             fragments (f)    Examine bone fragments
             artifacts (a)    Examine artifacts and memory traces
+            inspect          Inspect a fragment in detail
             ritual (r)       Compose and perform a ritual
             cast / bones     Cast the astragali (diagnostic bones)
             codex (c)        Browse your Codex of the Dead
@@ -184,6 +184,7 @@ extension GameSession {
             world (w)        Read the state of the region
             wait / rest      Let time pass
             profile (p)      View your practitioner record
+            taboos / sins    View the marks you carry
             save             Seal the current state to gehenna-save.json
             load             Restore the current state from gehenna-save.json
             help (h / ?)     Show this help

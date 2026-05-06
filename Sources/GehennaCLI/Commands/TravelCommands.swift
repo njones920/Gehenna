@@ -59,6 +59,22 @@ extension GameSession {
             print("  This location has drawn attention. Others have noticed activity here.")
         }
 
+        // Surface collectible clues diegetically — no UI numbers.
+        let site2 = sites[currentSiteIndex]
+        let hasItems = !site2.fragments.isEmpty || !site2.artifacts.isEmpty || !site2.memoryTraces.isEmpty
+        if hasItems {
+            if !site2.fragments.isEmpty {
+                print("  The ground here gives up its dead slowly. You sense bone close to the surface.")
+            }
+            if !site2.artifacts.isEmpty {
+                print("  Something worked — metal or clay — catches light at the edge of the disturbed earth.")
+            }
+            if !site2.memoryTraces.isEmpty {
+                print("  Fragments of inscription are visible where the soil has shifted.")
+            }
+            print("  (Type 'scavenge' to search.)")
+        }
+
         sites[currentSiteIndex].lastVisitTick = clock.currentTick
         let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
         processWorldEvents(events)
