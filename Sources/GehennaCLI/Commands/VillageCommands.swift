@@ -27,6 +27,14 @@ extension GameSession {
         // Find actual index in the main npcs array
         guard let mainIndex = npcs.firstIndex(where: { $0.id == targetNPC.id }) else { return }
 
+        // Build recent world events this NPC might be aware of —
+        // pull the last few notable entries from the journal near this site.
+        let recentJournal = world.journal.suffix(20)
+        let recentEventStrings: [String] = recentJournal
+            .filter { $0.severity >= .notable }
+            .suffix(4)
+            .map { $0.description }
+
         print()
         let greeting = await expressionEngine.npcGreeting(targetNPC)
         print("  \(greeting)")
@@ -34,8 +42,8 @@ extension GameSession {
         if targetNPC.isAtThreshold {
             let thresholdResp = await expressionEngine.npcThresholdResponse(
                 targetNPC,
-                recentEvents: [], // Would get these from ledger if we had it handy here
-                interactionCount: 1
+                recentEvents: recentEventStrings,
+                interactionCount: targetNPC.lastInteractionTick != nil ? 2 : 0
             )
             print("  \(thresholdResp)")
             npcs[mainIndex].lastInteractionTick = clock.currentTick
@@ -87,8 +95,8 @@ extension GameSession {
             let resp = await expressionEngine.npcChat(
                 targetNPC,
                 input: text,
-                recentEvents: [],
-                interactionCount: 1
+                recentEvents: recentEventStrings,
+                interactionCount: targetNPC.lastInteractionTick != nil ? 2 : 0
             )
             print("  \(resp)")
         }

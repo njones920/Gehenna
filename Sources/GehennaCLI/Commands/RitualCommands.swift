@@ -86,7 +86,7 @@ extension GameSession {
         let fragment = inventory.fragments.remove(at: intent.fragmentIndex)
         let artifact = intent.artifactIndex.map { inventory.artifacts.remove(at: $0) }
         let trace = intent.traceIndex.map { inventory.memoryTraces.remove(at: $0) }
-        
+
         let config = RitualConfiguration(
             remains: fragment,
             site: site,
@@ -96,7 +96,7 @@ extension GameSession {
             libation: Libation(intent.libationType),
             timing: intent.timing
         )
-        
+
         let pipeline = ResolutionPipeline()
         let result = pipeline.resolve(
             configuration: config,
@@ -105,19 +105,20 @@ extension GameSession {
             seed: UInt64(clock.currentTick),
             rootIdentities: self.rootIdentities
         )
-        
+
         print("\n  ── Ritual Result ──\n")
-        
+
         let autopsyText = autopsyReader.interpret(result, configuration: config, masteryPhase: profile.masteryPhase)
         print("\n  [Autopsy] \(autopsyText)\n")
 
+        // ── Spirit manifestation ─────────────────────────────────────────
         if let spirit = result.spirit {
             printManifestation(spirit, result: result)
-            
+
             let speech = await expressionEngine.spiritSpeech(spirit, practitioner: profile)
             print("  \"\(speech)\"")
 
-            // Archive this encounter in the Codex of the Dead.
+            // Archive encounter in the Codex of the Dead.
             let autopsyLines = autopsyText.components(separatedBy: ". ").filter { !$0.isEmpty }
             _ = codex.recordEncounter(
                 spirit: spirit,
@@ -126,7 +127,7 @@ extension GameSession {
                 tick: clock.currentTick
             )
             codex.crossLinkEpochs()
-            
+
             let sustained = profile.summonerCapacity > 0
             if sustained {
                 profile.summonerCapacity -= 1
@@ -137,36 +138,73 @@ extension GameSession {
         } else {
             print("  The libation sinks into the earth. Nothing answers.")
         }
-        
+
+        // ── Profile consequences ─────────────────────────────────────────
+        // Applies contagion, purity drain, taboo detection (graveRobbing,
+        // uncleanSacrifice, tophethPact), and fatigue from the specific
+        // fragment + site + libation combination.
+        profile.applyRitualConsequences(configuration: config, result: result)
+
+        // Advances totalRituals, successfulRituals/failedRituals, wasMutation,
+        // domainExperience, entropyFootprint, ritualFatigue, summonerSkill,
+        // and capacity milestone checks.
+        let wasMutation = result.outcomeClass == .mutation
+        let entropyCost = result.worldEffects.corruptionDelta
+            + result.worldEffects.ghostActivityDelta
+            + result.worldEffects.spiritualPressureDelta
+        profile.recordRitual(
+            success: result.spirit != nil,
+            wasMutation: wasMutation,
+            domain: fragment.domain,
+            entropyCost: entropyCost
+        )
+
+        // ── World state effects ──────────────────────────────────────────
+        // Push ritual entropy into the region and update site scarring.
+        if let regionID = world.regions.values.first?.id {
+            world.applyRitualEffects(result.worldEffects, regionID: regionID, site: &site)
+        }
+
+        // Apply site-level scarring from the result.
         if result.worldEffects.corruptionDelta > 0.3 {
             print("  The site is permanently scarred by this interaction.")
-            site.scarring = min(1.0, site.scarring + 0.3)
         }
-        
-        // Traces and taboos are now handled automatically by world and profile methods,
-        // but since this is CLI-driven, we just simulate the UI feedback.
-        site.localSuspicion = min(1.0, site.localSuspicion + 0.1)
+        site.localSuspicion = min(1.0, site.localSuspicion + result.worldEffects.suspicionDelta + 0.05)
         sites[currentSiteIndex] = site
-        profile.totalRituals += 1
-        if result.spirit != nil {
-            profile.successfulRituals += 1
+
+        // ── Rumor seeding ────────────────────────────────────────────────
+        // Village-type sites don't seed rumors (too public — no mystery).
+        if site.type != .ancestorShrine {
+            world.seedRitualRumor(
+                site: site,
+                wasMutation: wasMutation,
+                libation: intent.libationType,
+                timing: intent.timing,
+                practitionerName: nil,
+                npcs: &npcs
+            )
         }
-        
-        // Detailed journal logging is handled by engine's applyRitualEffects.
-        // We do a simple fallback entry here if the engine didn't catch it.
-        let entry = JournalEntry(
+
+        // ── Journal entry ────────────────────────────────────────────────
+        let journalType: JournalEntry.JournalEntryType = result.spirit != nil ? .spiritManifested : .ritualPerformed
+        let journalDesc: String = {
+            if let spirit = result.spirit {
+                return "Manifested \(spirit.epochName ?? spirit.template.rawValue) at \(site.name)"
+            } else {
+                return "Ritual failed at \(site.name) — nothing answered"
+            }
+        }()
+        world.journal.append(JournalEntry(
             tick: clock.currentTick,
-            type: .ritualPerformed,
-            description: result.spirit != nil ? "Manifested \(result.spirit!.epochName ?? result.spirit!.template.rawValue)" : "Failed ritual",
+            type: journalType,
+            description: journalDesc,
             source: .practitioner,
-            severity: result.worldEffects.corruptionDelta > 0.3 ? .rupture : .notable,
+            severity: wasMutation ? .rupture : (result.spirit != nil ? .significant : .notable),
             siteID: site.id,
-            involvedNPCs: [],
-            tags: []
-        )
-        world.journal.append(entry)
-        
-        // Advance time
+            tags: Set(["ritual", wasMutation ? "mutation" : "standard"])
+        ))
+
+        // ── Advance time ─────────────────────────────────────────────────
         let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
         processWorldEvents(events)
         processDirectorEvents()

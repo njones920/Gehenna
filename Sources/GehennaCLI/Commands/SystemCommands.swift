@@ -104,7 +104,13 @@ extension GameSession {
         }
 
         for entry in entries {
-            print("    Tick \(entry.tick) — \(entry.type.rawValue) | \(entry.source.rawValue)")
+            let icon: String = switch entry.severity {
+            case .rupture:     "☠"
+            case .significant: "⚠"
+            case .notable:     "◇"
+            case .ambient:     "·"
+            }
+            print("    \(icon) Tick \(entry.tick) — \(entry.description)")
         }
     }
 
