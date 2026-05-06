@@ -1,6 +1,6 @@
 # First Ritual Transcript
 
-Captured from a local `swift run gehenna` run against `v0.4.20`.
+Captured from a local `swift run gehenna` run against `v0.4.26`.
 
 The CLI now derives ritual timing from `WorldClock` and uses deterministic seeds for ritual and astragali paths. This transcript remains a valid opening path, even though the splash/version text below reflects the earlier capture.
 
@@ -28,7 +28,7 @@ quit
 ║   A physics engine for ancient cosmology,    ║
 ║           disguised as a game.               ║
 ║                                              ║
-║          Ridge of Elah — v0.4.20             ║
+║          Ridge of Elah — v0.4.26             ║
 ║                                              ║
 ╚══════════════════════════════════════════════╝
 

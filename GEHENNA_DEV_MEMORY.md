@@ -480,3 +480,11 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: Replaces static string responses in Kfar Shalem and ritual aftermaths with a live LLM generation pipeline.
 - **Scope**: Includes a three-tier fallback pipeline (Ollama -> Authored Bank -> Fallback), structured constraint packets (`LightExpressionPacket`, `FullExpressionPacket`), and rigid validation (`ExpressionValidator`). The entire interactive CLI was refactored to `async` to support non-blocking LLM calls.
 - **Implication**: The simulation remains completely mathematically deterministic (`ResolutionPipeline`); the LLM acts only as a rendering layer, unable to hallucinate game state or break the physics engine. Added `PLAYER_MANUAL.md` to document the playable prototype.
+
+## Architecture Decisions (Session 2026-05-06 Free-Form Chat)
+
+### Free-Form NPC Chat & 0.4.26 Release
+- **Decision**: Added free-form `practitionerInput` to `ExpressionPacket` and wired it through the engine, updating the version to `0.4.26`.
+- **Rationale**: Allows the player to speak freely to NPCs in the village, relying on the LLM to handle parsing and generate a context-appropriate, diegetic response based on the NPC's interiority and world state.
+- **Scope**: Also includes critical stability hardening for the Expression Layer: removing unreliable word counts from prompts, fixing cache hash collisions, enforcing deterministic cache eviction, adding connection timeouts for `OllamaProvider`, and switching validation to strict regex word boundaries.
+- **Implication**: Free-form chat is explicitly a **neutral consequence** interaction. The conversation itself has no mechanical side effects on trust or suspicion, strictly enforcing the rule that the Expression Layer renders but never decides truth.
