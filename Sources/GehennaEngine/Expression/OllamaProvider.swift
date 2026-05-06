@@ -275,27 +275,53 @@ public actor OllamaProvider: ExpressionProvider {
 
     // MARK: - Ollama HTTP Client
 
-    /// Call the Ollama generate API.
+    /// Call the Ollama chat API.
+    ///
+    /// Gemma4 returns empty `response` via `/api/generate` when `num_predict` is
+    /// set in `options`. The `/api/chat` endpoint is reliable — we split the prompt
+    /// into a system role (instructions) and a user role (the trigger utterance) so
+    /// the model knows what kind of turn to produce.
     private func callOllama(prompt: String) async throws -> String {
         // Bail immediately if the surrounding Task was cancelled.
         try Task.checkCancellation()
 
-        let url = URL(string: "\(baseURL)/api/generate")!
+        let url = URL(string: "\(baseURL)/api/chat")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // timeoutInterval is set on the session config; keep it explicit here too
-        // so individual requests can be overridden in tests.
         request.timeoutInterval = timeoutInterval
 
+        // Split the monolithic prompt into system + user turns.
+        // Everything above the last blank line is system context;
+        // the final non-empty line becomes the user trigger.
+        let trimmed = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        let parts = trimmed.components(separatedBy: "\n\n")
+        let userTurn: String
+        let systemContext: String
+        if parts.count > 1 {
+            userTurn = parts.last?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            systemContext = parts.dropLast().joined(separator: "\n\n")
+        } else {
+            userTurn = trimmed
+            systemContext = ""
+        }
+
+        var messages: [[String: String]] = []
+        if !systemContext.isEmpty {
+            messages.append(["role": "system", "content": systemContext])
+        }
+        messages.append(["role": "user", "content": userTurn.isEmpty ? "Respond now." : userTurn])
+
+        // NOTE: num_predict is intentionally omitted — gemma4 returns empty text
+        // when that option is set via the generate endpoint, and the chat endpoint
+        // doesn't suffer the same bug. Length is controlled via the prompt instead.
         let body: [String: Any] = [
             "model": model,
-            "prompt": prompt,
+            "messages": messages,
             "stream": false,
             "options": [
                 "temperature": temperature,
-                "repeat_penalty": repeatPenalty,
-                "num_predict": numPredict
+                "repeat_penalty": repeatPenalty
             ]
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -308,11 +334,12 @@ public actor OllamaProvider: ExpressionProvider {
         }
 
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let responseText = json["response"] as? String else {
+              let message = json["message"] as? [String: Any],
+              let content = message["content"] as? String else {
             throw OllamaError.invalidJSON
         }
 
-        return responseText.trimmingCharacters(in: .whitespacesAndNewlines)
+        return content.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private enum OllamaError: Error, LocalizedError {
