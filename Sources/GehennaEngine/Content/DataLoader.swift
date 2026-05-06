@@ -34,8 +34,7 @@ public enum CanonDataLoader {
     // MARK: - Generic Loader
 
     private static func load<T: Decodable>(_ type: T.Type, from filename: String) throws -> T {
-        guard let url = bundle.url(forResource: filename, withExtension: nil,
-                                   subdirectory: "Data") else {
+        guard let url = bundle.url(forResource: filename, withExtension: nil) else {
             throw CanonLoadError.bundleResourceNotFound(filename)
         }
         do {

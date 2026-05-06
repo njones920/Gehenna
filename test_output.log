@@ -1,0 +1,301 @@
+[0/1] Planning build
+Building for debugging...
+[0/5] Write swift-version-A88259DAF186EF7.txt
+Build complete! (0.33s)
+Test Suite 'All tests' started at 2026-05-06 11:58:06.342
+Test Suite 'debug.xctest' started at 2026-05-06 11:58:06.343
+Test Suite 'debug.xctest' passed at 2026-05-06 11:58:06.343
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.0 (0.0) seconds
+Test Suite 'All tests' passed at 2026-05-06 11:58:06.343
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.0 (0.0) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.2
+↳ Target Platform: x86_64-unknown-linux-gnu
+◇ Suite "World Clock Tests" started.
+◇ Suite "Practitioner Input Tests" started.
+◇ Suite "Canon Data Tests" started.
+◇ Suite "Ollama Live Tests" started.
+◇ Suite "Expression Validator Tests" started.
+◇ Suite "Fragment Tests" started.
+◇ Suite "Journal Query Tests" started.
+◇ Suite "Mastery-Aware Autopsy Tests" started.
+◇ Suite "Epoch Manifestation Tests" started.
+◇ Suite "Affinity Tests" started.
+◇ Suite "Persistence Tests" started.
+◇ Suite "NPC Tests" started.
+◇ Suite "Practitioner Profile Tests" started.
+◇ Suite "Expression Cache Tests" started.
+◇ Suite "Astragali Tests" started.
+◇ Suite "Rumor Engine Tests" started.
+◇ Suite "World Shard Multiplayer Tests" started.
+◇ Suite "World Director Tests" started.
+◇ Suite "Region State Tests" started.
+◇ Suite "Ritual DSL Tests" started.
+◇ Suite "Resolution Pipeline Tests" started.
+◇ Suite "Narrative Tag Tests" started.
+◇ Test "Rest costs the most ticks" started.
+◇ Suite "Site State Tests" started.
+◇ Suite "Domain Tests" started.
+◇ Suite "Zero-Trust Cosmology Tests" started.
+◇ Test "Clock synchronizes world tick" started.
+◇ Test "Clock currentTiming combines time of day and lunar phase" started.
+◇ Test "Cache key changes with different practitioner input" started.
+◇ Test "Test live Ollama connection" started.
+◇ Test "Clock derives lunar phase from tick count" started.
+◇ Test "Bundled root identity canon decodes with named epochs" started.
+◇ Test "Validator does not false-positive on practitioner words in forbidden topics" started.
+◇ Test "Travel costs more ticks than a command" started.
+◇ Test "Journal events filterable by severity" started.
+◇ Suite "Era Tests" started.
+◇ Test "Corrupted integrity degrades coherence weight" started.
+◇ Test "Clock derives time of day from tick count" started.
+◇ Test "Skull has highest coherence weight" started.
+◇ Test "Clock advances tick count correctly" started.
+◇ Test "Master autopsy uses precise language" started.
+◇ Test "Journal records ritual events with site ID" started.
+◇ Test "Bundled NPC canon decodes with authored interiority" started.
+◇ Test "NPC behavioral API updates trust and suspicion" started.
+◇ Test "Spirits from same root identity have same rootIdentityID" started.
+◇ Test "Journal events filterable by tick" started.
+◇ Test "Packet assembler includes practitionerInput in full packet" started.
+◇ Test "Same affinity resonance is 1.0" started.
+◇ Test "Opposing affinity resonance is 0.0" started.
+◇ Test "High suspicion and low trust cause refusal" started.
+◇ Test "Pipeline with root identities resolves epoch" started.
+◇ Test "Silence opposes nothing" started.
+◇ Test "Fire opposes water" started.
+◇ Test "Apprentice autopsy uses emotional language" started.
+◇ Test "Validator catches forbidden topics" started.
+◇ Test "Epoch resolver selects warrior epoch for battlefield configuration" started.
+◇ Test "Dark epoch activates in corrupted conditions" started.
+◇ Test "Compensated mortuary ritual avoids grave robbing taboo" started.
+◇ Test "Validator accepts any non-empty text regardless of word count" started.
+◇ Test "NPC suspicion increases with rumors" started.
+◇ Test "Journal events filterable by tag" started.
+◇ Test "Earth opposes air" started.
+◇ Test "NPC hearing a rumor records carrier state and bumps suspicion" started.
+◇ Test "Mastery phase advances with experience" started.
+◇ Test "Clock collects threshold events" started.
+◇ Test "Single-player snapshot round-trips world, journal, and practitioner state" started.
+◇ Test "Mortuary ritual without compensation marks grave robbing" started.
+◇ Test "Capacity grows at milestones" started.
+◇ Test "Positive interactions build trust" started.
+◇ Test "Blood libation produces a blood-offering rumor" started.
+◇ Test "NPC tick state causes suspicion to decay" started.
+◇ Test "Cache stores and retrieves by packet hash" started.
+◇ Test "Rumors decay and eventually go extinct" started.
+◇ Test "Different mastery phases produce different text" started.
+◇ Test "Priest faction amplifies suspicion" started.
+◇ Test "Corrupted fragment at sanctified site marks unclean sacrifice" started.
+◇ Test "Astragali produce reading for valid configuration" started.
+◇ Test "Rumor carriers raise regional suspicion over time" started.
+◇ Test "Ritual command records one journal entry and increments attempts" started.
+◇ Test "New practitioner starts as apprentice with capacity 1" started.
+◇ Test "Director fires for high Veil thinness" started.
+◇ Test "NPC wouldFlee with high suspicion and low trust" started.
+◇ Test "Director fires for site disturbance" started.
+◇ Test "Practitioners share site scarring" started.
+◇ Test "Director produces no events for calm world" started.
+◇ Test "Legacy world snapshots without rumor ledger still decode" started.
+◇ Test "A ritual at a village shrine seeds a rumor in the ledger" started.
+◇ Test "Root identity IDs are deterministic based on string traits" started.
+◇ Test "Astragali degrade with Veil instability" started.
+◇ Test "Propagation reaches new carriers over ticks" started.
+◇ Test "Mutation-heavy rumors fork child rumors" started.
+◇ Test "Mutation events seed a mutation rumor" started.
+◇ Test "Quiet site with no reach does not seed a rumor" started.
+◇ Test "Director respects max events per evaluation" started.
+◇ Test "Director fires NPC initiative at village" started.
+◇ Test "Veil thinness is derived" started.
+◇ Test "Director narration contains no numbers" started.
+◇ Test "Rumor pressure can tip a watchful region into inquisition" started.
+◇ Test "Blood sacrifice at topheth marks topheth pact" started.
+◇ Test "Deep Sheol requires triple threshold" started.
+◇ Test "Entropy decay is asymmetric" started.
+✘ Test "Spirits from same root identity have same rootIdentityID" recorded an issue at GehennaEngineTests.swift:883:6: Caught error: Canon resource not found in bundle: identities.json
+✘ Test "Bundled root identity canon decodes with named epochs" recorded an issue at GehennaEngineTests.swift:1024:6: Caught error: Canon resource not found in bundle: identities.json
+✘ Test "Bundled NPC canon decodes with authored interiority" recorded an issue at GehennaEngineTests.swift:1012:6: Caught error: Canon resource not found in bundle: npcs.json
+◇ Test "Ritual without Site does not compile" started.
+✘ Test "Pipeline with root identities resolves epoch" recorded an issue at GehennaEngineTests.swift:849:6: Caught error: Canon resource not found in bundle: identities.json
+◇ Test "Full ritual with all seven inputs" started.
+◇ Test "Ritual compiles with mandatory inputs" started.
+◇ Test "Apotropaic artifact reduces hostile probability" started.
+◇ Test "Ritual autopsy produces readable text" started.
+◇ Test "Every ritual produces entropy" started.
+◇ Test "High coherence produces targeted outcome" started.
+◇ Test "Higher tier spirits from deeper eras" started.
+◇ Test "Deterministic resolution — same inputs produce same output" started.
+✘ Test "Epoch resolver selects warrior epoch for battlefield configuration" recorded an issue at GehennaEngineTests.swift:791:28: Expectation failed: RidgeOfElah.hiramSonOfDagon() → nil
+✘ Test "NPC suspicion increases with rumors" recorded an issue at GehennaEngineTests.swift:1075:23: Expectation failed: RidgeOfElah.yoelBenShimri() → nil
+✘ Test "High suspicion and low trust cause refusal" recorded an issue at GehennaEngineTests.swift:1109:23: Expectation failed: RidgeOfElah.abiGad() → nil
+✘ Test "Dark epoch activates in corrupted conditions" recorded an issue at GehennaEngineTests.swift:819:28: Expectation failed: RidgeOfElah.hiramSonOfDagon() → nil
+◇ Test "Codex encounter merge does not accumulate duplicate tags" started.
+✘ Test "Single-player snapshot round-trips world, journal, and practitioner state" recorded an issue at GehennaEngineTests.swift:671:23: Expectation failed: RidgeOfElah.abiGad() → nil
+✘ Test "NPC tick state causes suspicion to decay" recorded an issue at GehennaEngineTests.swift:1121:23: Expectation failed: RidgeOfElah.huramTheTrader() → nil
+◇ Test "Conflicting affinities increase conflict" started.
+✘ Test "Positive interactions build trust" recorded an issue at GehennaEngineTests.swift:1099:23: Expectation failed: RidgeOfElah.tamarBatYoav() → nil
+✘ Test "Priest faction amplifies suspicion" recorded an issue at GehennaEngineTests.swift:1087:26: Expectation failed: RidgeOfElah.yoelBenShimri() → nil
+◇ Test "Tag constellation merge deduplicates exact duplicates" started.
+◇ Test "Active traces fade over time" started.
+◇ Test "Site disturbance detectable after ritual" started.
+◇ Test "Topheth rumors reach priesthood more strongly than traders" started.
+✔ Test "Rest costs the most ticks" passed after 0.003 seconds.
+◇ Test "Village rumors reach elders more strongly than cave rumors" started.
+◇ Test "Scarring accumulates with rituals" started.
+◇ Test "Purification repairs site scarring and corruption" started.
+◇ Test "Witness exposure cools over time" started.
+◇ Test "Ancestor shrine has highest suspicion multiplier" started.
+◇ Test "Mutation causes heavier scarring than ritual" started.
+✘ Test "NPC wouldFlee with high suspicion and low trust" recorded an issue at GehennaEngineTests.swift:1135:23: Expectation failed: RidgeOfElah.abiGad() → nil
+✘ Test "Ritual command records one journal entry and increments attempts" recorded an issue at GehennaEngineTests.swift:1622:6: Caught error: Canon resource not found in bundle: npcs.json
+◇ Test "Same domain resonates" started.
+◇ Test "Spirit rejects corrupted practitioner" started.
+✘ Test "Practitioners share site scarring" recorded an issue at GehennaEngineTests.swift:1660:6: Caught error: Canon resource not found in bundle: npcs.json
+◇ Test "Warden rejects practitioner who broke grave robbing taboo" started.
+◇ Test "Local Veil modifier increases with scarring" started.
+◇ Test "War conflicts with faith" started.
+◇ Test "Scarring heals only after traces and witness exposure cool" started.
+◇ Test "War resonates with rule" started.
+◇ Test "Clean Hands practitioner unlocks special epoch" started.
+◇ Test "Era depth ordering" started.
+✘ Test "Director respects max events per evaluation" recorded an issue at GehennaEngineTests.swift:1550:6: Caught error: Canon resource not found in bundle: npcs.json
+✔ Test "Clock derives lunar phase from tick count" passed after 0.004 seconds.
+◇ Test "Distant era alignment diminishes" started.
+✘ Test "Director fires NPC initiative at village" recorded an issue at GehennaEngineTests.swift:1579:23: Expectation failed: RidgeOfElah.tamarBatYoav() → nil
+◇ Test "Same era alignment is 1.0" started.
+✔ Test "Clock currentTiming combines time of day and lunar phase" passed after 0.004 seconds.
+✔ Test "Clock advances tick count correctly" passed after 0.004 seconds.
+✔ Test "Journal events filterable by severity" passed after 0.004 seconds.
+✔ Test "Clock synchronizes world tick" passed after 0.004 seconds.
+✔ Test "Skull has highest coherence weight" passed after 0.004 seconds.
+✔ Test "Same affinity resonance is 1.0" passed after 0.004 seconds.
+✔ Test "Cache key changes with different practitioner input" passed after 0.004 seconds.
+✔ Test "Corrupted integrity degrades coherence weight" passed after 0.004 seconds.
+✔ Test "Clock derives time of day from tick count" passed after 0.004 seconds.
+✔ Test "Travel costs more ticks than a command" passed after 0.004 seconds.
+✔ Test "Journal events filterable by tick" passed after 0.004 seconds.
+✘ Test "Spirits from same root identity have same rootIdentityID" failed after 0.004 seconds with 1 issue.
+✘ Test "Bundled root identity canon decodes with named epochs" failed after 0.004 seconds with 1 issue.
+◇ Test "Adjacent era alignment is 0.7" started.
+✔ Test "Packet assembler includes practitionerInput in full packet" passed after 0.005 seconds.
+✘ Test "Pipeline with root identities resolves epoch" failed after 0.004 seconds with 1 issue.
+✔ Test "NPC behavioral API updates trust and suspicion" passed after 0.004 seconds.
+✔ Test "Opposing affinity resonance is 0.0" passed after 0.004 seconds.
+✔ Test "Master autopsy uses precise language" passed after 0.004 seconds.
+✔ Test "Apprentice autopsy uses emotional language" passed after 0.004 seconds.
+✘ Test "Bundled NPC canon decodes with authored interiority" failed after 0.004 seconds with 1 issue.
+✔ Test "Fire opposes water" passed after 0.004 seconds.
+✔ Test "Journal records ritual events with site ID" passed after 0.004 seconds.
+✔ Test "Compensated mortuary ritual avoids grave robbing taboo" passed after 0.004 seconds.
+✔ Test "Validator accepts any non-empty text regardless of word count" passed after 0.004 seconds.
+✔ Test "Silence opposes nothing" passed after 0.004 seconds.
+✔ Test "Journal events filterable by tag" passed after 0.004 seconds.
+✔ Test "NPC hearing a rumor records carrier state and bumps suspicion" passed after 0.004 seconds.
+✔ Test "Earth opposes air" passed after 0.004 seconds.
+✔ Test "Mortuary ritual without compensation marks grave robbing" passed after 0.004 seconds.
+✔ Test "Capacity grows at milestones" passed after 0.004 seconds.
+✔ Test "Clock collects threshold events" passed after 0.004 seconds.
+✔ Test "Mastery phase advances with experience" passed after 0.004 seconds.
+✔ Test "Blood libation produces a blood-offering rumor" passed after 0.004 seconds.
+✘ Test "NPC suspicion increases with rumors" failed after 0.004 seconds with 1 issue.
+✘ Test "Single-player snapshot round-trips world, journal, and practitioner state" failed after 0.004 seconds with 1 issue.
+✘ Test "NPC tick state causes suspicion to decay" failed after 0.004 seconds with 1 issue.
+✘ Test "High suspicion and low trust cause refusal" failed after 0.005 seconds with 1 issue.
+✘ Test "Dark epoch activates in corrupted conditions" failed after 0.005 seconds with 1 issue.
+✘ Test "Priest faction amplifies suspicion" failed after 0.004 seconds with 1 issue.
+✔ Test "Rumors decay and eventually go extinct" passed after 0.004 seconds.
+✔ Test "Corrupted fragment at sanctified site marks unclean sacrifice" passed after 0.004 seconds.
+✘ Test "Positive interactions build trust" failed after 0.004 seconds with 1 issue.
+✔ Test "Validator does not false-positive on practitioner words in forbidden topics" passed after 0.005 seconds.
+✔ Test "Astragali produce reading for valid configuration" passed after 0.004 seconds.
+✔ Test "New practitioner starts as apprentice with capacity 1" passed after 0.004 seconds.
+✔ Test "Cache stores and retrieves by packet hash" passed after 0.004 seconds.
+✔ Test "Validator catches forbidden topics" passed after 0.005 seconds.
+✘ Test "Epoch resolver selects warrior epoch for battlefield configuration" failed after 0.005 seconds with 1 issue.
+✔ Test "Different mastery phases produce different text" passed after 0.004 seconds.
+✔ Test "Director fires for site disturbance" passed after 0.004 seconds.
+✔ Test "Director produces no events for calm world" passed after 0.004 seconds.
+✔ Test "Director fires for high Veil thinness" passed after 0.004 seconds.
+✘ Test "NPC wouldFlee with high suspicion and low trust" failed after 0.005 seconds with 1 issue.
+✘ Test "Ritual command records one journal entry and increments attempts" failed after 0.004 seconds with 1 issue.
+✔ Test "Rumor carriers raise regional suspicion over time" passed after 0.004 seconds.
+✘ Test "Practitioners share site scarring" failed after 0.004 seconds with 1 issue.
+✔ Test "A ritual at a village shrine seeds a rumor in the ledger" passed after 0.005 seconds.
+✔ Test "Mutation events seed a mutation rumor" passed after 0.005 seconds.
+✘ Test "Director respects max events per evaluation" failed after 0.004 seconds with 1 issue.
+✔ Test "Quiet site with no reach does not seed a rumor" passed after 0.004 seconds.
+✔ Test "Veil thinness is derived" passed after 0.004 seconds.
+✔ Test "Astragali degrade with Veil instability" passed after 0.004 seconds.
+✘ Test "Director fires NPC initiative at village" failed after 0.004 seconds with 1 issue.
+✔ Test "Director narration contains no numbers" passed after 0.004 seconds.
+✔ Test "Blood sacrifice at topheth marks topheth pact" passed after 0.004 seconds.
+✔ Test "Deep Sheol requires triple threshold" passed after 0.003 seconds.
+✔ Test "Root identity IDs are deterministic based on string traits" passed after 0.005 seconds.
+✔ Test "Ritual compiles with mandatory inputs" passed after 0.003 seconds.
+✔ Test "Rumor pressure can tip a watchful region into inquisition" passed after 0.004 seconds.
+✔ Test "Full ritual with all seven inputs" passed after 0.003 seconds.
+✔ Test "Entropy decay is asymmetric" passed after 0.004 seconds.
+✔ Test "Every ritual produces entropy" passed after 0.003 seconds.
+✔ Test "Deterministic resolution — same inputs produce same output" passed after 0.003 seconds.
+✔ Test "High coherence produces targeted outcome" passed after 0.003 seconds.
+✔ Test "Apotropaic artifact reduces hostile probability" passed after 0.003 seconds.
+✔ Test "Ritual autopsy produces readable text" passed after 0.003 seconds.
+✔ Test "Propagation reaches new carriers over ticks" passed after 0.005 seconds.
+✔ Test "Ritual without Site does not compile" passed after 0.003 seconds.
+✔ Test "Topheth rumors reach priesthood more strongly than traders" passed after 0.002 seconds.
+✔ Test "Village rumors reach elders more strongly than cave rumors" passed after 0.002 seconds.
+✔ Test "Tag constellation merge deduplicates exact duplicates" passed after 0.002 seconds.
+✔ Test "Codex encounter merge does not accumulate duplicate tags" passed after 0.002 seconds.
+✔ Test "Scarring accumulates with rituals" passed after 0.002 seconds.
+✔ Test "Active traces fade over time" passed after 0.002 seconds.
+✔ Test "Higher tier spirits from deeper eras" passed after 0.003 seconds.
+✔ Suite "World Clock Tests" passed after 0.006 seconds.
+✔ Test "Same domain resonates" passed after 0.002 seconds.
+✔ Test "Site disturbance detectable after ritual" passed after 0.002 seconds.
+✔ Test "Ancestor shrine has highest suspicion multiplier" passed after 0.002 seconds.
+✔ Test "Purification repairs site scarring and corruption" passed after 0.002 seconds.
+✔ Test "Conflicting affinities increase conflict" passed after 0.002 seconds.
+✔ Test "Mutation causes heavier scarring than ritual" passed after 0.002 seconds.
+✔ Test "Spirit rejects corrupted practitioner" passed after 0.002 seconds.
+✔ Test "Local Veil modifier increases with scarring" passed after 0.002 seconds.
+✔ Test "War resonates with rule" passed after 0.002 seconds.
+✔ Test "War conflicts with faith" passed after 0.002 seconds.
+✔ Test "Witness exposure cools over time" passed after 0.002 seconds.
+✔ Test "Distant era alignment diminishes" passed after 0.001 seconds.
+✔ Test "Scarring heals only after traces and witness exposure cool" passed after 0.002 seconds.
+✔ Suite "Fragment Tests" passed after 0.007 seconds.
+✔ Suite "Journal Query Tests" passed after 0.006 seconds.
+✔ Test "Same era alignment is 1.0" passed after 0.001 seconds.
+✔ Suite "Affinity Tests" passed after 0.006 seconds.
+✔ Suite "Practitioner Input Tests" passed after 0.007 seconds.
+✔ Suite "Expression Validator Tests" passed after 0.006 seconds.
+✔ Suite "Mastery-Aware Autopsy Tests" passed after 0.006 seconds.
+✔ Test "Adjacent era alignment is 0.7" passed after 0.001 seconds.
+✘ Suite "Persistence Tests" failed after 0.006 seconds with 1 issue.
+✔ Suite "Astragali Tests" passed after 0.006 seconds.
+✔ Suite "Expression Cache Tests" passed after 0.006 seconds.
+✔ Test "Warden rejects practitioner who broke grave robbing taboo" passed after 0.002 seconds.
+✘ Suite "World Director Tests" failed after 0.006 seconds with 2 issues.
+✔ Test "Era depth ordering" passed after 0.002 seconds.
+✘ Suite "World Shard Multiplayer Tests" failed after 0.006 seconds with 2 issues.
+✔ Test "Clean Hands practitioner unlocks special epoch" passed after 0.002 seconds.
+✘ Suite "Canon Data Tests" failed after 0.007 seconds with 2 issues.
+✔ Suite "Ritual DSL Tests" passed after 0.006 seconds.
+✘ Suite "NPC Tests" failed after 0.006 seconds with 6 issues.
+✘ Suite "Epoch Manifestation Tests" failed after 0.007 seconds with 4 issues.
+✔ Suite "Practitioner Profile Tests" passed after 0.006 seconds.
+✔ Suite "Resolution Pipeline Tests" passed after 0.006 seconds.
+✔ Suite "Region State Tests" passed after 0.006 seconds.
+✔ Suite "Narrative Tag Tests" passed after 0.006 seconds.
+✔ Suite "Domain Tests" passed after 0.007 seconds.
+✔ Suite "Zero-Trust Cosmology Tests" passed after 0.006 seconds.
+✔ Suite "Era Tests" passed after 0.006 seconds.
+✔ Suite "Site State Tests" passed after 0.007 seconds.
+✔ Test "Mutation-heavy rumors fork child rumors" passed after 0.005 seconds.
+✔ Test "Legacy world snapshots without rumor ledger still decode" passed after 0.005 seconds.
+✔ Suite "Rumor Engine Tests" passed after 0.007 seconds.
+Ollama available: true
+Validation Failed for text '': Generated text is empty
+✔ Test "Test live Ollama connection" passed after 12.110 seconds.
+✔ Suite "Ollama Live Tests" passed after 12.111 seconds.
+✘ Test run with 108 tests in 26 suites failed after 12.111 seconds with 17 issues.
