@@ -488,3 +488,11 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: Allows the player to speak freely to NPCs in the village, relying on the LLM to handle parsing and generate a context-appropriate, diegetic response based on the NPC's interiority and world state.
 - **Scope**: Also includes critical stability hardening for the Expression Layer: removing unreliable word counts from prompts, fixing cache hash collisions, enforcing deterministic cache eviction, adding connection timeouts for `OllamaProvider`, and switching validation to strict regex word boundaries.
 - **Implication**: Free-form chat is explicitly a **neutral consequence** interaction. The conversation itself has no mechanical side effects on trust or suspicion, strictly enforcing the rule that the Expression Layer renders but never decides truth.
+
+## Architecture Decisions (Session 2026-05-06 Engine Wire-Up)
+
+### CLI Engine Wire-Up & 0.4.27 Release
+- **Decision**: Completed a full audit of missing connections between `GehennaCLI` and `GehennaEngine`, wiring all consequence pipelines and bumping the version to `0.4.27`.
+- **Rationale**: The engine had rich consequence logic (taboos, contagion, rumor seeding, world entropy, capacity milestones) but the interactive CLI was bypassing it and manually incrementing simple counters.
+- **Scope**: `executeRitual` now routes through `profile.recordRitual`, `profile.applyRitualConsequences`, `world.applyRitualEffects`, `world.seedRitualRumor`, and `codex.recordEncounter`. Added diegetic hints for fragment collection via `scavenge` to resolve a progression blocker. The journal is now readable, and NPCs receive recent world events as context for LLM chat generation.
+- **Implication**: "Consequence is content" is now fully active in the CLI. The practitioner's actions permanently scar sites, seed rumors that reach the village, and potentially lock them out of certain spirit manifestations via taboo accrual.

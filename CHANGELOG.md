@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.4.27 - Gameplay Discoverability & Engine Wire-Up
+
+Fixed a major progression blocker regarding fragment collection and fully wired the CLI's ritual resolution to the engine's consequence pipelines. Rituals now correctly advance practitioner state, apply world entropy, and seed rumors.
+
+### Changed
+
+- **CLI Wire-Up Complete:** Replaced manual CLI counters with proper engine calls in `RitualCommands`. Rituals now correctly trigger `profile.recordRitual()`, `profile.applyRitualConsequences()`, `world.applyRitualEffects()`, and `world.seedRitualRumor()`. 
+- **Taboo Enforcement:** Ritual aftermath now properly detects and records `.graveRobbing`, `.uncleanSacrifice`, and `.tophethPact` taboos in the practitioner's profile.
+- **World Awareness for NPCs:** The free-form chat and threshold responses now receive the last 4 notable world journal events as context, allowing NPCs to react to recent ritual activity. Interaction counts are also now correctly tracked based on `lastInteractionTick`.
+- **Journal Visibility:** The `world` / `showJournal` command now prints the actual description and severity icon for each event, rather than just raw types. Successful summonings are now logged as `.spiritManifested`.
+- **Fragment Discoverability:** Fixed arrival text to accurately reflect an empty starting inventory. Added `scavenge`, `inspect`, and `taboos / sins` to the `help` command. `look` now surfaces diegetic hints when a site has collectible items, prompting the player to scavenge.
+- **Codex Recording:** Fixed a bug where successful spirit manifestations were not recorded in the Codex of the Dead. Rituals now properly call `codex.recordEncounter` and `codex.crossLinkEpochs`.
+
+
 ## 0.4.26 - Free-Form NPC Chat & Expression Hardening
 
 Added free-form chat capabilities allowing the practitioner to speak directly to NPCs and receive diegetic, LLM-rendered responses based on the NPC's world state and interiority. Hardened the Expression Layer to be robust for production use.
