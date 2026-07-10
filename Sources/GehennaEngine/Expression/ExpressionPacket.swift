@@ -36,6 +36,7 @@ public enum ExpressionEvent: String, Codable, Sendable {
     case rumorContent
     // Spirit
     case spiritSpeech
+    case spiritChat          // Free-form practitioner speech → bound spirit response
     case spiritRefusal
     case spiritDeparture
 }

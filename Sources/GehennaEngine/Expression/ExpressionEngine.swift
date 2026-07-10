@@ -74,12 +74,14 @@ public actor ExpressionEngine {
     /// Render spirit speech. Uses full packet (always important).
     public func spiritSpeech(
         _ spirit: Spirit,
-        practitioner: PractitionerProfile
+        practitioner: PractitionerProfile,
+        rootIdentity: RootIdentity? = nil
     ) async -> String {
         let packet = assembler.spiritPacket(
             for: spirit,
             event: .spiritSpeech,
-            practitioner: practitioner
+            practitioner: practitioner,
+            rootIdentity: rootIdentity
         )
         return await renderFull(packet)
     }
@@ -105,6 +107,24 @@ public actor ExpressionEngine {
             practitionerInput: input,
             recentEvents: recentEvents,
             interactionCount: interactionCount
+        )
+        return await renderFull(packet)
+    }
+
+    /// Render a bound spirit's response to free-form practitioner speech.
+    /// Always a full packet: identity, epoch interiority, knowledge-gated
+    /// facts, and the exchange history of this manifestation.
+    public func spiritChat(
+        _ bound: BoundSpirit,
+        input: String,
+        rootIdentity: RootIdentity? = nil,
+        recentEvents: [String] = []
+    ) async -> String {
+        let packet = assembler.spiritChatPacket(
+            for: bound,
+            input: input,
+            rootIdentity: rootIdentity,
+            recentEvents: recentEvents
         )
         return await renderFull(packet)
     }

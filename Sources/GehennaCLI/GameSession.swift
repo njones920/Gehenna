@@ -151,6 +151,8 @@ final class GameSession: @unchecked Sendable {
                 scavengeSite()
             case "spirits", "retinue", "bound":
                 showRetinue()
+            case "speak", "commune":
+                await speakMenu()
             case "dismiss", "release":
                 dismissMenu()
             case "village", "v", "talk":

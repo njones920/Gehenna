@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+## 0.4.29 - The Dead Speak
+
+The Codex Part II scene is now playable: you can sit with a summoned spirit and ask it questions. Free-form conversation with bound spirits, rendered from who they actually are — identity tags, epoch interiority, knowledge-gated facts — and paid for in stability. Phase 2 of Milestone 0.5.
+
+### Added
+
+- **`speak` command:** free-form conversation with a bound spirit. Every exchange strains the spirit's stability (holding the door open) and advances world time; a spirit can fade mid-word if you reach too long.
+- **`PacketAssembler.spiritChatPacket`:** conversation packets assembled from simulation truth — spirit tags across identity/death/relational/cultural/disposition dimensions, true name from the root identity, taboo tags as forbidden topics, and facts gated by the spirit's Knowledge attribute (a diminished shade reaches 4 facts; a strong spirit reaches 12).
+- **Epoch interiority:** `Epoch` gains optional `interiorVoice` / `privateTruth` / `wound` / `unsatisfiedWant`, same authoring model as NPCs. Authored for all six of Hiram's and Maacah's epoch aspects in `identities.json`. The Bronze Captain deflects questions about his sons into duty — and lets the count falter. Older canon files decode unchanged.
+- **`spiritChat` expression event** with authored fallback, so conversation reads even without Ollama.
+- **Tests:** 6-test `Spirit Conversation Tests` suite — packet assembly, knowledge gating, forbidden topics, canon interiority decoding, exchange strain and mid-word fade.
+
+### Changed
+
+- **First words got better:** manifestation speech (`spiritSpeech`) now receives the resolved root identity, so epoch interiority shapes the spirit's voice from its first utterance, not just in conversation.
+- **`Retinue.recordExchange`:** conversation strain is engine truth, shared by any future client.
+
 ## 0.4.28 - The Retinue
 
 Spirits persist. An anchored spirit now stays manifested — walking with the practitioner, decaying tick by tick — until its stability is spent or the practitioner chooses how to part with it. First phase of Milestone 0.5 (`docs/PROPOSALS/MILESTONE_0.5_THE_DEAD_SPEAK.md`).

@@ -59,6 +59,22 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
     /// Overrides the template's baseline requirements.
     public let identityRequirements: IdentityRequirements?
 
+    // MARK: Interiority — authored per epoch, same model as NPCs.
+    // Optional so pre-0.4.29 canon files decode unchanged. The Expression
+    // Layer renders these; they are never shown as raw facts.
+
+    /// How this aspect narrates its own existence to itself.
+    public let interiorVoice: String?
+
+    /// Something true about this aspect the practitioner may never learn.
+    public let privateTruth: String?
+
+    /// What shaped this aspect before anyone called it back.
+    public let wound: String?
+
+    /// What this aspect wants that no ritual can supply.
+    public let unsatisfiedWant: String?
+
     public init(
         id: UUID = UUID(),
         name: String,
@@ -71,7 +87,11 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
         corruptionThreshold: Double? = nil,
         personalityTraits: [PersonalityTrait] = [],
         baselineDisposition: Disposition = .calm,
-        identityRequirements: IdentityRequirements? = nil
+        identityRequirements: IdentityRequirements? = nil,
+        interiorVoice: String? = nil,
+        privateTruth: String? = nil,
+        wound: String? = nil,
+        unsatisfiedWant: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -85,6 +105,10 @@ public struct Epoch: Codable, Hashable, Sendable, Identifiable {
         self.personalityTraits = personalityTraits
         self.baselineDisposition = baselineDisposition
         self.identityRequirements = identityRequirements
+        self.interiorVoice = interiorVoice
+        self.privateTruth = privateTruth
+        self.wound = wound
+        self.unsatisfiedWant = unsatisfiedWant
     }
 }
 

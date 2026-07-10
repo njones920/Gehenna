@@ -12,7 +12,7 @@ extension GameSession {
         ║   A physics engine for ancient cosmology,    ║
         ║           disguised as a game.               ║
         ║                                              ║
-        ║          Ridge of Elah — v0.4.28             ║
+        ║          Ridge of Elah — v0.4.29             ║
         ║                                              ║
         ╚══════════════════════════════════════════════╝
 
@@ -182,6 +182,7 @@ extension GameSession {
             inspect          Inspect a fragment in detail
             ritual (r)       Compose and perform a ritual
             spirits          See who walks with you (retinue)
+            speak            Converse with a bound spirit — every word costs
             dismiss          Part ways with a bound spirit
             cast / bones     Cast the astragali (diagnostic bones)
             codex (c)        Browse your Codex of the Dead

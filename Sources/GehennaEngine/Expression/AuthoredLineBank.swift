@@ -121,6 +121,8 @@ public struct AuthoredLineBank: Sendable {
             return "Words travel."
         case .spiritSpeech:
             return "A voice, thin as smoke."
+        case .spiritChat:
+            return "The presence considers you. When it answers, the words arrive without sound."
         case .spiritRefusal:
             return "Silence. The dead do not always answer."
         case .spiritDeparture:

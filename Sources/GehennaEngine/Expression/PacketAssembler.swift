@@ -65,13 +65,17 @@ public struct PacketAssembler: Sendable {
 
     // MARK: - Spirit Packets
 
-    /// Build a full packet for spirit speech.
+    /// Build a full packet for spirit speech. When the spirit resolves to a
+    /// known root identity, its epoch's authored interiority shapes the voice
+    /// from the very first words.
     public func spiritPacket(
         for spirit: Spirit,
         event: ExpressionEvent,
-        practitioner: PractitionerProfile
+        practitioner: PractitionerProfile,
+        rootIdentity: RootIdentity? = nil
     ) -> FullExpressionPacket {
-        FullExpressionPacket(
+        let epoch = rootIdentity?.epochs.first { $0.name == spirit.epochName }
+        return FullExpressionPacket(
             entityType: .spirit,
             entityName: spirit.epochName,
             entityTags: spirit.tags,
@@ -90,7 +94,67 @@ public struct PacketAssembler: Sendable {
             allowedLengthMin: minLength(for: event),
             allowedLengthMax: maxLength(for: event),
             interactionHistory: 0,
-            recentEvents: []
+            recentEvents: [],
+            interiorVoice: epoch?.interiorVoice,
+            privateTruth: epoch?.privateTruth,
+            wound: epoch?.wound,
+            unsatisfiedWant: epoch?.unsatisfiedWant
+        )
+    }
+
+    /// Build a full packet for free-form conversation with a bound spirit.
+    /// What the spirit can say is simulation truth: facts are assembled from
+    /// its tags and root identity, gated by its Knowledge attribute — a
+    /// diminished shade holds fragments of its own life; a strong one holds
+    /// the shape of it. The Expression Layer phrases; it does not invent.
+    public func spiritChatPacket(
+        for bound: BoundSpirit,
+        input: String?,
+        rootIdentity: RootIdentity? = nil,
+        recentEvents: [String] = []
+    ) -> FullExpressionPacket {
+        let spirit = bound.spirit
+        let epoch = rootIdentity?.epochs.first { $0.name == spirit.epochName }
+
+        var facts: [String] = []
+        if let trueName = rootIdentity?.trueName {
+            facts.append("in life they were called \(trueName)")
+        }
+        for dimension in [NarrativeTag.Dimension.identity, .deathContext, .relational, .cultural, .disposition] {
+            facts.append(contentsOf: spirit.tags.tags(in: dimension).map(\.value))
+        }
+        facts.append(contentsOf: spirit.personalityTraits.map(\.rawValue))
+
+        // Knowledge gates how much of themselves the dead can still reach.
+        let factCap = spirit.attributes.knowledge < 0.3 ? 4
+                    : spirit.attributes.knowledge < 0.6 ? 7
+                    : 12
+
+        return FullExpressionPacket(
+            entityType: .spirit,
+            entityName: spirit.epochName,
+            entityTags: spirit.tags,
+            disposition: spirit.disposition.rawValue,
+            trustLevel: nil,
+            eventType: .spiritChat,
+            culture: spirit.culturalAffiliation,
+            suspicionLevel: nil,
+            isAtThreshold: false,
+            era: spirit.era,
+            registerKey: cadenceForSpirit(spirit),
+            knownFacts: Array(facts.prefix(factCap)),
+            forbiddenTopics: spirit.tags.tags
+                .filter { $0.dimension == .taboo }
+                .map(\.value),
+            allowedLengthMin: minLength(for: .spiritChat),
+            allowedLengthMax: maxLength(for: .spiritChat),
+            interactionHistory: bound.exchangeCount,
+            recentEvents: recentEvents,
+            interiorVoice: epoch?.interiorVoice,
+            privateTruth: epoch?.privateTruth,
+            wound: epoch?.wound,
+            unsatisfiedWant: epoch?.unsatisfiedWant,
+            practitionerInput: input
         )
     }
 
@@ -116,6 +180,7 @@ public struct PacketAssembler: Sendable {
         case .regionResponse, .deadResponse: return 10
         case .thresholdResponse: return 15
         case .playerChat: return 5
+        case .spiritChat: return 3
         case .ritualAutopsy, .codexEntry: return 20
         case .spiritSpeech: return 3
         case .spiritRefusal, .spiritDeparture: return 3
@@ -129,6 +194,7 @@ public struct PacketAssembler: Sendable {
         case .regionResponse, .deadResponse: return 60
         case .thresholdResponse: return 80
         case .playerChat: return 60
+        case .spiritChat: return 70
         case .ritualAutopsy, .codexEntry: return 100
         case .spiritSpeech: return 30
         case .spiritRefusal, .spiritDeparture: return 20

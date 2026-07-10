@@ -75,6 +75,8 @@ public struct Retinue: Codable, Sendable {
     public static let coPresenceStrainPerSpirit: Double = 0.01
     /// Extra strain when two or more Prideful spirits share the retinue.
     public static let pridefulRivalryStrain: Double = 0.015
+    /// Stability cost of one conversational exchange — holding the door open.
+    public static let strainPerExchange: Double = 0.015
 
     public init(bound: [BoundSpirit] = []) {
         self.bound = bound
@@ -113,6 +115,21 @@ public struct Retinue: Codable, Sendable {
               let index = bound.firstIndex(where: { $0.spirit.id == id }) else { return nil }
         let departed = bound.remove(at: index)
         return SpiritDeparture(spirit: departed.spirit, manner: manner, tick: tick)
+    }
+
+    /// Record a conversational exchange with a bound spirit. Speaking with
+    /// the dead holds the door open: each exchange strains the spirit's
+    /// stability. If the strain spends it, the spirit fades mid-word and
+    /// the departure is returned.
+    public mutating func recordExchange(with id: UUID, atTick tick: Int) -> SpiritDeparture? {
+        guard let index = bound.firstIndex(where: { $0.spirit.id == id }) else { return nil }
+        bound[index].exchangeCount += 1
+        bound[index].spirit.decayStability(by: Self.strainPerExchange)
+        if !bound[index].spirit.isManifested {
+            let departed = bound.remove(at: index)
+            return SpiritDeparture(spirit: departed.spirit, manner: .faded, tick: tick)
+        }
+        return nil
     }
 
     /// The stability every bound spirit loses this tick, given current

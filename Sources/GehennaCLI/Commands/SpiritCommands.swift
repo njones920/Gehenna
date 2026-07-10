@@ -67,6 +67,92 @@ extension GameSession {
         }
     }
 
+    // MARK: - Conversation
+
+    /// Choose a bound spirit to speak with.
+    func speakMenu() async {
+        guard !retinue.isEmpty else {
+            print("\n  There is no one to speak with. The dead do not come to you.")
+            return
+        }
+
+        let target: BoundSpirit
+        if retinue.count == 1 {
+            target = retinue.bound[0]
+        } else {
+            showRetinue()
+            print("\n  With whom do you speak? (1-\(retinue.count), or 'back'): ", terminator: "")
+            guard let input = readLine()?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  input != "back",
+                  let choice = Int(input), choice >= 1, choice <= retinue.count else {
+                return
+            }
+            target = retinue.bound[choice - 1]
+        }
+        await converse(with: target.spirit.id)
+    }
+
+    /// The conversation loop. Every exchange strains the spirit and lets
+    /// world time pass — talking to the dead is holding a door open.
+    func converse(with spiritID: UUID) async {
+        guard let opening = retinue.boundSpirit(withID: spiritID) else { return }
+        let name = spiritDisplayName(opening.spirit)
+
+        print("\n  You turn your attention to \(name). The air changes register —")
+        print("  the small sounds of the night withdraw, the way a room goes quiet")
+        print("  when someone is about to speak.")
+        print("  (Speak plainly. Say 'enough' to end. Every word holds the door open.)")
+
+        while true {
+            print("\n  [you → \(name)] > ", terminator: "")
+            guard let raw = readLine() else { return }
+            let input = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            if input.isEmpty { continue }
+            if ["enough", "leave", "farewell", "back", "quit"].contains(input.lowercased()) {
+                print("\n  You let the attention drop. \(name.capitalized) settles back")
+                print("  into its own silence, still present, no longer listening.")
+                return
+            }
+
+            guard let bound = retinue.boundSpirit(withID: spiritID) else { return }
+
+            let rootIdentity = bound.spirit.rootIdentityID.flatMap { rid in
+                rootIdentities.first { $0.id == rid }
+            }
+            let siteEvents: [String] = bound.originSiteID.map { siteID in
+                world.journal.filter { $0.siteID == siteID }.suffix(3).map(\.description)
+            } ?? []
+
+            let response = await expressionEngine.spiritChat(
+                bound,
+                input: input,
+                rootIdentity: rootIdentity,
+                recentEvents: siteEvents
+            )
+            print("\n  \"\(response)\"")
+
+            // The exchange itself strains the spirit.
+            if let departure = retinue.recordExchange(with: spiritID, atTick: clock.currentTick) {
+                print("\n  The voice thins mid-word. You held the door open too long,")
+                print("  and what was holding it from the other side let go.")
+                recordDeparture(departure)
+                return
+            }
+
+            // And the world does not wait while you speak.
+            let events = advanceTime(.command)
+            processWorldEvents(events)
+
+            guard let after = retinue.boundSpirit(withID: spiritID) else {
+                // Faded during the tick — already narrated by recordDeparture.
+                return
+            }
+            if after.spirit.currentStability < 0.15 {
+                print("  (Its presence \(stabilityReading(after.spirit)).)")
+            }
+        }
+    }
+
     // MARK: - Dismissal
 
     func dismissMenu() {

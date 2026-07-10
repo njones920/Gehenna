@@ -115,7 +115,14 @@ extension GameSession {
         if let spirit = result.spirit {
             printManifestation(spirit, result: result)
 
-            let speech = await expressionEngine.spiritSpeech(spirit, practitioner: profile)
+            let spiritRoot = spirit.rootIdentityID.flatMap { rid in
+                rootIdentities.first { $0.id == rid }
+            }
+            let speech = await expressionEngine.spiritSpeech(
+                spirit,
+                practitioner: profile,
+                rootIdentity: spiritRoot
+            )
             print("  \"\(speech)\"")
 
             // Archive encounter in the Codex of the Dead.
