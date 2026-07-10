@@ -46,6 +46,10 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
     /// written before 0.4.30 still decode.
     public var relationships: RelationshipLedger?
 
+    /// Authored thread state. Optional so snapshots written before 0.4.32
+    /// still decode.
+    public var threads: [String: StoryThread]?
+
     public init(
         engineVersion: String = GehennaEngine.version,
         codexVersion: String = GehennaEngine.codexVersion,
@@ -61,7 +65,8 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         npcs: [NPC],
         clock: WorldClock,
         retinue: Retinue? = nil,
-        relationships: RelationshipLedger? = nil
+        relationships: RelationshipLedger? = nil,
+        threads: [String: StoryThread]? = nil
     ) {
         self.engineVersion = engineVersion
         self.codexVersion = codexVersion
@@ -78,6 +83,7 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         self.clock = clock
         self.retinue = retinue
         self.relationships = relationships
+        self.threads = threads
     }
 }
 

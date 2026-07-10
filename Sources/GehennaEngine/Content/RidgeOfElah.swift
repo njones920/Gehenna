@@ -241,6 +241,25 @@ public enum RidgeOfElah {
                     NarrativeTag(.relational, "defended_a_pass"),
                 ])
             ),
+            // Maacah. Buried above the spring, without a name, without
+            // the rites. The Devorah thread points here.
+            Fragment(
+                remains: .longBone,
+                era: .ironAgeII,
+                domain: .faith,
+                affinity: .earth,
+                integrity: .worn,
+                tags: TagConstellation([
+                    NarrativeTag(.identity, "adult_woman"),
+                    NarrativeTag(.identity, "Israelite"),
+                    NarrativeTag(.cultural, "highland_clan"),
+                    NarrativeTag(.cultural, "keeps_asherah_figurine"),
+                    NarrativeTag(.cultural, "devoted_to_asherah"),
+                    NarrativeTag(.deathContext, "childbirth"),
+                    NarrativeTag(.relational, "lost_a_child"),
+                    NarrativeTag(.disposition, "grief"),
+                ])
+            ),
             Fragment(
                 remains: .ossuaryChip,
                 era: .ironAgeI,

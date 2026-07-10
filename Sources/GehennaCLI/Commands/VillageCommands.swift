@@ -47,6 +47,9 @@ extension GameSession {
             )
             print("  \(thresholdResp)")
             npcs[mainIndex].lastInteractionTick = clock.currentTick
+            // Threads must hear threshold conversations too — an NPC at
+            // their breaking point is exactly when a thread resolves.
+            maacahThreadAfterTalk(npcIndex: mainIndex)
             let events = advanceTime(.command)
             processWorldEvents(events)
             processDirectorEvents()
@@ -122,7 +125,10 @@ extension GameSession {
             }
         }
         npcs[mainIndex].lastInteractionTick = clock.currentTick
-        
+
+        // Authored threads listen to village conversations.
+        maacahThreadAfterTalk(npcIndex: mainIndex)
+
         let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()

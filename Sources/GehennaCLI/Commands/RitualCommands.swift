@@ -216,6 +216,9 @@ extension GameSession {
             // The dead remember being called back, whoever they are.
             relationships.noteSummon(of: spirit, atTick: clock.currentTick)
 
+            // Authored threads listen for the people they concern.
+            maacahThreadAfterManifestation(spirit)
+
             let anchored = retinue.anchor(
                 spirit,
                 atTick: clock.currentTick,

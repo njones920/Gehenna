@@ -529,3 +529,11 @@ Based on this audit, the most valuable next work is:
 - **Length control**: gemma4 returns empty content whenever `num_predict` is set — on `/api/chat` too, not just `/api/generate` (verified live 2026-07-10; do not re-add it). Bounds come from a prompt instruction + `ExpressionEngine.trimToLength` (sentence-boundary trim at the packet's `allowedLengthMax`).
 - **Verified live**: promising wine to the Bronze Captain fired the promise cue and he answered with his authored unsatisfied want ("did the ranks hold fast after my shield dropped?"); an unmarked insult classified correctly and went taut.
 - **Preserve**: heuristics must stay a superset of the load-bearing intents (promise/respect/reveal/forbidden) so consequence works replayably with Ollama absent. Classification failure is `.none`, never a guess.
+
+### The First Want (The Buried Names) & 0.4.32 Release
+- **Decision**: Threads are wants, not quests. `StoryThread` (engine) holds only stage + flags; all beats and predicates live in `GehennaCLI/Commands/ThreadCommands.swift` as authored content. Load-bearing canon facts (Maacah's truth) are Tier-1 authored beats — never LLM-rendered — so the thread works with Ollama absent.
+- **Canon**: Maacah's remains added to Nahal Caves content (childbirth/lost_a_child/asherah tags). Her "Mother Who Did Not Return" interiority was rewritten to match canonical death tags (died in childbirth after the village shut its doors; the daughter lived — her want, "who raised my daughter, and were they kind," is deliberately unsatisfiable in current canon and is the hook for future content). The Silenced Devotee refuses the truth — epoch mechanics taught diegetically.
+- **Consequence routing**: the comforting-lie resolution records `.promiseBroken` against Maacah via `RelationshipLedger.record(forKey:)` — consequences can reach the unmanifested dead.
+- **Bug fixed**: `villageMenu`'s threshold early-return path skipped thread hooks; threads must hear threshold conversations (that is exactly when resolutions land).
+- **Known gap**: `fragments_expanded.json` is authored but never loaded by anything — the canon pipeline needs a DataLoader wire-up before that content exists in play.
+- **Preserve**: no quest log, no markers. Threads surface in conversation and live in the journal. Thread stages only move forward; flags are the extension surface.

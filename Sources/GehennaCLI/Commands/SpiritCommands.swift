@@ -192,6 +192,11 @@ extension GameSession {
                 return
             }
 
+            // Authored threads listen to what the dead are asked.
+            if let refreshed = retinue.boundSpirit(withID: spiritID) {
+                maacahThreadDuringConversation(with: refreshed)
+            }
+
             // And the world does not wait while you speak.
             let events = advanceTime(.command)
             processWorldEvents(events)

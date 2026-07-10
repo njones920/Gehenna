@@ -228,7 +228,12 @@ public struct RelationshipLedger: Codable, Sendable {
 
     /// Record a moment against a spirit's relationship.
     public mutating func record(_ kind: RelationalMoment.Kind, for spirit: Spirit, atTick tick: Int, detail: String? = nil) {
-        let key = Self.key(for: spirit)
+        record(kind, forKey: Self.key(for: spirit), atTick: tick, detail: detail)
+    }
+
+    /// Record a moment by relationship key — for consequences that land
+    /// while the spirit is not manifested. The dead hear of things.
+    public mutating func record(_ kind: RelationalMoment.Kind, forKey key: UUID, atTick tick: Int, detail: String? = nil) {
         guard relationships[key] != nil else { return }
         relationships[key]?.moments.append(RelationalMoment(kind: kind, tick: tick, detail: detail))
         if kind == .gaveTrueName {

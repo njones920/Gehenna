@@ -20,6 +20,7 @@ final class GameSession: @unchecked Sendable {
     var expressionEngine: ExpressionEngine
     var retinue: Retinue
     var relationships: RelationshipLedger
+    var threads: [String: StoryThread]
     var debugMode: Bool = false
 
     struct Inventory {
@@ -58,6 +59,7 @@ final class GameSession: @unchecked Sendable {
         self.expressionEngine = ExpressionEngine()
         self.retinue = Retinue()
         self.relationships = RelationshipLedger()
+        self.threads = [:]
     }
 
     // MARK: - Time
@@ -248,7 +250,8 @@ final class GameSession: @unchecked Sendable {
             npcs: npcs,
             clock: clock,
             retinue: retinue,
-            relationships: relationships
+            relationships: relationships,
+            threads: threads
         )
     }
 
@@ -270,6 +273,7 @@ final class GameSession: @unchecked Sendable {
         clock = snapshot.clock
         retinue = snapshot.retinue ?? Retinue()
         relationships = snapshot.relationships ?? RelationshipLedger()
+        threads = snapshot.threads ?? [:]
     }
 
     // MARK: - Commands

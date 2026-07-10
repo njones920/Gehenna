@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 0.4.32 - The First Want
+
+The game has a reason to summon anyone: The Buried Names. Devorah the herbalist, once she trusts you, asks whether a woman the village failed still rests — and the answer is under the ground above the spring, reachable only through the practice. No quest log, no marker: a want, discovered in conversation, tracked in the journal, resolved by choice. Phase 5 of Milestone 0.5.
+
+### Added
+
+- **`StoryThread`:** minimal engine state (stage + flags, forward-only); all transition logic lives with authored content. Persisted in snapshots; older saves decode.
+- **The Buried Names thread:** Devorah's want surfaces past a trust threshold; Maacah's unmarked remains now lie at Nahal Caves; her aspects respond differently — The Silenced Devotee refuses ("Call me another way, and perhaps another part of me can afford to remember"), teaching epoch mechanics diegetically; the truth is an authored Tier-1 beat, so canon facts never depend on the model. Resolution is a choice: carry the truth back (Devorah's trust opens fully; she gives her grandmother's ritual mixture), or a comforting lie (recorded against Maacah as a broken promise — the dead keep accounts), or silence (return later).
+- **Maacah's want survives resolution:** find who raised her daughter, and whether they were kind — a hook the current canon deliberately cannot satisfy.
+- **Thread hooks** run on village talks (including threshold conversations), manifestations, and spirit exchanges. Whole loop verified live, including with the LLM disabled — authored beats carry it.
+- **Tests:** 4-test `Story Thread Tests` suite, including "Maacah's remains resolve to her when named."
+
 ## 0.4.31 - Talk Matters
 
 Words have weight. Free-form speech to spirits and villagers is classified into a closed intent enum — deterministic heuristics first, a temperature-zero LLM pass for the semantic remainder — and the engine applies deterministic consequences. The LLM parses; it never decides. Phase 4 of Milestone 0.5.
