@@ -213,6 +213,18 @@ public struct CodexOfTheDead: Codable, Sendable {
         return nil
     }
 
+    /// Append a note to the entry matching a root identity or epoch name.
+    /// Used by the canon harvest: what a spirit says about itself becomes
+    /// part of its written record.
+    public mutating func annotate(rootIdentityID: UUID?, epochName: String?, note: String) {
+        let match = entries.first { _, entry in
+            (rootIdentityID != nil && entry.rootIdentityID == rootIdentityID)
+                || (epochName != nil && entry.epochName == epochName)
+        }
+        guard let (id, entry) = match, !entry.notes.contains(note) else { return }
+        entries[id]?.notes.append(note)
+    }
+
     /// Auto-cross-link entries that share a root identity but represent different epochs.
     /// This is the archaeology mechanic: the practitioner discovers that two entries
     /// are aspects of the same person. (v3 §5.3)

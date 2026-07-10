@@ -90,6 +90,65 @@ final class GameSession: @unchecked Sendable {
         return events
     }
 
+    // MARK: - The Conway Lane
+
+    /// The generative director: the LLM admitted as one more actor. It
+    /// proposes a typed world event; validation gates it; the engine
+    /// commits it to the journal with mechanical effects. Fires
+    /// unpredictably (live entropy) after consequential action. Failure
+    /// at any step means the world stays quiet — always a valid state.
+    func maybeGenerativeDirector() async {
+        guard UInt64.random(in: 0..<3) == 0 else { return }
+        guard let region = world.regions.values.first else { return }
+
+        let recent = world.journal.suffix(4).map(\.description).joined(separator: "; ")
+        let context = "Suspicion is \(describeLevel(region.suspicion, low: "low", mid: "rising", high: "critical")), "
+            + "corruption \(describeLevel(region.corruption, low: "clean", mid: "seeping", high: "saturated")), "
+            + "the dead \(describeLevel(region.ghostActivity, low: "settled", mid: "restless", high: "raging")). "
+            + "The practitioner was last seen near \(sites[currentSiteIndex].name). Recent events: \(recent)"
+
+        guard let proposal = await expressionEngine.proposeWorldEvent(
+            context: context,
+            npcNames: npcs.map(\.name)
+        ) else { return }
+
+        commit(proposal)
+    }
+
+    /// Deterministic consequences per proposal kind, then the journal.
+    /// From here on the event is history like any other.
+    func commit(_ proposal: WorldEventProposal) {
+        switch proposal.kind {
+        case .rumor:
+            for index in npcs.indices.prefix(2) {
+                npcs[index].hearRumor(strength: 0.12)
+            }
+        case .npcAction:
+            if let index = npcs.firstIndex(where: { $0.name == proposal.actor }) {
+                npcs[index].hearRumor(strength: 0.15)
+            }
+        case .omen:
+            if let regionID = world.regions.keys.first, var region = world.regions[regionID] {
+                region.spiritualPressure = min(1.0, region.spiritualPressure + 0.01)
+                world.regions[regionID] = region
+            }
+        case .visitor:
+            break
+        }
+
+        world.journal.append(JournalEntry(
+            tick: clock.currentTick,
+            type: .directorEvent,
+            description: proposal.text,
+            source: .director,
+            severity: .notable,
+            regionID: world.regions.keys.first,
+            siteID: sites[currentSiteIndex].id,
+            tags: ["generative", proposal.kind.rawValue]
+        ))
+        print("\n  ◇ \(proposal.text)")
+    }
+
     /// Decay bound spirits for elapsed ticks and narrate any that fade.
     func tickRetinue(elapsed: Int) {
         guard !retinue.isEmpty else { return }

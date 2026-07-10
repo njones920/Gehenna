@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 0.4.33 - The Oracle Lane
+
+"Conway's Game of Life meets language compiler." The LLM is admitted as a story-driving actor — through typed, recorded lanes rather than freeform control. The model proposes; the simulation commits; the record remembers. This applies the Codex's own Oracle-Network pattern (live input recorded into the envelope as consumed; replay reads the record) to the language model itself.
+
+### Added
+
+- **Spoken canon harvest:** what a spirit improvises in conversation is extracted (temperature-zero pass, ≤2 concrete claims), recorded into the relationship ledger, written into its Codex entry ("Spoke of: …"), and fed back into future packets — the dead stay consistent with their own inventions, and the Codex is now partly written by the deceased. Deduplicated, capped, snapshot-persisted.
+- **The generative Director lane:** after consequential action the world may act on its own. The LLM proposes one typed event (`rumor` / `npcAction` / `omen` / `visitor`) as JSON; `ProposalValidator` gates kind, actor existence, and length; the engine commits survivors to the journal with deterministic mechanical effects (rumor spread, NPC suspicion, spiritual pressure). Verified live: "The birds nesting near the ridge suddenly scattered eastward at midday" — an unauthored omen with real consequences.
+- **Live entropy lane:** ritual seeds now mix live randomness with the deterministic salt, and the combined seed is recorded in the ritual's journal entry as consumed. No two playthroughs are alike; every past remains reconstructable.
+- **Tests:** 6-test `Oracle Lane Tests` suite — claim recording/dedup/cap/persistence/packet re-entry, codex annotation, proposal validation and fail-safe JSON parsing.
+
+### Design note
+
+"The Expression Layer renders, never decides" is refined, not repealed: the LLM still never silently mutates state. It now has two ways to *speak into the record* — as a spirit whose words become its own memory, and as a world-director whose proposals pass a validation gate. Failure at any step means the world stays quiet, which is always a valid state for it.
+
 ## 0.4.32 - The First Want
 
 The game has a reason to summon anyone: The Buried Names. Devorah the herbalist, once she trusts you, asks whether a woman the village failed still rests — and the answer is under the ground above the spring, reachable only through the practice. No quest log, no marker: a want, discovered in conversation, tracked in the journal, resolved by choice. Phase 5 of Milestone 0.5.

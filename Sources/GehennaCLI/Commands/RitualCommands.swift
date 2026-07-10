@@ -174,12 +174,18 @@ extension GameSession {
             timing: intent.timing
         )
 
+        // The Oracle lane: live entropy joins the seed, and the combined
+        // seed is recorded into the ritual's journal entry as consumed.
+        // No two playthroughs are alike; every past remains replayable.
+        let liveEntropy = UInt64.random(in: UInt64.min...UInt64.max)
+        let ritualSeed = deterministicSeed(fragmentID: fragment.id) ^ liveEntropy
+
         let pipeline = ResolutionPipeline()
         let result = pipeline.resolve(
             configuration: config,
             regionState: world.regions.values.first ?? RegionState(name: "Unknown"),
             profile: profile,
-            seed: UInt64(clock.currentTick),
+            seed: ritualSeed,
             rootIdentities: self.rootIdentities,
             invocation: invocation
         )
@@ -301,13 +307,18 @@ extension GameSession {
             source: .practitioner,
             severity: wasMutation ? .rupture : (result.spirit != nil ? .significant : .notable),
             siteID: site.id,
-            tags: Set(["ritual", wasMutation ? "mutation" : "standard"])
+            tags: Set(["ritual", wasMutation ? "mutation" : "standard", "seed:\(ritualSeed)"])
         ))
 
         // ── Advance time ─────────────────────────────────────────────────
         let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()
+
+        // ── The Conway lane ──────────────────────────────────────────────
+        // After consequential action, the world may decide something of
+        // its own. Sometimes nothing happens. Sometimes it speaks first.
+        await maybeGenerativeDirector()
     }
 
     func castAstragali() {

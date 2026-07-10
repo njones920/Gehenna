@@ -151,6 +151,25 @@ extension GameSession {
             print("\n  \"\(response)\"")
             relationships.noteExchange(withKey: relationshipKey)
 
+            // The Oracle lane: what the spirit improvised becomes recorded
+            // canon. It re-enters future packets, so the dead stay
+            // consistent with their own inventions — and the Codex is now
+            // partly written by the deceased.
+            let claims = await expressionEngine.harvestClaims(
+                from: response,
+                speakerName: spiritDisplayName(bound.spirit)
+            )
+            if !claims.isEmpty {
+                relationships.recordSpokenClaims(claims, forKey: relationshipKey)
+                for claim in claims {
+                    codex.annotate(
+                        rootIdentityID: bound.spirit.rootIdentityID,
+                        epochName: bound.spirit.epochName,
+                        note: "Spoke of: \(claim)"
+                    )
+                }
+            }
+
             // What you said, typed and recorded. The dead keep accounts.
             let forbidden = bound.spirit.tags.tags
                 .filter { $0.dimension == .taboo }

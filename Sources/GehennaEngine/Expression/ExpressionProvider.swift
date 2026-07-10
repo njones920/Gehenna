@@ -33,11 +33,32 @@ public protocol ExpressionProvider: Sendable {
     /// Declared as a requirement (not just an extension) so existentials
     /// dispatch to the real implementation.
     func classifyIntent(_ input: String, forbiddenTopics: [String]) async -> String?
+
+    /// Extract concrete new claims a speaker asserted in generated speech
+    /// (names, places, events). The Oracle-lane harvest: what the model
+    /// improvised becomes recorded simulation input. Providers without a
+    /// model return an empty list.
+    func harvestClaims(from speech: String, speakerName: String) async -> [String]
+
+    /// Propose one world event from current context — the Conway lane.
+    /// The proposal is typed and bounded; the caller validates and commits.
+    /// Providers without a model return nil.
+    func proposeWorldEvent(context: String, npcNames: [String]) async -> WorldEventProposal?
 }
 
 public extension ExpressionProvider {
     /// Default: no model, no classification.
     func classifyIntent(_ input: String, forbiddenTopics: [String]) async -> String? {
+        nil
+    }
+
+    /// Default: no model, no harvest.
+    func harvestClaims(from speech: String, speakerName: String) async -> [String] {
+        []
+    }
+
+    /// Default: no model, no proposals.
+    func proposeWorldEvent(context: String, npcNames: [String]) async -> WorldEventProposal? {
         nil
     }
 }

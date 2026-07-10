@@ -114,6 +114,12 @@ public struct SpiritRelationship: Codable, Sendable {
     public var nameGiven: String?
     /// The append-only record.
     public var moments: [RelationalMoment]
+    /// Canon this spirit has spoken into being — names, places, events it
+    /// asserted in conversation. Harvested from generated speech, recorded
+    /// here as consumed (the Oracle-lane pattern: replay reads the record,
+    /// not the model), and fed back into future packets so the dead stay
+    /// consistent with their own inventions. Optional for pre-0.4.33 saves.
+    public var spokenClaims: [String]?
 
     public init(rootKey: UUID, displayName: String, firstSummonTick: Int) {
         self.rootKey = rootKey
@@ -124,6 +130,7 @@ public struct SpiritRelationship: Codable, Sendable {
         self.totalExchanges = 0
         self.nameGiven = nil
         self.moments = []
+        self.spokenClaims = nil
     }
 
     /// Sum of all moment valences — the relationship's net charge.
@@ -239,6 +246,17 @@ public struct RelationshipLedger: Codable, Sendable {
         if kind == .gaveTrueName {
             relationships[key]?.nameGiven = detail
         }
+    }
+
+    /// Record canon a spirit spoke into being. Deduplicated; capped so
+    /// a talkative shade cannot flood its own record.
+    public mutating func recordSpokenClaims(_ claims: [String], forKey key: UUID) {
+        guard relationships[key] != nil, !claims.isEmpty else { return }
+        var existing = relationships[key]?.spokenClaims ?? []
+        for claim in claims where !existing.contains(claim) && existing.count < 24 {
+            existing.append(claim)
+        }
+        relationships[key]?.spokenClaims = existing
     }
 
     /// Record a departure by its manner.

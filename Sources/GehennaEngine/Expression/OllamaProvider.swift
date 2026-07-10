@@ -387,6 +387,54 @@ public actor OllamaProvider: ExpressionProvider {
         return firstWord.lowercased()
     }
 
+    // MARK: - Canon Harvest
+
+    /// Extract up to two concrete claims the speaker asserted about their
+    /// own life or world. Temperature zero; short lines only. What comes
+    /// back is recorded into the relationship ledger as consumed — replay
+    /// reads the record, never the model.
+    public func harvestClaims(from speech: String, speakerName: String) async -> [String] {
+        var lines: [String] = []
+        lines.append("Read the speech below. List concrete NEW facts the speaker asserts about their own life or world — a named person, a place, a specific event.")
+        lines.append("Rules: at most 2 facts. One per line. Maximum 12 words per line. Third person, past tense, starting with the speaker's name or 'their'.")
+        lines.append("Ignore mood, threats, philosophy, and anything about the listener. If there are no such facts, respond with exactly: none")
+        lines.append("")
+        lines.append("Speaker: \(speakerName)")
+        lines.append("Speech: \"\(speech)\"")
+
+        guard let raw = try? await callOllama(
+            prompt: lines.joined(separator: "\n"),
+            temperatureOverride: 0.0
+        ) else { return [] }
+
+        let cleaned: [String] = raw
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespaces).trimmingCharacters(in: CharacterSet(charactersIn: "-•*1234567890. ")) }
+            .filter { !$0.isEmpty && $0.lowercased() != "none" && $0.split(separator: " ").count <= 14 }
+        return Array(cleaned.prefix(2))
+    }
+
+    // MARK: - Generative Director Lane
+
+    /// Propose one small world event. This is the creative lane — normal
+    /// temperature, but the output is a typed proposal the caller
+    /// validates before anything becomes true.
+    public func proposeWorldEvent(context: String, npcNames: [String]) async -> WorldEventProposal? {
+        var lines: [String] = []
+        lines.append("You are the world of GEHENNA, an Iron Age Levant simulation, deciding what happens next while the practitioner is not watching.")
+        lines.append("Propose exactly ONE small event as JSON, no other text:")
+        lines.append("{\"kind\": \"rumor|npcAction|omen|visitor\", \"actor\": \"<villager name or null>\", \"text\": \"<one past-tense sentence>\"}")
+        lines.append("")
+        lines.append("rumor = village talk spreading. npcAction = one villager does something small (actor must be one of: \(npcNames.joined(separator: ", "))).")
+        lines.append("omen = a natural sign read as unnatural — birds, wind, water, light. visitor = a stranger passed through.")
+        lines.append("Grounded, small, period-true. No modern words. No practitioner mind-reading. The event should follow believably from the state below.")
+        lines.append("")
+        lines.append("Current state: \(context)")
+
+        guard let raw = try? await callOllama(prompt: lines.joined(separator: "\n")) else { return nil }
+        return ProposalValidator.parse(raw)
+    }
+
     // MARK: - Ollama HTTP Client
 
     /// Call the Ollama chat API.

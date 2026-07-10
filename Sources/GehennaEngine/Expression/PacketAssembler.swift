@@ -156,6 +156,11 @@ public struct PacketAssembler: Sendable {
             if let name = relationship.nameGiven {
                 relationshipFacts.append("they gave you their true name: \(name) — you may speak it")
             }
+            // The dead stay consistent with their own inventions: canon
+            // this spirit spoke into being returns to it as memory.
+            for claim in (relationship.spokenClaims ?? []).suffix(5) {
+                relationshipFacts.append("you have said before: \(claim)")
+            }
         }
 
         return FullExpressionPacket(

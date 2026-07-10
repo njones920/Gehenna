@@ -150,6 +150,25 @@ public actor ExpressionEngine {
         return ConversationalIntent(rawValue: raw) ?? .none
     }
 
+    /// Harvest spoken canon from a spirit's generated speech. Empty when
+    /// the LLM is off — authored lines assert no new facts.
+    public func harvestClaims(from speech: String, speakerName: String) async -> [String] {
+        guard llmEnabled else { return [] }
+        return await primary.harvestClaims(from: speech, speakerName: speakerName)
+    }
+
+    /// Ask the generative lane to propose one world event. Nil when the
+    /// LLM is off or the proposal fails validation — the world simply
+    /// stays quiet, which is always a valid state for it.
+    public func proposeWorldEvent(context: String, npcNames: [String]) async -> WorldEventProposal? {
+        guard llmEnabled else { return nil }
+        guard let proposal = await primary.proposeWorldEvent(context: context, npcNames: npcNames),
+              ProposalValidator.validate(proposal, npcNames: npcNames) else {
+            return nil
+        }
+        return proposal
+    }
+
     // MARK: - Rendering Pipeline
 
     /// Render a light packet through the tiered pipeline.
