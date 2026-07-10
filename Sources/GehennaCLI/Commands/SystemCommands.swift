@@ -37,7 +37,7 @@ extension GameSession {
             }
         }
 
-        let events = clock.advanceForRest(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.rest)
 
         if events.isEmpty {
             print("  The world turns. Nothing of note.")

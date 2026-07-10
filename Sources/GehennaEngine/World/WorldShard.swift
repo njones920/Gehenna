@@ -17,6 +17,7 @@ public struct PractitionerSession: Sendable {
     public var inventory: PlayerInventory
     public var currentSiteIndex: Int
     public var ritualCount: Int
+    public var retinue: Retinue
 
     public struct PlayerInventory: Sendable {
         public var fragments: [Fragment]
@@ -45,6 +46,7 @@ public struct PractitionerSession: Sendable {
         )
         self.currentSiteIndex = startingSiteIndex
         self.ritualCount = 0
+        self.retinue = Retinue()
     }
 }
 
@@ -90,6 +92,31 @@ public actor WorldShard {
         return id
     }
 
+    /// Decay every practitioner's bound spirits for elapsed ticks.
+    /// Fades are journaled quietly — the shared world notices, barely.
+    private func decayRetinues(elapsed: Int) {
+        let corruption = world.regions.values.first?.corruption ?? 0.0
+        for id in sessions.keys {
+            guard var session = sessions[id], !session.retinue.isEmpty else { continue }
+            let departures = session.retinue.advance(
+                ticks: elapsed,
+                regionCorruption: corruption,
+                endingAtTick: clock.currentTick
+            )
+            for departure in departures {
+                world.journal.append(JournalEntry(
+                    tick: departure.tick,
+                    type: .spiritDeparted,
+                    description: "\(departure.spirit.epochName ?? departure.spirit.template.rawValue) departed \(session.name)'s retinue (faded).",
+                    source: .spirit,
+                    severity: .ambient,
+                    tags: ["retinue", "departure", "faded"]
+                ))
+            }
+            sessions[id] = session
+        }
+    }
+
     // MARK: - Command Execution
 
     /// Execute a command for a given practitioner. Returns the result they perceive.
@@ -98,6 +125,7 @@ public actor WorldShard {
             return CommandResult(narration: ["You do not exist in this world."])
         }
 
+        let tickBefore = clock.currentTick
         let result: CommandResult
 
         switch command {
@@ -119,6 +147,12 @@ public actor WorldShard {
 
         // Write session back
         sessions[playerID] = session
+
+        // Every practitioner's bound spirits feel the same elapsed time.
+        let elapsed = clock.currentTick - tickBefore
+        if elapsed > 0 {
+            decayRetinues(elapsed: elapsed)
+        }
 
         // Log the command
         commandLog.append((
@@ -410,13 +444,19 @@ public actor WorldShard {
         }
         sites[session.currentSiteIndex].lastRitualTick = clock.currentTick
 
-        // Codex entry
+        // Codex entry and anchoring
         if let spirit = result.spirit {
             _ = session.codex.recordEncounter(
                 spirit: spirit,
                 autopsy: ["Ritual performed by \(session.name) at tick \(clock.currentTick)."],
                 ritualID: config.id,
                 tick: clock.currentTick
+            )
+            session.retinue.anchor(
+                spirit,
+                atTick: clock.currentTick,
+                originSiteID: sites[session.currentSiteIndex].id,
+                capacity: session.profile.summonerCapacity
             )
         }
 

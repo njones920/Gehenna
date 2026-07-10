@@ -128,12 +128,21 @@ extension GameSession {
             )
             codex.crossLinkEpochs()
 
-            let sustained = profile.summonerCapacity > 0
-            if sustained {
-                profile.summonerCapacity -= 1
-                print("\n  You anchor the spirit to your will.")
+            let anchored = retinue.anchor(
+                spirit,
+                atTick: clock.currentTick,
+                originSiteID: site.id,
+                capacity: profile.summonerCapacity
+            )
+            if anchored {
+                print("\n  You anchor the spirit. It walks with you now — for as long as it holds.")
+                print("  (Type 'spirits' to see who is with you, 'dismiss' to part ways.)")
+                if retinue.count > 1 {
+                    print("  The others feel the new presence. The strain of company is shared.")
+                }
             } else {
-                print("\n  Your capacity is exceeded. The spirit breaks free and dissipates.")
+                print("\n  You cannot hold another. The anchor slips, and the spirit disperses")
+                print("  like breath in cold air. It noticed the attempt.")
             }
         } else {
             print("  The libation sinks into the earth. Nothing answers.")
@@ -205,7 +214,7 @@ extension GameSession {
         ))
 
         // ── Advance time ─────────────────────────────────────────────────
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()
     }
@@ -247,7 +256,7 @@ extension GameSession {
         print("  Veil State: \(reading.veilState.rawValue)")
         print("\n  (The reading consumes 1 tick)")
         
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()
     }

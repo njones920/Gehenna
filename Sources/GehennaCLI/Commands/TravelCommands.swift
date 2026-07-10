@@ -76,7 +76,7 @@ extension GameSession {
         }
 
         sites[currentSiteIndex].lastVisitTick = clock.currentTick
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()
     }
@@ -104,7 +104,7 @@ extension GameSession {
         let site = sites[currentSiteIndex]
 
         // Advance time when traveling — travel costs more ticks
-        let events = clock.advanceForTravel(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.travel)
 
         print("\n  You travel to \(site.name).")
         print("  \(travelDescription(site))")
@@ -147,7 +147,7 @@ extension GameSession {
             site.localSuspicion = min(1.0, site.localSuspicion + 0.3)
             sites[currentSiteIndex] = site
             print("\n  You spend hours digging. The earth yields its secrets, but you feel watched.")
-            let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+            let events = advanceTime(.command)
             if !events.isEmpty {
                 processWorldEvents(events)
             }

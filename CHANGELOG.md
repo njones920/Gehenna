@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 0.4.28 - The Retinue
+
+Spirits persist. An anchored spirit now stays manifested — walking with the practitioner, decaying tick by tick — until its stability is spent or the practitioner chooses how to part with it. First phase of Milestone 0.5 (`docs/PROPOSALS/MILESTONE_0.5_THE_DEAD_SPEAK.md`).
+
+### Added
+
+- **`Retinue` / `BoundSpirit` engine types:** anchored spirits persist across commands, decay per tick (base + regional Corruption + co-presence strain + prideful rivalry), and return to Sheol as `.faded` departures when stability runs out.
+- **Dismissal with manner:** `dismiss` lets the practitioner release a spirit with a libation (respectful, costs the offering), banish it (abrupt, free, remembered), or leave it to fade. Each parting is journaled with its manner — the relationship ledger (0.4.30) will read these.
+- **`spirits` command:** diegetic retinue view — disposition, stability read in lamp-and-smoke language, time held. No visible numbers outside debug mode.
+- **Shared-world parity:** `PractitionerSession` carries a retinue; `WorldShard` anchors successful ritual spirits and decays every practitioner's retinue as shard time passes.
+- **Journal:** new `spiritDeparted` entry type.
+- **Tests:** 10-test `Retinue Tests` suite — capacity, decay, corruption acceleration, co-presence strain, prideful rivalry, dismissal manners, snapshot round-trip, pre-0.4.28 save compatibility, shard decay.
+
+### Changed
+
+- **Capacity is a cap, not a consumable:** fixed a bug where anchoring permanently decremented `summonerCapacity` (capacity only ever grows at ritual milestones, so every anchor burned a slot forever). Anchoring now checks retinue count against capacity; dismissal and fading free the slot.
+- **All CLI time flows through `GameSession.advanceTime`:** the clock advances and the retinue feels the same ticks; departures are narrated before the prompt returns.
+- **Snapshot format:** `SinglePlayerSnapshot` gains an optional `retinue` field; older saves decode cleanly.
+
 ## 0.4.27 - Gameplay Discoverability & Engine Wire-Up
 
 Fixed a major progression blocker regarding fragment collection and fully wired the CLI's ritual resolution to the engine's consequence pipelines. Rituals now correctly advance practitioner state, apply world entropy, and seed rumors.

@@ -496,3 +496,17 @@ Based on this audit, the most valuable next work is:
 - **Rationale**: The engine had rich consequence logic (taboos, contagion, rumor seeding, world entropy, capacity milestones) but the interactive CLI was bypassing it and manually incrementing simple counters.
 - **Scope**: `executeRitual` now routes through `profile.recordRitual`, `profile.applyRitualConsequences`, `world.applyRitualEffects`, `world.seedRitualRumor`, and `codex.recordEncounter`. Added diegetic hints for fragment collection via `scavenge` to resolve a progression blocker. The journal is now readable, and NPCs receive recent world events as context for LLM chat generation.
 - **Implication**: "Consequence is content" is now fully active in the CLI. The practitioner's actions permanently scar sites, seed rumors that reach the village, and potentially lock them out of certain spirit manifestations via taboo accrual.
+
+## Architecture Decisions (Session 2026-07-09 Milestone 0.5 Begins)
+
+### Milestone 0.5 Direction — The Dead Speak
+- **Decision**: After the 0.4.27 playtest verdict ("feels hollow — a big soulless engine"), development re-centered on the project's original loop: compile/collect spirits and watch their language evolve in a living world. Full plan at `docs/PROPOSALS/MILESTONE_0.5_THE_DEAD_SPEAK.md`. Phases: Retinue (0.4.28) → spirit conversation (0.4.29) → relationship memory + call-by-name (0.4.30) → typed intent extraction (0.4.31) → first want, Maacah/Devorah thread (0.4.32) → Ridge of Elah proof re-run (0.5.0).
+- **Rationale**: The engine was correct and complete enough; the hollowness was located in four verified gaps — no spirit conversation, no collection/persistence, consequence-free chat, nothing to want. Remaining work is game-making, not architecture.
+
+### The Retinue & 0.4.28 Release
+- **Decision**: Added `Retinue`/`BoundSpirit`/`SpiritDeparture`/`DismissalManner` in `World/Retinue.swift`. Anchored spirits persist until stability is spent or the practitioner dismisses them. Decay per tick = base 0.02 + corruption×0.03 + co-presence strain 0.01/extra spirit + 0.015 prideful rivalry, recomputed per tick as the retinue thins.
+- **Bug fixed**: The CLI previously decremented `summonerCapacity` on anchor — permanently consuming a slot that only ritual milestones can restore. Capacity is now a cap checked at anchor time; dismissal/fading free the slot.
+- **CLI**: All time advancement now flows through `GameSession.advanceTime(_:)` (clock + retinue decay + departure narration in one place). New `spirits` and `dismiss` commands; dismissal manners are journaled (`spiritDeparted`) for the 0.4.30 relationship ledger to read. Stability is rendered diegetically ("burns steady" → "is nearly spent").
+- **Shared world**: `PractitionerSession.retinue` + `WorldShard.decayRetinues(elapsed:)` after every command; shard rituals anchor automatically. Arena bots now hold and lose spirits like the CLI practitioner.
+- **Persistence**: `SinglePlayerSnapshot.retinue` is optional; pre-0.4.28 saves decode cleanly (tested by stripping the key).
+- **Preserve**: `.faded` is never a chosen dismissal manner — fading only happens through decay in `Retinue.advance`. How a spirit leaves is relational truth; keep the manner taxonomy stable because the ledger will build on it.

@@ -38,6 +38,10 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
     public var npcs: [NPC]
     public var clock: WorldClock
 
+    /// Bound spirits walking with the practitioner. Optional so snapshots
+    /// written before 0.4.28 still decode (missing key -> nil -> empty retinue).
+    public var retinue: Retinue?
+
     public init(
         engineVersion: String = GehennaEngine.version,
         codexVersion: String = GehennaEngine.codexVersion,
@@ -51,7 +55,8 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         ritualCount: Int,
         rootIdentities: [RootIdentity],
         npcs: [NPC],
-        clock: WorldClock
+        clock: WorldClock,
+        retinue: Retinue? = nil
     ) {
         self.engineVersion = engineVersion
         self.codexVersion = codexVersion
@@ -66,6 +71,7 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         self.rootIdentities = rootIdentities
         self.npcs = npcs
         self.clock = clock
+        self.retinue = retinue
     }
 }
 

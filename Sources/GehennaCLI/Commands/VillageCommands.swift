@@ -47,7 +47,7 @@ extension GameSession {
             )
             print("  \(thresholdResp)")
             npcs[mainIndex].lastInteractionTick = clock.currentTick
-            let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+            let events = advanceTime(.command)
             processWorldEvents(events)
             processDirectorEvents()
             return
@@ -102,7 +102,7 @@ extension GameSession {
         }
         npcs[mainIndex].lastInteractionTick = clock.currentTick
         
-        let events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        let events = advanceTime(.command)
         processWorldEvents(events)
         processDirectorEvents()
     }

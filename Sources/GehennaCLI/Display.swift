@@ -12,7 +12,7 @@ extension GameSession {
         ║   A physics engine for ancient cosmology,    ║
         ║           disguised as a game.               ║
         ║                                              ║
-        ║          Ridge of Elah — v0.4.27             ║
+        ║          Ridge of Elah — v0.4.28             ║
         ║                                              ║
         ╚══════════════════════════════════════════════╝
 
@@ -132,7 +132,11 @@ extension GameSession {
         if profile.mutationRituals > 0 {
             print("    Mutations: \(profile.mutationRituals)")
         }
-        print("    Spirits sustained: \(profile.summonerCapacity)")
+        if retinue.isEmpty {
+            print("    No spirit walks with you. You could hold \(capacityDescription(profile.summonerCapacity)).")
+        } else {
+            print("    \(retinue.count == 1 ? "One spirit walks" : "\(retinue.count) spirits walk") with you. You can hold \(capacityDescription(profile.summonerCapacity)).")
+        }
         print("    Purity: \(describeLevel(profile.tokens.effectivePurity, low: "unclean", mid: "adequate", high: "purified"))")
         if profile.tokens.corpseContagion > 0.3 {
             print("    ⚠ Heavy contagion from handling the dead.")
@@ -177,6 +181,8 @@ extension GameSession {
             artifacts (a)    Examine artifacts and memory traces
             inspect          Inspect a fragment in detail
             ritual (r)       Compose and perform a ritual
+            spirits          See who walks with you (retinue)
+            dismiss          Part ways with a bound spirit
             cast / bones     Cast the astragali (diagnostic bones)
             codex (c)        Browse your Codex of the Dead
             village (v)      Talk to the people of Kfar Shalem

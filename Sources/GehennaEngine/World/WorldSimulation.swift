@@ -101,6 +101,7 @@ public struct JournalEntry: Codable, Sendable, Identifiable {
         case rumorSeed
         case directorEvent
         case spiritLingering
+        case spiritDeparted
     }
 }
 

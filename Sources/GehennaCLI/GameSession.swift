@@ -18,6 +18,7 @@ final class GameSession: @unchecked Sendable {
     var clock: WorldClock
     var director: WorldDirector
     var expressionEngine: ExpressionEngine
+    var retinue: Retinue
     var debugMode: Bool = false
 
     struct Inventory {
@@ -54,6 +55,49 @@ final class GameSession: @unchecked Sendable {
         self.clock = WorldClock()
         self.director = WorldDirector()
         self.expressionEngine = ExpressionEngine()
+        self.retinue = Retinue()
+    }
+
+    // MARK: - Time
+
+    enum TimeCost {
+        case command, travel, rest
+    }
+
+    /// The single CLI entry point for time. Advances the clock, then lets
+    /// the retinue feel the same ticks — bound spirits decay while the
+    /// world moves, and their departures are narrated before the prompt
+    /// returns.
+    func advanceTime(_ cost: TimeCost) -> [WorldEvent] {
+        let events: [WorldEvent]
+        let ticks: Int
+        switch cost {
+        case .command:
+            ticks = clock.ticksPerCommand
+            events = clock.advanceForCommand(world: &world, sites: &sites, npcs: &npcs)
+        case .travel:
+            ticks = clock.ticksPerTravel
+            events = clock.advanceForTravel(world: &world, sites: &sites, npcs: &npcs)
+        case .rest:
+            ticks = clock.ticksPerRest
+            events = clock.advanceForRest(world: &world, sites: &sites, npcs: &npcs)
+        }
+        tickRetinue(elapsed: ticks)
+        return events
+    }
+
+    /// Decay bound spirits for elapsed ticks and narrate any that fade.
+    func tickRetinue(elapsed: Int) {
+        guard !retinue.isEmpty else { return }
+        let corruption = world.regions.values.first?.corruption ?? 0.0
+        let departures = retinue.advance(
+            ticks: elapsed,
+            regionCorruption: corruption,
+            endingAtTick: clock.currentTick
+        )
+        for departure in departures {
+            recordDeparture(departure)
+        }
     }
 
     // MARK: - Main Loop
@@ -105,6 +149,10 @@ final class GameSession: @unchecked Sendable {
                 searchJournal()
             case "scavenge", "s":
                 scavengeSite()
+            case "spirits", "retinue", "bound":
+                showRetinue()
+            case "dismiss", "release":
+                dismissMenu()
             case "village", "v", "talk":
                 await villageMenu()
             case "rumors", "gossip":
@@ -192,7 +240,8 @@ final class GameSession: @unchecked Sendable {
             ritualCount: ritualCount,
             rootIdentities: rootIdentities,
             npcs: npcs,
-            clock: clock
+            clock: clock,
+            retinue: retinue
         )
     }
 
@@ -212,6 +261,7 @@ final class GameSession: @unchecked Sendable {
         rootIdentities = snapshot.rootIdentities
         npcs = snapshot.npcs
         clock = snapshot.clock
+        retinue = snapshot.retinue ?? Retinue()
     }
 
     // MARK: - Commands
