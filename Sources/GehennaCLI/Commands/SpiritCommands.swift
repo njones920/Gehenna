@@ -115,6 +115,24 @@ extension GameSession {
             }
 
             guard let bound = retinue.boundSpirit(withID: spiritID) else { return }
+            let relationshipKey = RelationshipLedger.key(for: bound.spirit)
+
+            // Giving your true name to the dead: trust, and a liability.
+            // It cannot be ungiven.
+            if input.lowercased().hasPrefix("my name is ") {
+                let givenName = String(input.dropFirst("my name is ".count))
+                    .trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters))
+                if !givenName.isEmpty,
+                   relationships.relationship(forKey: relationshipKey)?.nameGiven == nil {
+                    relationships.record(
+                        .gaveTrueName,
+                        for: bound.spirit,
+                        atTick: clock.currentTick,
+                        detail: givenName
+                    )
+                    print("\n  You have given the dead your name. That cannot be ungiven.")
+                }
+            }
 
             let rootIdentity = bound.spirit.rootIdentityID.flatMap { rid in
                 rootIdentities.first { $0.id == rid }
@@ -127,9 +145,11 @@ extension GameSession {
                 bound,
                 input: input,
                 rootIdentity: rootIdentity,
+                relationship: relationships.relationship(forKey: relationshipKey),
                 recentEvents: siteEvents
             )
             print("\n  \"\(response)\"")
+            relationships.noteExchange(withKey: relationshipKey)
 
             // The exchange itself strains the spirit.
             if let departure = retinue.recordExchange(with: spiritID, atTick: clock.currentTick) {
@@ -232,6 +252,10 @@ extension GameSession {
     /// while the world is moving and the practitioner may not be watching.
     func recordDeparture(_ departure: SpiritDeparture) {
         let name = spiritDisplayName(departure.spirit)
+
+        // The manner of parting is relational truth. The ledger reads it,
+        // and the next summoning will remember.
+        relationships.recordDeparture(departure)
 
         if departure.manner == .faded {
             print("\n  ✦ \(name.capitalized) thins. You feel the anchor let go — not broken, spent.")

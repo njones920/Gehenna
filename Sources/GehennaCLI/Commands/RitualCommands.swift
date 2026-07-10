@@ -81,7 +81,84 @@ extension GameSession {
         await executeRitual(intent)
     }
 
-    private func executeRitual(_ intent: RitualIntent) async {
+    // MARK: - Call By Name
+
+    /// Summon someone already known, through the relationship rather than
+    /// through fragments alone. First contact is discovery; calling is
+    /// recall. Which aspect answers depends on how you have treated them.
+    func callMenu() async {
+        let known = relationships.all.filter { rel in
+            rootIdentities.contains { $0.id == rel.rootKey }
+        }
+        guard !known.isEmpty else {
+            print("\n  There is no one you know well enough to call by name.")
+            print("  Calling needs a relationship with someone whose root you have touched —")
+            print("  summon them first, the long way, through the fragments.")
+            return
+        }
+        guard !inventory.fragments.isEmpty else {
+            print("\n  Even a call needs an anchor. You carry no fragments.")
+            return
+        }
+
+        print("\n  ── Call By Name ──")
+        print("  The dead you have known:")
+        for (i, rel) in known.enumerated() {
+            let times = rel.timesSummoned == 1 ? "once" : "\(rel.timesSummoned) times"
+            print("  [\(i)] \(rel.displayName) — called \(times)")
+        }
+        print("  [c] Cancel")
+        print("\n  > ", terminator: "")
+        guard let input = readLine(), input.lowercased() != "c",
+              let index = Int(input), index < known.count else { return }
+        let rel = known[index]
+
+        guard let root = rootIdentities.first(where: { $0.id == rel.rootKey }) else { return }
+
+        print("\n  Anchor the call with a fragment:")
+        for (i, frag) in inventory.fragments.enumerated() {
+            print("  [\(i)] \(frag.remainsType.rawValue) (\(frag.era.rawValue))")
+        }
+        print("  [c] Cancel")
+        print("\n  > ", terminator: "")
+        guard let fragInput = readLine(), fragInput.lowercased() != "c",
+              let fragIndex = Int(fragInput), fragIndex < inventory.fragments.count else { return }
+
+        print("\n  Pour a libation:")
+        for (i, lib) in inventory.libations.enumerated() {
+            print("  [\(i)] \(lib.rawValue)")
+        }
+        print("  [c] Cancel")
+        print("\n  > ", terminator: "")
+        guard let libInput = readLine(), let libIndex = Int(libInput),
+              libIndex < inventory.libations.count else { return }
+        let libation = inventory.libations.remove(at: libIndex)
+
+        // The relationship's stage sets the anchor strength; its valence
+        // steers which aspect of the person picks up.
+        let observedTraits = codex.entries.values
+            .filter { $0.rootIdentityID == rel.rootKey }
+            .flatMap(\.observedTraits)
+        let invocation = RelationalInvocation(
+            rootIdentityID: root.id,
+            coherenceBonus: rel.callCoherenceBonus(traits: observedTraits),
+            valence: rel.netValence
+        )
+
+        print("\n  You speak the name you know — not to the air, to the person.")
+
+        let intent = RitualIntent(
+            fragmentIndex: fragIndex,
+            trueName: root.trueName ?? rel.displayName,
+            artifactIndex: nil,
+            traceIndex: nil,
+            libationType: libation,
+            timing: WorldTiming(time: clock.currentTimeOfDay)
+        )
+        await executeRitual(intent, invocation: invocation)
+    }
+
+    private func executeRitual(_ intent: RitualIntent, invocation: RelationalInvocation? = nil) async {
         var site = sites[currentSiteIndex]
         let fragment = inventory.fragments.remove(at: intent.fragmentIndex)
         let artifact = intent.artifactIndex.map { inventory.artifacts.remove(at: $0) }
@@ -103,7 +180,8 @@ extension GameSession {
             regionState: world.regions.values.first ?? RegionState(name: "Unknown"),
             profile: profile,
             seed: UInt64(clock.currentTick),
-            rootIdentities: self.rootIdentities
+            rootIdentities: self.rootIdentities,
+            invocation: invocation
         )
 
         print("\n  ── Ritual Result ──\n")
@@ -134,6 +212,9 @@ extension GameSession {
                 tick: clock.currentTick
             )
             codex.crossLinkEpochs()
+
+            // The dead remember being called back, whoever they are.
+            relationships.noteSummon(of: spirit, atTick: clock.currentTick)
 
             let anchored = retinue.anchor(
                 spirit,

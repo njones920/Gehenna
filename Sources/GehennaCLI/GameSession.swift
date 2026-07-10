@@ -19,6 +19,7 @@ final class GameSession: @unchecked Sendable {
     var director: WorldDirector
     var expressionEngine: ExpressionEngine
     var retinue: Retinue
+    var relationships: RelationshipLedger
     var debugMode: Bool = false
 
     struct Inventory {
@@ -56,6 +57,7 @@ final class GameSession: @unchecked Sendable {
         self.director = WorldDirector()
         self.expressionEngine = ExpressionEngine()
         self.retinue = Retinue()
+        self.relationships = RelationshipLedger()
     }
 
     // MARK: - Time
@@ -153,6 +155,8 @@ final class GameSession: @unchecked Sendable {
                 showRetinue()
             case "speak", "commune":
                 await speakMenu()
+            case "call":
+                await callMenu()
             case "dismiss", "release":
                 dismissMenu()
             case "village", "v", "talk":
@@ -243,7 +247,8 @@ final class GameSession: @unchecked Sendable {
             rootIdentities: rootIdentities,
             npcs: npcs,
             clock: clock,
-            retinue: retinue
+            retinue: retinue,
+            relationships: relationships
         )
     }
 
@@ -264,6 +269,7 @@ final class GameSession: @unchecked Sendable {
         npcs = snapshot.npcs
         clock = snapshot.clock
         retinue = snapshot.retinue ?? Retinue()
+        relationships = snapshot.relationships ?? RelationshipLedger()
     }
 
     // MARK: - Commands

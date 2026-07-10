@@ -118,12 +118,14 @@ public actor ExpressionEngine {
         _ bound: BoundSpirit,
         input: String,
         rootIdentity: RootIdentity? = nil,
+        relationship: SpiritRelationship? = nil,
         recentEvents: [String] = []
     ) async -> String {
         let packet = assembler.spiritChatPacket(
             for: bound,
             input: input,
             rootIdentity: rootIdentity,
+            relationship: relationship,
             recentEvents: recentEvents
         )
         return await renderFull(packet)

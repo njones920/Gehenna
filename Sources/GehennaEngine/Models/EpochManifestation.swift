@@ -260,16 +260,26 @@ public struct EpochResolver: Sendable {
 
     /// Given a root identity and a ritual context, determine which epoch manifests.
     /// Returns nil if no epoch matches — the default template selection takes over.
+    /// `relationalValence` steers aspect selection on a call-by-name: a soured
+    /// relationship favors the person's dark aspects; a warm one favors the
+    /// aspect the practitioner has actually known. Epochs are moods of the
+    /// relationship, not random forms.
     public func resolve(
         identity: RootIdentity,
         configuration: RitualConfiguration,
-        regionState: RegionState
+        regionState: RegionState,
+        relationalValence: Double = 0.0
     ) -> Epoch? {
         guard !identity.epochs.isEmpty else { return nil }
 
         // Score each epoch against the current configuration
         let scored = identity.epochs.map { epoch in
-            (epoch: epoch, score: scoreEpoch(epoch, configuration: configuration, regionState: regionState))
+            (epoch: epoch, score: scoreEpoch(
+                epoch,
+                configuration: configuration,
+                regionState: regionState,
+                relationalValence: relationalValence
+            ))
         }
 
         // The highest-scoring epoch wins, with a minimum threshold
@@ -282,13 +292,31 @@ public struct EpochResolver: Sendable {
         return winner.epoch
     }
 
+    /// Whether an epoch is a dark aspect — the shape a person takes when
+    /// what was done to them outweighs who they were.
+    private func isDarkAspect(_ epoch: Epoch) -> Bool {
+        epoch.corruptionThreshold != nil
+            || epoch.baselineDisposition == .hostile
+            || epoch.template == .butcher
+    }
+
     /// Score how well an epoch matches the current ritual context.
     private func scoreEpoch(
         _ epoch: Epoch,
         configuration: RitualConfiguration,
-        regionState: RegionState
+        regionState: RegionState,
+        relationalValence: Double = 0.0
     ) -> Double {
         var score = 0.0
+
+        // Relational steering — how the practitioner has treated this
+        // person tilts which aspect picks up. Banish the Captain often
+        // enough and the Butcher answers instead.
+        if relationalValence < 0, isDarkAspect(epoch) {
+            score += min(0.5, -relationalValence * 0.5)
+        } else if relationalValence > 0, !isDarkAspect(epoch) {
+            score += min(0.3, relationalValence * 0.25)
+        }
 
         // Era alignment — the dominant era of the ritual vs the epoch's era
         let eraAlignment = configuration.dominantEra.alignment(with: epoch.era)

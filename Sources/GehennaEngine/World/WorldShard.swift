@@ -18,6 +18,7 @@ public struct PractitionerSession: Sendable {
     public var currentSiteIndex: Int
     public var ritualCount: Int
     public var retinue: Retinue
+    public var relationships: RelationshipLedger
 
     public struct PlayerInventory: Sendable {
         public var fragments: [Fragment]
@@ -47,6 +48,7 @@ public struct PractitionerSession: Sendable {
         self.currentSiteIndex = startingSiteIndex
         self.ritualCount = 0
         self.retinue = Retinue()
+        self.relationships = RelationshipLedger()
     }
 }
 
@@ -104,6 +106,7 @@ public actor WorldShard {
                 endingAtTick: clock.currentTick
             )
             for departure in departures {
+                session.relationships.recordDeparture(departure)
                 world.journal.append(JournalEntry(
                     tick: departure.tick,
                     type: .spiritDeparted,
@@ -452,6 +455,7 @@ public actor WorldShard {
                 ritualID: config.id,
                 tick: clock.currentTick
             )
+            session.relationships.noteSummon(of: spirit, atTick: clock.currentTick)
             session.retinue.anchor(
                 spirit,
                 atTick: clock.currentTick,

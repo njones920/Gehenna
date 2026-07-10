@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.4.30 - The Dead Remember
+
+The tenth summoning sounds different from the first. Spirits carry a typed relationship record — every summoning, parting, promise, and slight — and their voice evolves from it. `call` summons someone you already know through the relationship itself, and which aspect answers depends on how you have treated them. Phase 3 of Milestone 0.5.
+
+### Added
+
+- **`SpiritRelationship` / `RelationshipLedger`:** append-only `RelationalMoment` record (anchored, released-with-libation, banished, left-to-fade, gave-true-name, plus 0.4.31's conversational kinds), keyed by root identity so every epoch aspect shares one memory — the Captain remembers what was done to the Butcher. Familiarity stage (`stranger → named → acquainted → bonded`, souring `wary → cold → hostile`) is a pure function of the record, modulated by personality: loyal spirits bond at lower valence, resentful ones never bond, spiteful ones sour twice as fast.
+- **`call` command:** call-by-name summoning. The relationship contributes coherence (`bonded` +0.4 — the knowing itself is an anchor; `hostile` gives the name no purchase), resolution is confined to the called identity, and relational valence steers epoch scoring — banish the Captain often enough and the Butcher answers. Verified live.
+- **True-name giving:** say "my name is …" to a bound spirit. A strong bonding moment, permanently recorded ("That cannot be ungiven") — and a liability the multiplayer influence actions will eventually read.
+- **Evolving voice:** chat packets carry relationship memory as concrete facts ("at your last parting they banished you — you remember it"), stage-mapped trust, and cross-manifestation exchange counts. Relationship memory is deliberately not gated by the Knowledge attribute: the dead may forget their own lives, but they remember how they were treated.
+- **Persistence & parity:** ledger persists in the snapshot (pre-0.4.30 saves decode); `WorldShard` sessions accrue summons and fades identically.
+- **Tests:** 10-test `Spirit Relationship Tests` suite, including the Captain→Butcher steering flip and deterministic stage math.
+
 ## 0.4.29 - The Dead Speak
 
 The Codex Part II scene is now playable: you can sit with a summoned spirit and ask it questions. Free-form conversation with bound spirits, rendered from who they actually are — identity tags, epoch interiority, knowledge-gated facts — and paid for in stability. Phase 2 of Milestone 0.5.

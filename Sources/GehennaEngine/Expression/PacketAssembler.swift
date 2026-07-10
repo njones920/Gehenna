@@ -111,6 +111,7 @@ public struct PacketAssembler: Sendable {
         for bound: BoundSpirit,
         input: String?,
         rootIdentity: RootIdentity? = nil,
+        relationship: SpiritRelationship? = nil,
         recentEvents: [String] = []
     ) -> FullExpressionPacket {
         let spirit = bound.spirit
@@ -130,25 +131,52 @@ public struct PacketAssembler: Sendable {
                     : spirit.attributes.knowledge < 0.6 ? 7
                     : 12
 
+        // Relationship memory is not gated by Knowledge — the dead may
+        // forget their own lives, but they remember how they were treated.
+        // These are concrete moments the Expression Layer can phrase.
+        var relationshipFacts: [String] = []
+        let stage = relationship?.stage(traits: spirit.personalityTraits)
+        if let relationship, let stage {
+            relationshipFacts.append("to you, this practitioner is \(stage.descriptor)")
+            if relationship.timesSummoned > 1 {
+                relationshipFacts.append("this practitioner has called you back \(relationship.timesSummoned) times")
+            }
+            if let parting = relationship.lastParting {
+                switch parting.kind {
+                case .releasedWithLibation:
+                    relationshipFacts.append("at your last parting they poured an offering and released you properly")
+                case .banished:
+                    relationshipFacts.append("at your last parting they banished you — torn away without ceremony; you remember it")
+                case .leftToFade:
+                    relationshipFacts.append("at your last parting they let you dissolve when your strength ran out")
+                default:
+                    break
+                }
+            }
+            if let name = relationship.nameGiven {
+                relationshipFacts.append("they gave you their true name: \(name) — you may speak it")
+            }
+        }
+
         return FullExpressionPacket(
             entityType: .spirit,
             entityName: spirit.epochName,
             entityTags: spirit.tags,
             disposition: spirit.disposition.rawValue,
-            trustLevel: nil,
+            trustLevel: stage?.promptTrust,
             eventType: .spiritChat,
             culture: spirit.culturalAffiliation,
             suspicionLevel: nil,
             isAtThreshold: false,
             era: spirit.era,
             registerKey: cadenceForSpirit(spirit),
-            knownFacts: Array(facts.prefix(factCap)),
+            knownFacts: relationshipFacts + Array(facts.prefix(factCap)),
             forbiddenTopics: spirit.tags.tags
                 .filter { $0.dimension == .taboo }
                 .map(\.value),
             allowedLengthMin: minLength(for: .spiritChat),
             allowedLengthMax: maxLength(for: .spiritChat),
-            interactionHistory: bound.exchangeCount,
+            interactionHistory: max(relationship?.totalExchanges ?? 0, bound.exchangeCount),
             recentEvents: recentEvents,
             interiorVoice: epoch?.interiorVoice,
             privateTruth: epoch?.privateTruth,

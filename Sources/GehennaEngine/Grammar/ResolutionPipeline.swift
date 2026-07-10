@@ -41,6 +41,9 @@ public struct ResolutionState: Sendable {
     public var resolvedEpoch: Epoch? = nil
     public var resolvedRootIdentity: RootIdentity? = nil
 
+    // -- Relational Invocation (call-by-name) --
+    public var invocation: RelationalInvocation? = nil
+
     // -- Diagnostics --
     public var autopsyFactors: [String] = []
 
@@ -126,7 +129,8 @@ public struct ResolutionPipeline: Sendable {
         regionState: RegionState,
         profile: PractitionerProfile,
         seed: UInt64,
-        rootIdentities: [RootIdentity] = []
+        rootIdentities: [RootIdentity] = [],
+        invocation: RelationalInvocation? = nil
     ) -> RitualResult {
         var state = ResolutionState(
             configuration: configuration,
@@ -135,6 +139,7 @@ public struct ResolutionPipeline: Sendable {
             rootIdentities: rootIdentities,
             entropySource: EntropySource(seed: seed)
         )
+        state.invocation = invocation
 
         // Stage 1: Aggregation
         aggregation(&state)
@@ -266,6 +271,14 @@ public struct ResolutionPipeline: Sendable {
 
         // Summoner skill reduces noise
         coherence += state.profile.summonerSkill * 0.1
+
+        // Call-by-name: the relationship itself is an anchor. A bonded
+        // spirit answers a bare fragment; a hostile one gives the name
+        // no purchase.
+        if let invocation = state.invocation, invocation.coherenceBonus > 0 {
+            coherence += invocation.coherenceBonus
+            state.autopsyFactors.append("You did not call a stranger. The knowing itself was an anchor.")
+        }
 
         state.coherence = min(1.0, max(0.0, coherence))
     }
@@ -571,9 +584,19 @@ public struct ResolutionPipeline: Sendable {
         let config = state.configuration
         let configTags = Set(config.aggregatedTags.tags.map(\.value))
 
+        // A call-by-name confines resolution to the identity being called —
+        // the practitioner is not fishing the tag space; they know who
+        // they want. Which aspect answers is still the grammar's choice.
+        let candidates: [RootIdentity]
+        if let invocation = state.invocation {
+            candidates = state.rootIdentities.filter { $0.id == invocation.rootIdentityID }
+        } else {
+            candidates = state.rootIdentities
+        }
+
         // Score each root identity by tag overlap with the configuration
         var bestMatch: (identity: RootIdentity, score: Double)? = nil
-        for identity in state.rootIdentities {
+        for identity in candidates {
             let coreTags = Set(identity.coreTags.tags.map(\.value))
             let overlap = configTags.intersection(coreTags).count
             let score = Double(overlap) / max(1.0, Double(coreTags.count))
@@ -599,7 +622,8 @@ public struct ResolutionPipeline: Sendable {
         if let epoch = resolver.resolve(
             identity: match.identity,
             configuration: config,
-            regionState: state.regionState
+            regionState: state.regionState,
+            relationalValence: state.invocation?.valence ?? 0.0
         ) {
             state.resolvedEpoch = epoch
             state.resolvedRootIdentity = match.identity

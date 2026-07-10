@@ -289,7 +289,7 @@ public actor OllamaProvider: ExpressionProvider {
                             trust > 0.4 ? "neutral, weighing each word" :
                             trust > 0.2 ? "guarded, watching for danger" :
                                          "hostile — every word is a potential threat"
-            lines.append("Attitude toward the stranger: \(trustDesc)")
+            lines.append("Attitude toward the practitioner: \(trustDesc)")
         }
         if let suspicion = packet.suspicionLevel {
             let suspDesc = suspicion > 0.8 ? "acutely suspicious — braced for betrayal" :

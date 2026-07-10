@@ -42,6 +42,10 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
     /// written before 0.4.28 still decode (missing key -> nil -> empty retinue).
     public var retinue: Retinue?
 
+    /// The practitioner's spirit relationship ledger. Optional so snapshots
+    /// written before 0.4.30 still decode.
+    public var relationships: RelationshipLedger?
+
     public init(
         engineVersion: String = GehennaEngine.version,
         codexVersion: String = GehennaEngine.codexVersion,
@@ -56,7 +60,8 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         rootIdentities: [RootIdentity],
         npcs: [NPC],
         clock: WorldClock,
-        retinue: Retinue? = nil
+        retinue: Retinue? = nil,
+        relationships: RelationshipLedger? = nil
     ) {
         self.engineVersion = engineVersion
         self.codexVersion = codexVersion
@@ -72,6 +77,7 @@ public struct SinglePlayerSnapshot: Codable, Sendable {
         self.npcs = npcs
         self.clock = clock
         self.retinue = retinue
+        self.relationships = relationships
     }
 }
 
