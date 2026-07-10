@@ -103,7 +103,7 @@ final class GameSession: @unchecked Sendable {
                 showJournal()
             case "search":
                 searchJournal()
-            case "scavenge":
+            case "scavenge", "s":
                 scavengeSite()
             case "village", "v", "talk":
                 await villageMenu()

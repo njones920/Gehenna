@@ -12,10 +12,25 @@ import Foundation
 import FoundationNetworking
 #endif
 
+/// Hardware-aware model tiers for auto-negotiation.
+/// Ordered from most capable to least capable within each tier.
+/// Only models present in the machine's Ollama installation are selected.
+private enum ModelTier {
+    /// >= 32 GB unified memory: large models are comfortable.
+    static let high:   [String] = ["gemma4:31b", "gemma4:27b"]
+    /// >= 16 GB unified memory: mid-weight models fit well.
+    static let mid:    [String] = ["gemma4:e4b", "gemma4:12b", "qwen2.5-coder:7b"]
+    /// < 16 GB unified memory: keep it small to avoid stalls.
+    static let low:    [String] = ["qwen2.5-coder:1.5b", "llama3.2:3b", "gemma:2b"]
+}
+
 /// Ollama HTTP client implementing ExpressionProvider.
 public actor OllamaProvider: ExpressionProvider {
     private let baseURL: String
-    private let model: String
+    /// Pinned model name. nil means auto-negotiate on first use.
+    private let _model: String?
+    /// Resolved model name, cached after first negotiation.
+    private var resolvedModel: String?
     private let validator: ExpressionValidator
 
     // MARK: - Generation options
@@ -33,7 +48,9 @@ public actor OllamaProvider: ExpressionProvider {
     /// Create a provider targeting a local Ollama instance.
     /// - Parameters:
     ///   - baseURL: Ollama server URL (default: http://localhost:11434 or OLLAMA_HOST env var)
-    ///   - model: Model name to use (default: gemma4:31b or OLLAMA_MODEL env var)
+    ///   - model: Model name to use. When nil (the default), the provider auto-negotiates
+    ///            the best installed model for the machine's available RAM. Override via
+    ///            the OLLAMA_MODEL env var or by passing an explicit value here.
     ///   - temperature: Sampling temperature (default: 0.65 — constrained creative)
     ///   - repeatPenalty: Repetition penalty (default: 1.15)
     ///   - numPredict: Maximum tokens to generate (default: 150)
@@ -47,7 +64,8 @@ public actor OllamaProvider: ExpressionProvider {
         timeoutInterval: TimeInterval = 90
     ) {
         self.baseURL = baseURL ?? ProcessInfo.processInfo.environment["OLLAMA_HOST"] ?? "http://localhost:11434"
-        self.model = model ?? ProcessInfo.processInfo.environment["OLLAMA_MODEL"] ?? "gemma4:31b"
+        // Explicit arg > env var > nil (auto-negotiate)
+        self._model = model ?? ProcessInfo.processInfo.environment["OLLAMA_MODEL"]
         self.validator = ExpressionValidator()
         self.temperature = temperature
         self.repeatPenalty = repeatPenalty
@@ -57,6 +75,78 @@ public actor OllamaProvider: ExpressionProvider {
         config.timeoutIntervalForRequest = timeoutInterval
         config.timeoutIntervalForResource = timeoutInterval + 30
         self.session = URLSession(configuration: config)
+    }
+
+    // MARK: - Hardware-Aware Model Negotiation
+
+    /// Returns the model to use for this session.
+    ///
+    /// Resolution order:
+    ///   1. A pinned model from init or OLLAMA_MODEL env var.
+    ///   2. Previously negotiated model (cached after first negotiation).
+    ///   3. Auto-negotiate: pick the best installed model for available RAM.
+    ///   4. Absolute fallback: "gemma4:31b" (preserves original default).
+    private func resolveModel() async -> String {
+        // Fast path: already pinned or previously negotiated.
+        if let pinned = _model { return pinned }
+        if let cached = resolvedModel { return cached }
+
+        // Auto-negotiate based on RAM and installed models.
+        let negotiated = await negotiateModel()
+        resolvedModel = negotiated
+        return negotiated
+    }
+
+    /// Selects the best installed Ollama model for the current hardware.
+    ///
+    /// RAM thresholds mirror common unified-memory Mac configs:
+    ///   - 32 GB+: high tier (large models run comfortably)
+    ///   - 16 GB+: mid tier (medium models fit; large ones stall)
+    ///   - < 16 GB: low tier (keep it small to avoid swap)
+    private func negotiateModel() async -> String {
+        let ramGB = ProcessInfo.processInfo.physicalMemory / (1024 * 1024 * 1024)
+
+        let preferenceList: [String]
+        switch ramGB {
+        case 32...: preferenceList = ModelTier.high + ModelTier.mid + ModelTier.low
+        case 16...: preferenceList = ModelTier.mid + ModelTier.low + ModelTier.high
+        default:    preferenceList = ModelTier.low + ModelTier.mid
+        }
+
+        let installed = (try? await fetchAvailableModels()) ?? []
+
+        for candidate in preferenceList {
+            if installed.contains(candidate) {
+                #if DEBUG
+                print("[OllamaProvider] Auto-selected model: \(candidate) (\(ramGB) GB RAM, \(installed.count) model(s) installed)")
+                #endif
+                return candidate
+            }
+        }
+
+        // Nothing matched — fall back to the historic default and let Ollama
+        // surface its own "model not found" error if it's missing.
+        #if DEBUG
+        print("[OllamaProvider] No matching model found in tier list; defaulting to gemma4:31b")
+        #endif
+        return "gemma4:31b"
+    }
+
+    /// Fetch the list of model names currently installed in Ollama.
+    /// Returns an empty array on any network or parse error.
+    private func fetchAvailableModels() async throws -> [String] {
+        let url = URL(string: "\(baseURL)/api/tags")!
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 5.0  // Fast health check — don't hang
+        let (data, response) = try await session.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            return []
+        }
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let models = json["models"] as? [[String: Any]] else {
+            return []
+        }
+        return models.compactMap { $0["name"] as? String }
     }
 
     // MARK: - ExpressionProvider conformance
@@ -96,19 +186,10 @@ public actor OllamaProvider: ExpressionProvider {
     public var isAvailable: Bool {
         get async {
             do {
-                let url = URL(string: "\(baseURL)/api/tags")!
-                var request = URLRequest(url: url)
-                request.timeoutInterval = 5.0  // Fast health check — don't hang
-                let (data, response) = try await session.data(for: request)
-                guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-                    return false
-                }
-                // Verify the specific model is loaded, not just the endpoint.
-                guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                      let models = json["models"] as? [[String: Any]] else {
-                    return false
-                }
-                return models.contains { ($0["name"] as? String) == model }
+                let installed = try await fetchAvailableModels()
+                let model = await resolveModel()
+                // Verify the specific model is installed, not just the endpoint.
+                return installed.contains(model)
             } catch {
                 return false
             }
@@ -284,6 +365,8 @@ public actor OllamaProvider: ExpressionProvider {
     private func callOllama(prompt: String) async throws -> String {
         // Bail immediately if the surrounding Task was cancelled.
         try Task.checkCancellation()
+
+        let model = await resolveModel()
 
         let url = URL(string: "\(baseURL)/api/chat")!
         var request = URLRequest(url: url)
