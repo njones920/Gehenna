@@ -1,8 +1,8 @@
 # GEHENNA
 
-![Version](https://img.shields.io/badge/version-0.4.26-7a3cff)
+![Version](https://img.shields.io/badge/version-0.5.0-7a3cff)
 ![Swift](https://img.shields.io/badge/swift-6-orange)
-![Tests](https://img.shields.io/badge/tests-104%20passing-2ea44f)
+![Tests](https://img.shields.io/badge/tests-151%20passing-2ea44f)
 ![Releases](https://img.shields.io/badge/releases-tags%20on%20main-0a7ea4)
 
 ![GEHENNA early key art](art/reference/early_key_art.png)
@@ -13,7 +13,7 @@ GEHENNA is an early Swift implementation of the Codex concept in this repository
 
 ## World Seed
 
-Version: `0.4.26`
+Version: `0.5.0`
 
 This build is intended as the first public "world seed" build: clone it, build it, run it, inspect it, and continue development without private context.
 
@@ -29,6 +29,9 @@ This build is intended as the first public "world seed" build: clone it, build i
 | Rumor ledger, propagation, mutation, and decay | Live |
 | Local shared-world bot arena | Live |
 | Persistence | Local single-player save/load via `gehenna-save.json`; no server/backend persistence yet |
+| Spirit retinue, conversation, and relationship memory | Live |
+| Call-by-name summoning with relational epoch steering | Live |
+| Generative Oracle lanes (spoken canon harvest, world-event proposals) | Live |
 | Networked multiplayer server | Not live yet |
 | Full historical canon dataset | Prototype seed only |
 | Graphics | Not live yet |
@@ -89,7 +92,14 @@ What is live:
 - Headless shared-world bot arena for local multiplayer simulation.
 - Rumor ledger with seed, propagation, mutation, decay, and carrier tracking, surfaced in the CLI through `rumors`.
 - LLM-backed Expression Layer via Ollama for dynamic narrative generation.
-- Swift Testing suite (104 tests across 24 suites).
+- The Retinue: anchored spirits persist, decay, and are dismissed with manner.
+- Free-form spirit conversation with knowledge-gated facts and per-epoch authored interiority.
+- Relationship ledger: the dead remember every summoning, parting, promise, and slight; their voices evolve.
+- Call-by-name summoning: relationships anchor coherence, and how you treated someone steers which aspect answers.
+- Typed intent extraction: what you say to spirits and villagers has deterministic consequences.
+- The Buried Names: the first authored want — Devorah, Maacah, and a truth only the dead can give.
+- The Oracle Lane: the LLM proposes typed world events and spirits speak canon into their own records; the simulation commits; the record remembers.
+- Swift Testing suite (151 tests across 32 suites).
 
 What is not live yet:
 
@@ -100,7 +110,6 @@ What is not live yet:
 - Region-scale rumor ecology and faction action on rumor history.
 - Oracle Network.
 - Evidence chain.
-- Spirit persistence after manifestation.
 - Graphics.
 
 ## Requirements
@@ -142,6 +151,10 @@ Useful first commands:
 ```text
 look
 sites
+spirits
+speak
+call
+dismiss
 fragments
 artifacts
 cast

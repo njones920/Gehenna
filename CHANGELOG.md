@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 0.5.0 - The Dead Speak (Milestone Complete)
+
+Milestone 0.5 closes. The loop the game was originally imagined around — compile spirits, keep them, talk to them, watch their language evolve in a world that acts on its own — is playable end to end. Scored against Codex Part XI:
+
+1. **A useful spirit within fifteen minutes** — pass. Scavenge at the starting site, speak a name over a fragment, and someone answers.
+2. **Deliberate configuration choices** — pass. Autopsies name causes; the astragali read configurations; `call` makes the relationship itself a deliberate input.
+3. **World change connected to actions** — pass. Sites scar, rumors travel, villagers close their doors or open them, and the retinue makes every tick of time a cost you feel.
+4. **The Unscripted Moment** — pass, twice in one proof run: told his line held at Ashkelon, the Bronze Captain challenged the practitioner — "Tell me now, does your word hold steel?" — and minutes later the generative lane scattered birds eastward off the ridge, an omen nobody authored, with consequences in the journal.
+5. *(Milestone)* **Re-summoning feels like meeting someone again** — pass, both polarities: the banished Hiram answered as the Butcher and called it theft; the properly-released Hiram answered as the Captain and remembered the offering.
+6. *(Milestone)* **A tester names a spirit they like and one they're wary of, in terms of things that happened** — open: requires a fresh player. That's the next playtest.
+
+### Changed
+
+- Version-bearing surfaces report `0.5.0`. README status, live-feature list, and first-commands updated; `docs/PLAYER_MANUAL.md` documents `spirits`, `speak`, `call`, and `dismiss`.
+
 ## 0.4.33 - The Oracle Lane
 
 "Conway's Game of Life meets language compiler." The LLM is admitted as a story-driving actor — through typed, recorded lanes rather than freeform control. The model proposes; the simulation commits; the record remembers. This applies the Codex's own Oracle-Network pattern (live input recorded into the envelope as consumed; replay reads the record) to the language model itself.

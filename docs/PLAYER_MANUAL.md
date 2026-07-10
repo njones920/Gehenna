@@ -15,6 +15,10 @@ The engine operates via a deterministic, minimalist command-line interface. The 
 * **`travel`** (or `t`): Move between sites. Travel costs time.
 * **`village`** (or `v`): When at a living settlement (like Kfar Shalem), interact with the locals.
 * **`ritual`** (or `r`): Compose and execute a ritual using your collected items.
+* **`spirits`** (or `retinue`): See who walks with you. Anchored spirits persist — they travel with you and their presence decays tick by tick until spent or released.
+* **`speak`** (or `commune`): Converse freely with a bound spirit. Every exchange strains the spirit's stability and passes world time — talking to the dead is holding a door open. What you say has weight: promises are recorded, insults remembered, courtesy noticed. Give a spirit your true name ("my name is ...") and it cannot be ungiven.
+* **`call`**: Summon someone you already know by name, through the relationship rather than a full fragment assembly. How you have treated them decides how reliably they come — and *which aspect of them answers*.
+* **`dismiss`** (or `release`): Part ways with a bound spirit. Pour a libation and speak the release (respectful — costs the offering), banish it (free — remembered), or let it fade. The dead keep accounts of partings.
 * **`inventory`** (or `i`): View your satchel contents (Fragments, Artifacts, Traces, and Libations) and check your Astragali.
 * **`wait`** (or `rest`): Rest at a camp to recover your strength. Time passes quickly.
 * **`world`** (or `w`): Check the macro-state of the entire region (Ghost Activity, Corruption, Stability).
