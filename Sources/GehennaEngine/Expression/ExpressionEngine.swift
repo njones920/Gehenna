@@ -131,6 +131,25 @@ public actor ExpressionEngine {
         return await renderFull(packet)
     }
 
+    /// Classify a practitioner utterance into a typed intent. Deterministic
+    /// heuristics run first (replayable, model-free); the LLM handles the
+    /// semantic remainder; anything unrecognized degrades to `.none`.
+    /// The LLM parses speech into the same typed command space everything
+    /// else uses — it never decides consequences.
+    public func classifyIntent(
+        _ input: String,
+        forbiddenTopics: [String] = []
+    ) async -> ConversationalIntent {
+        if let heuristic = ConversationalIntent.heuristic(for: input, forbiddenTopics: forbiddenTopics) {
+            return heuristic
+        }
+        guard llmEnabled else { return .none }
+        guard let raw = await primary.classifyIntent(input, forbiddenTopics: forbiddenTopics) else {
+            return .none
+        }
+        return ConversationalIntent(rawValue: raw) ?? .none
+    }
+
     // MARK: - Rendering Pipeline
 
     /// Render a light packet through the tiered pipeline.
@@ -170,6 +189,19 @@ public actor ExpressionEngine {
         return "..."
     }
 
+    /// Trim generated text to a word budget at a sentence boundary.
+    /// Local models ignore length instructions often enough that the
+    /// engine enforces the packet's contract deterministically.
+    private func trimToLength(_ text: String, wordLimit: Int) -> String {
+        let words = text.split(separator: " ")
+        guard words.count > wordLimit else { return text }
+        let head = words.prefix(wordLimit).joined(separator: " ")
+        if let lastEnd = head.lastIndex(where: { ".!?".contains($0) }) {
+            return String(head[...lastEnd])
+        }
+        return head + "…"
+    }
+
     /// Render a full packet through the tiered pipeline.
     private func renderFull(_ packet: FullExpressionPacket) async -> String {
         // Check cache first
@@ -182,8 +214,9 @@ public actor ExpressionEngine {
             let result = await primary.generate(from: packet)
             switch result {
             case .generated(let text):
-                await cache.set(text, for: packet)
-                return text
+                let bounded = trimToLength(text, wordLimit: packet.allowedLengthMax)
+                await cache.set(bounded, for: packet)
+                return bounded
             case .validationFailed(let text, let reason):
                 #if DEBUG
                 print("[ExpressionEngine] Validation failed (full/\(packet.eventType.rawValue)/\(packet.entityName ?? "?")):")

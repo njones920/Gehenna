@@ -26,6 +26,20 @@ public protocol ExpressionProvider: Sendable {
 
     /// Whether this provider is currently available.
     var isAvailable: Bool { get async }
+
+    /// Classify a practitioner utterance into one intent word from the
+    /// `ConversationalIntent` raw-value set. Providers without a model
+    /// return nil — the engine degrades to heuristics-only, fail-safe.
+    /// Declared as a requirement (not just an extension) so existentials
+    /// dispatch to the real implementation.
+    func classifyIntent(_ input: String, forbiddenTopics: [String]) async -> String?
+}
+
+public extension ExpressionProvider {
+    /// Default: no model, no classification.
+    func classifyIntent(_ input: String, forbiddenTopics: [String]) async -> String? {
+        nil
+    }
 }
 
 /// The authored-line fallback. Always available. No generation cost.

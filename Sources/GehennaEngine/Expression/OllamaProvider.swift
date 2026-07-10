@@ -333,8 +333,7 @@ public actor OllamaProvider: ExpressionProvider {
         }
 
         lines.append("")
-        // Word count is NOT specified here — numPredict handles the token budget.
-        // Telling LLMs to count words is unreliable and produces worse prose.
+        lines.append("Answer in two to four sentences at most. The dead do not orate; NPCs do not monologue.")
         lines.append("Use period-appropriate language. Be specific — reference real deities (Baal, Asherah, Dagon, Yahweh), cult objects (massebah, asherim, teraphim), and places.")
         lines.append("No modern psychology. No anachronisms. The dead do not \'process trauma.\'")
         lines.append("Do not summarize. Do not explain. Speak only as this character.")
@@ -354,6 +353,40 @@ public actor OllamaProvider: ExpressionProvider {
         }
     }
 
+    // MARK: - Intent Classification
+
+    /// Classify a practitioner utterance into one intent word. Temperature
+    /// zero, a handful of tokens — this is transcription, not generation.
+    /// Any output that is not a clean member of the intent set is discarded
+    /// by the caller.
+    public func classifyIntent(_ input: String, forbiddenTopics: [String]) async -> String? {
+        var lines: [String] = []
+        lines.append("Classify the speaker's intent. Respond with exactly one word from this list:")
+        lines.append("promise, insult, threaten, plea, comfort, respect, forbidden, reveal, none")
+        lines.append("")
+        lines.append("promise = commits to a future action. insult = contempt or mockery.")
+        lines.append("threaten = menace. plea = asks for help or mercy. comfort = consoles or sympathizes.")
+        lines.append("respect = courtesy or deference. forbidden = presses one of these topics: \(forbiddenTopics.joined(separator: ", ")).")
+        lines.append("reveal = admits to practicing necromancy or speaking with the dead.")
+        lines.append("none = anything else, including ordinary questions.")
+        lines.append("")
+        lines.append("The speaker says: \"\(input)\"")
+
+        guard let raw = try? await callOllama(
+            prompt: lines.joined(separator: "\n"),
+            temperatureOverride: 0.0
+        ) else { return nil }
+
+        // Take the first word only — models sometimes elaborate despite
+        // instructions. Anything that isn't a clean intent word is
+        // discarded by the caller.
+        let firstWord = raw
+            .split { !$0.isLetter }
+            .first
+            .map(String.init) ?? ""
+        return firstWord.lowercased()
+    }
+
     // MARK: - Ollama HTTP Client
 
     /// Call the Ollama chat API.
@@ -362,7 +395,11 @@ public actor OllamaProvider: ExpressionProvider {
     /// set in `options`. The `/api/chat` endpoint is reliable — we split the prompt
     /// into a system role (instructions) and a user role (the trigger utterance) so
     /// the model knows what kind of turn to produce.
-    private func callOllama(prompt: String) async throws -> String {
+    private func callOllama(
+        prompt: String,
+        temperatureOverride: Double? = nil,
+        numPredictOverride: Int? = nil
+    ) async throws -> String {
         // Bail immediately if the surrounding Task was cancelled.
         try Task.checkCancellation()
 
@@ -395,15 +432,16 @@ public actor OllamaProvider: ExpressionProvider {
         }
         messages.append(["role": "user", "content": userTurn.isEmpty ? "Respond now." : userTurn])
 
-        // NOTE: num_predict is intentionally omitted — gemma4 returns empty text
-        // when that option is set via the generate endpoint, and the chat endpoint
-        // doesn't suffer the same bug. Length is controlled via the prompt instead.
+        // NOTE: num_predict is omitted on purpose — gemma4 returns empty
+        // content when it is set, on /api/chat as well as /api/generate
+        // (verified live 2026-07-10). Length is controlled by prompt
+        // instruction plus the engine's sentence-boundary trim.
         let body: [String: Any] = [
             "model": model,
             "messages": messages,
             "stream": false,
             "options": [
-                "temperature": temperature,
+                "temperature": temperatureOverride ?? temperature,
                 "repeat_penalty": repeatPenalty
             ]
         ]

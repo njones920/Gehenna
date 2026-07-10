@@ -91,7 +91,6 @@ extension GameSession {
             print("  \(resp)")
             npcs[mainIndex].witnessActivity(severity: 0.4)
         case .speakFreely(let text):
-            // Free-form chat — neutral interaction. No trust/suspicion change.
             let resp = await expressionEngine.npcChat(
                 targetNPC,
                 input: text,
@@ -99,6 +98,28 @@ extension GameSession {
                 interactionCount: targetNPC.lastInteractionTick != nil ? 2 : 0
             )
             print("  \(resp)")
+
+            // Words have weight. The classifier types the utterance; the
+            // engine applies the consequence — trust, suspicion, memory.
+            let intent = await expressionEngine.classifyIntent(
+                text,
+                forbiddenTopics: targetNPC.register.avoids
+            )
+            if let cue = npcs[mainIndex].apply(intent) {
+                print("  \(cue)")
+            }
+            if intent == .reveal {
+                world.journal.append(JournalEntry(
+                    tick: clock.currentTick,
+                    type: .npcReaction,
+                    description: "The practitioner spoke openly of the practice to \(targetNPC.name).",
+                    source: .practitioner,
+                    severity: .significant,
+                    siteID: sites[currentSiteIndex].id,
+                    involvedNPCs: [targetNPC.id],
+                    tags: ["confession"]
+                ))
+            }
         }
         npcs[mainIndex].lastInteractionTick = clock.currentTick
         

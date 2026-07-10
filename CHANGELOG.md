@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## 0.4.31 - Talk Matters
+
+Words have weight. Free-form speech to spirits and villagers is classified into a closed intent enum — deterministic heuristics first, a temperature-zero LLM pass for the semantic remainder — and the engine applies deterministic consequences. The LLM parses; it never decides. Phase 4 of Milestone 0.5.
+
+### Added
+
+- **`ConversationalIntent`:** promise / insult / threaten / plea / comfort / respect / forbidden / reveal / none. Word-boundary heuristics catch unmistakable cases replayably with no model; classification failure degrades to `.none` — words fail safe, never weird.
+- **Spirit consequences:** intents write relational moments (respect → `spokeRespectfully`, insult/threaten → `insulted`, promises recorded verbatim as moments and journal entries). Subtle diegetic cues for charged moments ("The words hang in the air a moment longer than they should"), silence for quiet warming — behavior shows it, not narration.
+- **NPC consequences:** free-form chat is no longer consequence-free. Respect and comfort warm trust beneath the surface; insults close faces like doors; confessing the practice makes a witness of the listener and enters the journal as a significant event.
+- **Tests:** 7-test `Conversational Intent Tests` suite.
+
+### Fixed
+
+- **Provider dispatch:** `classifyIntent` is a protocol requirement (with a nil default), not just an extension — existential dispatch was silently returning nil for every LLM classification.
+- **Spirit monologues:** generation is bounded by a prompt instruction ("The dead do not orate") plus a deterministic sentence-boundary trim at the packet's word budget. `num_predict` stays off — gemma4 returns empty content when it is set, on `/api/chat` too (verified live).
+
 ## 0.4.30 - The Dead Remember
 
 The tenth summoning sounds different from the first. Spirits carry a typed relationship record — every summoning, parting, promise, and slight — and their voice evolves from it. `call` summons someone you already know through the relationship itself, and which aspect answers depends on how you have treated them. Phase 3 of Milestone 0.5.

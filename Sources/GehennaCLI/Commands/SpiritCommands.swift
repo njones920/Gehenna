@@ -151,6 +151,39 @@ extension GameSession {
             print("\n  \"\(response)\"")
             relationships.noteExchange(withKey: relationshipKey)
 
+            // What you said, typed and recorded. The dead keep accounts.
+            let forbidden = bound.spirit.tags.tags
+                .filter { $0.dimension == .taboo }
+                .map(\.value)
+            let intent = await expressionEngine.classifyIntent(input, forbiddenTopics: forbidden)
+            if let momentKind = intent.spiritMoment {
+                relationships.record(
+                    momentKind,
+                    for: bound.spirit,
+                    atTick: clock.currentTick,
+                    detail: momentKind == .promiseMade ? input : nil
+                )
+                switch momentKind {
+                case .promiseMade:
+                    print("  (The words hang in the air a moment longer than they should.)")
+                    world.journal.append(JournalEntry(
+                        tick: clock.currentTick,
+                        type: .practitionerAction,
+                        description: "A promise was made to \(spiritDisplayName(bound.spirit)): \"\(input)\"",
+                        source: .practitioner,
+                        severity: .notable,
+                        siteID: sites[currentSiteIndex].id,
+                        tags: ["promise", "retinue"]
+                    ))
+                case .insulted:
+                    print("  (Something in the air goes taut.)")
+                case .askedForbidden:
+                    print("  (The silence after has edges.)")
+                default:
+                    break
+                }
+            }
+
             // The exchange itself strains the spirit.
             if let departure = retinue.recordExchange(with: spiritID, atTick: clock.currentTick) {
                 print("\n  The voice thins mid-word. You held the door open too long,")
