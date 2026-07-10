@@ -243,7 +243,7 @@ struct GehennaArena {
         ║                                                  ║
         ║           G E H E N N A   A R E N A              ║
         ║                                                  ║
-        ║       Shared World Bot Arena — v0.5.0            ║
+        ║       Shared World Bot Arena — v0.5.1            ║
         ║                                                  ║
         ╚══════════════════════════════════════════════════╝
 

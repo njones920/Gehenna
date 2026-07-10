@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.5.1 - The Shared World Learns the New Verbs
+
+Duel Round 2 infrastructure: two practitioners (human, agent, or otherwise) can now work the same sites, scar the same ground, and contest the same spirits.
+
+### Added
+
+- **Shard support for the 0.5 verbs:** `scavenge`, `speak`, `callByName`, and `dismiss` land in `PlayerCommand`/`WorldShard` with full parity — retinue strain, relationship moments, intent extraction (heuristics always; LLM when an `ExpressionEngine` is injected), canon harvest, and journal writes. Fragment scarcity is real: what one practitioner scavenges, the other never finds.
+- **Invoke Name (Codex v3 §8.2):** the first spirit-politics influence action. Speak a rival's spirit's true name — which your own Codex must actually hold — and the spirit doubts: stability strain scaled by the *rival's* bond (a well-treated spirit barely wavers; a poorly-treated one can be shaken loose entirely), a `nameContested` moment on the rival's ledger, and a significant journal entry. Control never transfers. The Captain does not switch sides; the Captain begins to doubt.
+- **`gehenna-duel` executable:** a shared-world duel server with a file-based turn protocol any process can drive (`turn_N.cmd` in / `turn_N.out` back), a spectator stream on stdout and `world.log`, per-player `final.json` dumps scoreable by the duel rubric, strict-alternation `turns` mode and free-run `free` mode — commands execute as they arrive and the actor serializes. Cells at their own rates.
+- **Tests:** 5-test `Shared World Verb Tests` suite, including scavenge exclusivity and the Invoke Name contest.
+
+## 0.5.0 - The Dead Speak (Milestone Complete)
+
 ## 0.5.0 - The Dead Speak (Milestone Complete)
 
 Milestone 0.5 closes. The loop the game was originally imagined around — compile spirits, keep them, talk to them, watch their language evolve in a world that acts on its own — is playable end to end. Scored against Codex Part XI:

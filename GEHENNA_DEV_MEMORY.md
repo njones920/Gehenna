@@ -544,3 +544,10 @@ Based on this audit, the most valuable next work is:
 - **Interpretation of the old rule**: "renders, never decides" now means the LLM never *silently mutates* state. It may speak into the record through typed, validated lanes. Do not treat the rule as a ban on generative agency again.
 - **Verified live**: an unauthored omen ("birds scattered eastward") committed with pressure effects; the Captain answered a warm call-by-name remembering the parting offering.
 - **Preserve**: every generative lane must (a) be typed, (b) pass validation, (c) be recorded as consumed, (d) fail to silence. New lanes (NPC initiative, harvested-name summonable stubs, generative thread seeds) should follow the same four properties.
+
+### Shared-World Duel Infrastructure & 0.5.1 Release
+- **Context**: After Duel Round 1 (Codex beat Claude +33.8/+31.6, `docs/transcripts/duel_round1.md`), Nate asked for Round 2 in a true shared world.
+- **Decision**: `WorldShard.execute` is now async and handles `scavenge`/`speak`/`callByName`/`dismiss`/`invokeName`. The shard takes an optional `ExpressionEngine`; expression output enters only through the typed lanes. `Retinue.strain(id:by:atTick:)` supports direct contest damage. `RelationalMoment.Kind.nameContested` (valence −0.15) extends the canon table additively.
+- **Invoke Name mechanics**: requires the invoker's codex to hold the target's root identity; doubt = 0.05/0.12/0.25 stability by rival bond valence (≥0.9 / >0.3 / else); same-site requirement; journaled as spiritPolitics. Trueman-name knowledge is the currency — giving your name to a spirit is now a legible liability in multiplayer, as designed.
+- **`gehenna-duel`**: file-turn protocol (`<arena>/<player>/turn_N.cmd` → `turn_N.out`), spectator stream (stdout + `world.log`), per-player `final.json` shaped for the duel scorer, `turns` and `free` modes. Smoke-verified: fragment scarcity and cross-practitioner trace visibility work.
+- **Real-time path**: free mode + two agent CLIs running concurrently is already "real time" at agent-loop latency; the actor serializes safely. The missing piece for spectacle is only orchestration, not engine work.

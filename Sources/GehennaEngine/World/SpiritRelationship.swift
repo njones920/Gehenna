@@ -36,6 +36,8 @@ public struct RelationalMoment: Codable, Hashable, Sendable {
         case promiseMade
         case promiseKept
         case promiseBroken
+        // Spirit politics (0.5.x)
+        case nameContested          // a rival spoke their name against the summoner's claim
     }
 
     /// How this moment lands, relationally. Deterministic per kind —
@@ -54,6 +56,7 @@ public struct RelationalMoment: Codable, Hashable, Sendable {
         case .promiseMade: return 0.0
         case .promiseKept: return 0.6
         case .promiseBroken: return -0.8
+        case .nameContested: return -0.15
         }
     }
 }

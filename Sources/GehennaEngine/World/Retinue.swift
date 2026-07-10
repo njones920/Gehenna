@@ -132,6 +132,19 @@ public struct Retinue: Codable, Sendable {
         return nil
     }
 
+    /// Apply direct strain to one bound spirit — doubt, contest, shock.
+    /// If the strain spends it, the spirit returns to Sheol and the
+    /// departure is returned.
+    public mutating func strain(id: UUID, by amount: Double, atTick tick: Int) -> SpiritDeparture? {
+        guard let index = bound.firstIndex(where: { $0.spirit.id == id }) else { return nil }
+        bound[index].spirit.decayStability(by: amount)
+        if !bound[index].spirit.isManifested {
+            let departed = bound.remove(at: index)
+            return SpiritDeparture(spirit: departed.spirit, manner: .faded, tick: tick)
+        }
+        return nil
+    }
+
     /// The stability every bound spirit loses this tick, given current
     /// conditions. Recomputed per tick because strain lessens as the
     /// retinue thins.

@@ -19,6 +19,9 @@ let package = Package(
         .executable(
             name: "gehenna-arena",
             targets: ["GehennaArena"]),
+        .executable(
+            name: "gehenna-duel",
+            targets: ["GehennaDuel"]),
     ],
     targets: [
         .target(
@@ -31,6 +34,9 @@ let package = Package(
             dependencies: ["GehennaEngine"]),
         .executableTarget(
             name: "GehennaArena",
+            dependencies: ["GehennaEngine"]),
+        .executableTarget(
+            name: "GehennaDuel",
             dependencies: ["GehennaEngine"]),
         .testTarget(
             name: "GehennaEngineTests",

@@ -17,6 +17,15 @@ public enum PlayerCommand: Sendable {
     case castAstragali
     case performRitual(RitualIntent)
     case purifySite
+    // The 0.5 verbs — the relational game, shared-world capable.
+    case scavenge
+    case speak(spiritIndex: Int, text: String)
+    case callByName(relationshipIndex: Int, fragmentIndex: Int, libation: LibationType)
+    case dismiss(spiritIndex: Int, manner: DismissalManner)
+    /// Spirit politics (Codex v3 §8.2): speak a rival's spirit's true
+    /// name to contest its binding. Does not transfer control — it makes
+    /// the spirit doubt. Requires actually knowing the name.
+    case invokeName(rivalID: UUID, spiritIndex: Int)
 
     public enum ConversationAction: Sendable {
         case friendly
