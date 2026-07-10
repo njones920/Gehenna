@@ -655,9 +655,13 @@ public actor WorldShard {
             timing: intent.timing
         )
 
-        // Deterministic seed from tick + player ID + ritual count
+        // Live entropy joins the deterministic salt. Genuine third parties
+        // bring genuine unpredictability; the consumed seed survives in
+        // RitualResult.entropySeed, so any single resolution remains
+        // reconstructable even though no two duels are alike.
         let idByte = UInt64(session.id.uuid.0)
-        let seed = UInt64(bitPattern: Int64(clock.currentTick)) &+ idByte &+ UInt64(bitPattern: Int64(session.ritualCount))
+        let salt = UInt64(bitPattern: Int64(clock.currentTick)) &+ idByte &+ UInt64(bitPattern: Int64(session.ritualCount))
+        let seed = salt ^ UInt64.random(in: UInt64.min...UInt64.max)
 
         // Resolve through the pipeline
         let result = pipeline.resolve(
