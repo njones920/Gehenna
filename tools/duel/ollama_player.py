@@ -46,14 +46,19 @@ def main():
     ap.add_argument("--model", required=True)
     ap.add_argument("--max-turns", type=int, default=30)
     ap.add_argument("--temperature", type=float, default=0.8)
+    ap.add_argument("--context", default=None,
+                    help="optional file appended to the system prompt — match history, coaching, roundtable")
     args = ap.parse_args()
 
     me = Path(args.dir)
     me.mkdir(parents=True, exist_ok=True)
+    rules = RULES
+    if args.context:
+        rules += "\n\nCONTEXT FROM YOUR PAST MATCHES:\n" + Path(args.context).read_text()
     history = []
 
     for turn in range(1, args.max_turns + 1):
-        messages = [{"role": "system", "content": RULES}]
+        messages = [{"role": "system", "content": rules}]
         for past in history[-6:]:
             messages.append({"role": "user", "content": past})
         messages.append({"role": "user", "content": f"Turn {turn}. Your one command:"})
@@ -80,6 +85,11 @@ def main():
         history.append(f"You did: {command}\nThe world answered:\n{result}")
         if "record is sealed" in result:
             return
+
+    # Max turns reached: retire formally so the referee is not left
+    # waiting on an abandoned seat.
+    (me / f"turn_{args.max_turns + 1}.cmd").write_text("end")
+    print("[driver] max turns reached — withdrew from the field", flush=True)
 
 
 if __name__ == "__main__":

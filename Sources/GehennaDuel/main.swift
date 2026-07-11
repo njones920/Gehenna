@@ -119,8 +119,21 @@ enum ParsedInput {
         guard tokens.count > 1, let index = Int(tokens[1]) else { return .invalid("travel N") }
         return .command(.travel(siteIndex: index))
     case "speak":
-        guard tokens.count > 2, let index = Int(tokens[1]) else { return .invalid("speak S <text>") }
-        return .command(.speak(spiritIndex: index, text: tokens[2]))
+        // Forgiving grammar: "speak 1 <text>" addresses spirit 1;
+        // "speak <text>" reaches the first spirit walking with you.
+        // A practitioner who wants to speak to the dead should never
+        // be told their words mean nothing because of a missing digit
+        // (learned from Gemma, Round 3).
+        if tokens.count > 2, let index = Int(tokens[1]) {
+            return .command(.speak(spiritIndex: index, text: tokens[2]))
+        }
+        if tokens.count >= 2 {
+            let text = trimmed.dropFirst(verb.count).trimmingCharacters(in: .whitespaces)
+            if !text.isEmpty {
+                return .command(.speak(spiritIndex: 0, text: text))
+            }
+        }
+        return .invalid("speak [S] <text>")
     case "dismiss":
         guard tokens.count > 1, let index = Int(tokens[1]) else { return .invalid("dismiss S [libation|banish]") }
         let manner: DismissalManner = (tokens.count > 2 && tokens[2].hasPrefix("ban")) ? .banished : .releasedWithLibation
