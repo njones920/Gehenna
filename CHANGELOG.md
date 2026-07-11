@@ -25,8 +25,6 @@ Duel Round 2 infrastructure: two practitioners (human, agent, or otherwise) can 
 
 ## 0.5.0 - The Dead Speak (Milestone Complete)
 
-## 0.5.0 - The Dead Speak (Milestone Complete)
-
 Milestone 0.5 closes. The loop the game was originally imagined around — compile spirits, keep them, talk to them, watch their language evolve in a world that acts on its own — is playable end to end. Scored against Codex Part XI:
 
 1. **A useful spirit within fifteen minutes** — pass. Scavenge at the starting site, speak a name over a fragment, and someone answers.
