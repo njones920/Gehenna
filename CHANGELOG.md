@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.5.2 - The Spectator
+
+Nate asked to watch. The duel server now emits a `status.json` heartbeat after every turn, and `tools/duel/watch.py` renders any match live in any terminal: colored practitioner panels, spirit presence as a row of lamps, tick progress, per-player satchel and entropy, and the public record scrolling beneath. Ctrl-C to stop watching — the world continues without you.
+
+### Fixed
+
+- **Shard ritual consumption (CLI parity):** shared-world rituals now consume the fragment, libation, and any committed artifact or trace. Round 2's recoveries were cheaper than they should have been; Round 3 will not be.
+- **`score.py --budget`:** the scorer no longer hardcodes Round 1's 40-tick budget.
+
+
 ## 0.5.1 - The Shared World Learns the New Verbs
 
 Duel Round 2 infrastructure: two practitioners (human, agent, or otherwise) can now work the same sites, scar the same ground, and contest the same spirits.

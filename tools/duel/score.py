@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """GEHENNA duel scorer — 'the world keeps score.'
 Reads a gehenna-save.json and computes the match score mechanically.
-Usage: python3 score.py <path-to-gehenna-save.json>
+Usage: python3 score.py <path-to-gehenna-save.json> [--budget 60]
 """
 import json, sys
 
@@ -21,7 +21,7 @@ def uuid_dict(raw):
         out[raw[i]] = raw[i + 1]
     return out
 
-def main(path):
+def main(path, budget=40):
     s = json.load(open(path))
     lines, total = [], 0
 
@@ -95,8 +95,11 @@ def main(path):
     print(f"GEHENNA duel score — saved at tick {tick}")
     print("\n".join(lines) if lines else "  (nothing to score — did you play?)")
     print(f"  ------\n  TOTAL: {total:+.1f}")
-    if tick > 40:
-        print(f"  ⚠ OVER TICK BUDGET ({tick}/40) — score void")
+    if tick > budget:
+        print(f"  ⚠ OVER TICK BUDGET ({tick}/{budget}) — score void")
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    budget = 40
+    if "--budget" in sys.argv:
+        budget = int(sys.argv[sys.argv.index("--budget") + 1])
+    main(sys.argv[1], budget)

@@ -12,7 +12,7 @@ extension GameSession {
         ║   A physics engine for ancient cosmology,    ║
         ║           disguised as a game.               ║
         ║                                              ║
-        ║          Ridge of Elah — v0.5.1             ║
+        ║          Ridge of Elah — v0.5.2             ║
         ║                                              ║
         ╚══════════════════════════════════════════════╝
 

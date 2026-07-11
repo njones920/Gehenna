@@ -462,10 +462,10 @@ public actor WorldShard {
         guard fragmentIndex >= 0, fragmentIndex < session.inventory.fragments.count else {
             return CommandResult(narration: ["Even a call needs an anchor. That fragment is not in your satchel."])
         }
-        guard let libIndex = session.inventory.libations.firstIndex(of: libation) else {
+        guard session.inventory.libations.contains(libation) else {
             return CommandResult(narration: ["You do not carry that offering."])
         }
-        session.inventory.libations.remove(at: libIndex)
+        // Consumption happens in executeRitual — one owner, no double-spend.
 
         let observedTraits = session.codex.entries.values
             .filter { $0.rootIdentityID == rel.rootKey }
@@ -632,6 +632,9 @@ public actor WorldShard {
               let regionState = world.regions[regionID] else {
             return CommandResult(narration: ["The world is empty."])
         }
+        guard let libationIndex = session.inventory.libations.firstIndex(of: intent.libationType) else {
+            return CommandResult(narration: ["You do not carry that offering."])
+        }
 
         // Build the ritual configuration using the proper init
         var artifactOpt: LifeArtifact? = nil
@@ -654,6 +657,19 @@ public actor WorldShard {
             libation: Libation(intent.libationType),
             timing: intent.timing
         )
+
+        // The ritual consumes what it uses — bone, offering, and any
+        // artifact or trace committed to the fire (CLI parity). Removal
+        // happens after the configuration is built, descending order
+        // not needed since these are separate arrays.
+        session.inventory.libations.remove(at: libationIndex)
+        session.inventory.fragments.remove(at: intent.fragmentIndex)
+        if let ai = intent.artifactIndex, ai >= 0, ai < session.inventory.artifacts.count {
+            session.inventory.artifacts.remove(at: ai)
+        }
+        if let ti = intent.traceIndex, ti >= 0, ti < session.inventory.memoryTraces.count {
+            session.inventory.memoryTraces.remove(at: ti)
+        }
 
         // Live entropy joins the deterministic salt. Genuine third parties
         // bring genuine unpredictability; the consumed seed survives in

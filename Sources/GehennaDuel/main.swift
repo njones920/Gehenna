@@ -73,6 +73,7 @@ struct Player {
     let dir: URL
     var nextTurn: Int = 1
     var finished: Bool = false
+    var lastCommand: String = "—"
 }
 
 var players: [Player] = []
@@ -225,6 +226,45 @@ struct PlayerFinal: Codable {
     }
 }
 
+// MARK: Spectator heartbeat — status.json for the watch tool
+
+@MainActor func writeStatus() async {
+    let tick = await shard.clock.currentTick
+    var playerBlobs: [[String: Any]] = []
+    for player in players {
+        guard let session = await shard.sessions[player.id] else { continue }
+        let site = await shard.sites[session.currentSiteIndex]
+        let spirits: [[String: Any]] = session.retinue.bound.map { bound in
+            [
+                "name": bound.spirit.epochName ?? bound.spirit.template.rawValue,
+                "stability": bound.spirit.currentStability,
+                "disposition": bound.spirit.disposition.rawValue,
+                "exchanges": bound.exchangeCount,
+            ]
+        }
+        playerBlobs.append([
+            "name": player.name,
+            "site": site.name,
+            "finished": player.finished,
+            "lastCommand": player.lastCommand,
+            "spirits": spirits,
+            "codexEntries": session.codex.totalEncountered,
+            "libations": session.inventory.libations.count,
+            "fragments": session.inventory.fragments.count,
+            "taboos": session.profile.taboosBroken.count,
+            "entropy": session.profile.entropyFootprint,
+        ])
+    }
+    let status: [String: Any] = [
+        "tick": tick, "budget": tickBudget,
+        "mode": freeMode ? "free" : "turns",
+        "players": playerBlobs,
+    ]
+    if let data = try? JSONSerialization.data(withJSONObject: status, options: [.prettyPrinted]) {
+        try? data.write(to: arena.appendingPathComponent("status.json"), options: .atomic)
+    }
+}
+
 // MARK: Turn execution
 
 @MainActor func takeTurn(for index: Int) async -> Bool {
@@ -272,7 +312,9 @@ struct PlayerFinal: Codable {
 
     spectate("─ tick \(tick) " + publicLine)
     for line in output.dropLast() { spectate("    \(line)") }
+    players[index].lastCommand = raw.trimmingCharacters(in: .whitespacesAndNewlines)
     players[index].nextTurn += 1
+    await writeStatus()
     return true
 }
 
