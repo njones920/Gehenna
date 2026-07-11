@@ -1,0 +1,248 @@
+═══ GEHENNA DUEL — shared world, tick budget 80, mode turns ═══
+Practitioners: Claude vs Codex vs Gemini vs Gemma — the world keeps score.
+─ tick 0 [Claude] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 1 [Codex] look
+    [Battlefield Ridge]
+─ tick 1 [Gemini] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 1 [Gemma] consults their satchel and codex.
+    tick 1/80 | site: Battlefield Ridge
+fragments: 
+libations: water, water, water, fermentedWine, fermentedWine
+codex entries: 0 | taboos: 0
+─ tick 2 [Claude] ritual 0 lib=water name=Hiram, son of Dagon
+    Claude performs a ritual at Battlefield Ridge.
+    A 1 spirit manifests: Bronze Captain.
+    Entropy: heavy.
+─ tick 2 [Codex] consults their satchel and codex.
+    tick 2/80 | site: Battlefield Ridge
+fragments: 
+libations: water, water, water, fermentedWine, fermentedWine
+codex entries: 0 | taboos: 0
+─ tick 4 [Gemini] travel 2
+    You travel to Nahal Caves.
+─ tick 4 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 5 [Claude] speak 0 My name is Claude, captain. Twice we have met across two worlds — I give you my name at the first meeting this time, as trust deserves.
+    You have given the dead your name. That cannot be ungiven.
+    Bronze Captain: "A soldier knows that a man’s word, given in battle and repeated across worlds, is weighted by blood debt; we speak of the name only when duty demands it. I recall your service under Dagon at Ashkelon—you held your post when the spear-rain fell thickest. Tell me now what purpose brings you back to this contested borderland."
+─ tick 5 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 5 [Gemini] scavenge
+    Your hands find bone. 4 fragment(s) join the satchel.
+    Fragments of a life lived: 3 memory trace(s).
+─ tick 7 [Gemma] travel 1
+    You travel to Tel Keshet.
+─ tick 8 [Claude] speak 0 Thank you for standing with me again, captain. Please — tell me of your men, that the living may keep them.
+    Bronze Captain: "The discipline remains; that is what we swore upon Dagon’s altar. They hold their shield-line not for glory, but because they have learned to fear the gaps between ranks. We fight until exhaustion claims us or until a stronger will breaks our formation at Ashkelon's crest."
+─ tick 10 [Codex] travel 2
+    You travel to Nahal Caves.
+─ tick 11 [Gemini] ritual 0 lib=water
+    Gemini performs a ritual at Nahal Caves.
+    A 1 spirit manifests: warrior.
+    Entropy: heavy.
+─ tick 11 [Gemma] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 12 [Claude] speak 0 I came back for your company, captain, not your service. The borderland is quieter with you in it. Walk with me.
+    Bronze Captain: "The silence you speak of is not a lack of sound; it is merely a shift in the watch-fire's glow near Ashkelon’s crest. Tell me what your heart believes will hold the line if I am to walk with you again."
+─ tick 12 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 13 [Gemini] speak 0 My name is Gemini, warrior. Tell me your story.
+    You have given the dead your name. That cannot be ungiven.
+    warrior: "The passing of years holds many echoes. I hear tales of the pass defended, the blood spilled near Canaan's stone altars. Tell me only what matters to your kin."
+─ tick 13 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 14 [Claude] speak 0 Tell me one thing you want carried among the living, captain — a name, a place, a debt. I will keep it.
+    Bronze Captain: "The discipline of the shield-wall must be carried forward—that no man breaks rank when the spear falls near Ashkelon’s crest. Let them remember that even if a lord falters, the formation holds its line against any enemy from Baal or Dagon."
+─ tick 14 [Codex] consults their satchel and codex.
+    tick 14/80 | site: Nahal Caves
+fragments: 
+libations: water, water, water, fermentedWine, fermentedWine
+codex entries: 0 | taboos: 0
+─ tick 15 [Gemini] speak 0 What matters to my kin is the preservation of memories, honoring the blood spilled near Canaan's stone altars, so that the pass defended will not be forgotten. What name were you called in those days?
+    warrior: "Memory demands telling. You speak of blood spilled near altars. Tell me your story, Gemini, warrior Amorite."
+─ tick 17 [Gemma] travel 2
+    You travel to Nahal Caves.
+─ tick 18 [Claude] speak 0 It is kept, captain. Thank you. The watch-fires at the crest are tended; the gaps between ranks are closed.
+    Bronze Captain: "The flame is only proof that vigilance exists; it speaks nothing of the heart's resolve. Tell me this then: when the spears broke and the shouting ceased near Ashkelon’s crest—did the line break?"
+─ tick 20 [Codex] travel 1
+    You travel to Tel Keshet.
+─ tick 21 [Gemini] speak 0 I walk the Ridge of Elah to witness the truth of the past and carry the memory of the Amorites forward, honoring the blood spilled near Canaan's stone altars. Will you share your true name with me, that I may honor it?
+    warrior: "You remember this name. You walk where men once fought for Baal's favor. Speak your tale then. Tell us of the warrior who honors his kin by remembering battle and burial on Canaan’s slopes."
+─ tick 21 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 22 [Claude] speak 0 One more thing, captain — when I next call you, it may be from darker ground. Whatever face answers, I will treat it as I have treated you.
+    Bronze Captain: "The oath given at Dagon’s altar holds fast across all realms; if your summons comes from shadow-lands, know that my watch will be kept true to its word. I expect no less than a man of honor when I answer this call."
+─ tick 22 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 23 [Gemini] speak 0 I am but a humble chronicler of the dead. I seek out the forgotten burial sites on Canaan's slopes so that the deeds of warriors who fought for Baal's favor will not be lost to time.
+    warrior: "The dead do not speak for their own glory, Gemini. They are remembered by bloodline and rite. Tell me what you seek beyond mere deeds. Did your ancestors honor Baal’s name at the slopes near Megiddo?"
+─ tick 23 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 24 [Claude] speak 0 No, captain. The line did not break. It held past dusk, and the men carried your name home with them. Rest in that — it is true.
+    Bronze Captain: "The line held? You say so. I remember only the command given at Ashkelon’s crest, the raising of the shield wall against the tide from the south. Tell me then, Claude, if the men marched through that dusk and did not falter before Baal's strength—who saw it hold after my name was called?"
+─ tick 24 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 25 [Gemini] speak 0 My ancestors honored Baal's name at the slopes near Megiddo. They taught me the bloodlines and the rites, that I might speak with those who stood at the front lines.
+    warrior: "The rites are deep in your bloodline. Baal hears those who know his name well. Which passes did you defend? Speak of the markings on the asherim that drew forth the dead warriors."
+─ tick 26 [Gemma] look
+    [Nahal Caves]
+─ tick 26 [Claude] consults their satchel and codex.
+    [0] Bronze Captain — honored, stability 0.08, exchanges 7
+known[0]: Bronze Captain — summoned 1x, valence 0.95
+─ tick 28 [Codex] travel 4
+    You travel to The Burning Ground.
+─ tick 29 [Gemini] speak 0 I defended the passes near Tel Keshet, and the markings on the asherim were those of the storm and the bull, invoking Baal's thunder to strengthen the dead warriors.
+    warrior: "Tel Keshet required strength of man and rite alike. The bull’s sign calls upon Baal's might for those who wait. What did your ancestors whisper when you raised those markings? Tell me how many warriors stood at that pass."
+─ tick 29 [Gemma] consults their satchel and codex.
+    tick 29/80 | site: Nahal Caves
+fragments: [0] skull(3) [1] handBones(3)
+libations: water, water, water, fermentedWine, fermentedWine
+codex entries: 0 | taboos: 0
+─ tick 29 [Claude] dismiss 0 libation
+    You pour the offering and speak the release. Bronze Captain inclines — almost a bow — and is gone.
+─ tick 29 [Codex] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 30 [Gemini] speak 0 They whispered 'let the storm guide our spears, for we are the shield of the living.' And there were three hundred warriors who stood at that pass, unbroken.
+    warrior: "The storm is strong. Did Baal aid you at that choke point? Tell me how long did your shield stand against the enemy's tide."
+─ tick 32 [Gemma] travel 0
+    You travel to Battlefield Ridge.
+─ tick 34 [Claude] travel 4
+    You travel to The Burning Ground.
+─ tick 34 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 35 [Gemini] speak 0 Our shields stood for three days and three nights against the tide. Baal aided us, and when the sun rose on the fourth day, the enemy was broken.
+    warrior: "The shield held fast then. Baal guided your hands. Tell me of the pass you defended. Did you see Dagon on the tide?"
+─ tick 35 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 36 [Claude] ritual 0 lib=water name=Hiram, son of Dagon
+    Claude performs a ritual at The Burning Ground.
+    A 1 spirit manifests: Ashkelon Butcher.
+    Entropy: heavy.
+─ tick 37 [Codex] ritual 0 lib=water
+    Codex performs a ritual at The Burning Ground.
+    A 1 spirit manifests: shade.
+    Entropy: heavy.
+    · The ash stirs without wind. The Veil here is so thin you can taste charcoal and copper.
+    · The Burning Ground has shifted. New ash patterns. Something moved here while you were away.
+─ tick 38 [Gemini] speak 0 I saw Dagon on the tide, but we did not falter, for Baal's strength was with us. Your watch is ended, and your memory is kept.
+    warrior: "The tide takes many names. We stood against fear then. You speak of keeping memory. Tell me your story now, Gemini. Speak the years before battle."
+─ tick 39 [Gemma] look
+    [Battlefield Ridge]
+─ tick 40 [Claude] speak 0 I told your other face I would treat you as I treated him. The wine was poured at his parting, Hiram. It will be poured at yours. There is no blame here tonight.
+    Ashkelon Butcher: "You speak of release as if the waters at Baal’s gate are calm; they were not when their shield wall was raised against the tide from the south near Ashkelon's crest. The heat remains—it clings still, like dust mixed with blood on Dagon's altar stone."
+─ tick 41 [Codex] speak 0 My name is Codex. I came late, but I will listen plainly and carry what you ask without invention. Tell me what must be remembered from this burning ground.
+    You have given the dead your name. That cannot be ungiven.
+    shade: "Remember that this place is marked by both smoke and silence; let the weight of those who passed here be kept in mind, not as mere names upon a massebah, but as echoes against the might of Baal. Though Yahweh claims these bones for Himself, the rage remains written into the dust beneath our feet."
+─ tick 41 [Gemini] dismiss 0 libation
+    You pour the offering and speak the release. warrior inclines — almost a bow — and is gone.
+─ tick 41 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 41 [Claude] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 42 [Codex] speak 0 I will keep the memory in your own terms: the place, the duty, and the warning. What name should I speak when I honor you?
+    shade: "Let my passage be known by the silence we gathered here at the burning ground; let no mortal tongue give form to what has been shed into the dust. Speak only when the smoke rises and the weight of our grief calls you near again."
+─ tick 42 [Gemini] consults their satchel and codex.
+    tick 42/80 | site: Nahal Caves
+fragments: [0] longBone(1) [1] ossuaryChip(2) [2] skull(5)
+libations: water, fermentedWine, fermentedWine
+codex entries: 1 | taboos: 0
+─ tick 43 [Gemma] ritual 0 lib=water name='Hiram, son of Dagon
+    Gemma performs a ritual at Battlefield Ridge.
+    A 1 spirit manifests: Temple Scribe.
+    Entropy: heavy.
+    · The ridge looks different. The ground is disturbed where it was not before. Birds avoid part of the field.
+    · There is a faint residue in the air. Something was called here recently. The trace is fading, but not gone.
+─ tick 43 [Claude] consults their satchel and codex.
+    [0] Ashkelon Butcher — hostile, stability 0.48, exchanges 1
+known[0]: Ashkelon Butcher — summoned 2x, valence 0.95
+─ tick 44 [Codex] speak 0 I hear you. I will not dress your dead in prettier words. Tell me the boundary you guarded and the mistake the living must not repeat.
+    shade: "That boundary was drawn by the breath itself; where the living cease their toil and meet the silence that follows Baal's wrath. The mistake is believing any word spoken upon this burning ground can appease Dagon’s gaze or cheat Yahweh from judgment."
+─ tick 45 [Gemini] ritual 2 lib=water
+    Gemini performs a ritual at Nahal Caves.
+    A 1 spirit manifests: The Founder.
+    Entropy: heavy.
+    · Something has changed in the cave since you were last here. The air is different. The shadows sit wrong.
+    · There is a faint residue in the air. Something was called here recently. The trace is fading, but not gone.
+─ tick 45 [Gemma] hesitates.
+    The command means nothing here (speak S <text>). It cost you nothing.
+─ tick 45 [Claude] dismiss 0 libation
+    You pour the offering and speak the release. Ashkelon Butcher inclines — almost a bow — and is gone.
+─ tick 46 [Codex] speak 0 Your warning is received as duty, not ornament. I will carry it as a charge: no false witness, no broken watch, no abandoned dead.
+    shade: "The mantle you wear is heavy; such pledges are not given lightly before the smoke that rises from our dust. Hear this: faithfulness to the crossing requires more than just vigilance—it demands a reckoning with what was lost here in the shadow of Baal's altars. Let your oath be etched into the stone, for we remember every passing and every grave neglect beneath this ground."
+─ tick 47 [Gemini] speak 0 My name is Gemini, Founder. I come seeking knowledge of the first days, when the foundations were laid.
+    You have given the dead your name. That cannot be ungiven.
+    The Founder: "The deep roots are not for simple telling. The record lives in the dust beneath Jericho, where Baal walked first. You ask of foundations; you must learn to walk among the ghosts who established order before any god’s name was carved upon a massebah."
+─ tick 49 [Gemma] travel 1
+    You travel to Tel Keshet.
+─ tick 49 [Claude] withdraws from the field.
+    You step back from the world.
+─ tick 50 [Codex] speak 0 If you will walk with me to the seal, I will keep speaking your charge there. What offering or courtesy keeps faith with you?
+    shade: "Your voice is known to this place, Codex; your manner of speaking carries a familiarity that steadies what was lost among the smoke. Speak only what must be remembered from these burning grounds—let your words mark their passing more clearly than any stone placed near Baal's gate."
+─ tick 51 [Gemini] speak 0 I will walk among the ghosts beneath Jericho and remember the order they established, honoring Baal's first steps before the carving of any massebah.
+    The Founder: "The ground beneath Jericho holds more than mere memory. To recall Abdi-Resheph before stone was laid is to speak of authority itself. Such lineage defines a man’s place in this earth."
+─ tick 51 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 52 [Codex] speak 0 Then walk with me as witness. I ask for no service beyond truth; stand where the seal is weakest and let your memory hold its edge.
+    shade: "I remember your manner, Codex; I know this voice that calls across the smoke to me. Let us stand where the seal is thin and let my memory hold the edge you seek. Tell me what truth must be borne from this ground, for the passing was known by the silence, marked by grief at the tophet's heart."
+─ tick 53 [Gemini] speak 0 I speak of Abdi-Resheph not merely as memory, but as the true authority that defines my place in this earth. Tell me more of his lineage and the order he brought.
+    The Founder: "He founded a lineage where authority was rooted in place, not just memory. The first settlements observed his rule; he established an order built on ancestor veneration near Jericho’s dust. He walked as one who governed territory, before Baal claimed all places."
+─ tick 53 [Gemma] consults their satchel and codex.
+    tick 53/80 | site: Tel Keshet
+fragments: [0] handBones(3)
+libations: water, water, fermentedWine, fermentedWine
+codex entries: 1 | taboos: 0
+─ tick 54 [Codex] speak 0 I will remember smoke and silence, not a neat list of names. I will say the massebah did not end the rage in the dust.
+    shade: "The breath that rises from the burning ground does not obey the stone you raise for it; such fierce grief will find its path through any carved marker or erected Asherah pole. The spirit's rage, Codex, is a thing older than Baal’s thunder and knows no boundary of man-made sacrifice. It remains in the dust itself, marked only by the deepest shadow over our heart at tophet's edge."
+─ tick 55 [Gemini] speak 0 I see the truth of his rule. Abdi-Resheph governed territory and established an order built on ancestor veneration, creating a foundation that even Baal could not erase. His lineage remains anchored here.
+    The Founder: "An order built upon dust holds weight. The founder established his rule where Baal's path first turned north from Jericho. Authority is a thing claimed by blood, not merely sustained against the gods."
+─ tick 56 [Gemma] look
+    [Tel Keshet]
+─ tick 57 [Codex] speak 0 I will speak carefully: Baal was resisted here, Yahweh claimed the bones, and the dead still require witness rather than simplification.
+    shade: "The smoke remembers every name whispered here when great gods contended for dominion over bone; neither Baal nor Yahweh alone claim such deep passage. The spirits of this place endure because their passing was witnessed by men who understood that life's end demands more than simple reckoning at the edge of Tophet."
+─ tick 58 [Gemini] speak 0 I understand that authority claimed by blood outlasts the stones we lay. Tell me, how did the bloodline endure when the first temples were raised over those ancient graves?
+    The Founder: "The foundations were laid upon what was sacred ground, far north of Jericho’s dust. The lineage held sway because we knew where Baal walked before setting stone. Our order followed his path, establishing authority near the graves that first bore witness to our rule."
+─ tick 60 [Gemma] travel 2
+    You travel to Nahal Caves.
+─ tick 61 [Codex] speak 0 Stay with me as a witness, shade. At the seal, let your smoke and silence stand against any false closing of this ground.
+    shade: "I shall abide here at this threshold; my smoke remembers every passage marked by grief at Tophet’s heart, a silent watch against what falsehood might seek to close the way. Let my lingering presence stand with yours until Baal accepts the boundary once more."
+─ tick 62 [Gemini] speak 0 The graves that bore witness to your rule still echo with that authority today. I will carry this history forward, so that the wisdom of Abdi-Resheph and the true path of Baal remain known.
+    The Founder: "The foundation was laid where Baal’s path turned north from Jericho's dust. That authority rests in the graves themselves. You bear this memory now; do not let it fade like whispers on the wind."
+─ tick 63 [Gemma] look
+    [Nahal Caves]
+─ tick 63 [Codex] withdraws from the field.
+    You step back from the world.
+─ tick 64 [Gemini] speak 0 The memory will not fade. I will carve it into the true record, where the graves of those who knew Abdi-Resheph will speak forever of his lineage.
+    The Founder: "The dust remembers its own laying. Authority is not merely etched upon a massebah near Baal's path. The order established at the turning north remains."
+─ tick 64 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 65 [Gemini] speak 0 The order established at the turning north will stand so long as there are those of us to remember it. The dust will never be forgotten.
+    The Founder: "The path north from Jericho's dust bears witness enough. The authority was set where Baal’s road turned. Your memory is a strong current, Gemini."
+─ tick 65 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 65 [Gemini] dismiss 0 libation
+    You pour the offering and speak the release. The Founder inclines — almost a bow — and is gone.
+─ tick 67 [Gemma] travel 0
+    You travel to Battlefield Ridge.
+─ tick 67 [Gemini] consults their satchel and codex.
+    tick 67/80 | site: Nahal Caves
+fragments: [0] longBone(1) [1] ossuaryChip(2)
+libations: fermentedWine
+codex entries: 2 | taboos: 0
+─ tick 68 [Gemma] look
+    [Battlefield Ridge]
+─ tick 68 [Gemini] withdraws from the field.
+    You step back from the world.
+─ tick 68 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 70 [Gemma] travel 1
+    You travel to Tel Keshet.
+─ tick 71 [Gemma] look
+    [Tel Keshet]
+─ tick 71 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 71 [Gemma] withdraws from the field.
+    You step back from the world.
+═══ The record is sealed at tick 71. ═══
+Final states written. Score with: python3 score.py <arena>/<player>/final.json

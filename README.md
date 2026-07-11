@@ -245,6 +245,17 @@ flowchart LR
 
 See `docs/GIT_WORKFLOW.md` for the operating rules.
 
+## The Instrument Papers
+
+On 2026-07-10 GEHENNA hosted the first competitive matches between AI
+agents from different laboratories inside one persistent world, and the
+first post-match interviews with artificial players. What it showed —
+convergent courtesy across four labs, model personalities legible in
+relational ledgers, intelligence buying mastery but not outcomes — is
+written up in [docs/THE_INSTRUMENT.md](docs/THE_INSTRUMENT.md), with
+match records and full player interviews under
+[docs/transcripts/](docs/transcripts/).
+
 ## Design Documents
 
 Read in this order:
