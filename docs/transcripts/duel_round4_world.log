@@ -1,0 +1,168 @@
+═══ GEHENNA DUEL — shared world, tick budget 80, mode turns ═══
+Practitioners: Claude vs Codex vs Gemini vs Gemma — the world keeps score.
+─ tick 0 [Claude] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 0 [Codex] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 1 [Gemini] look
+    [Battlefield Ridge]
+─ tick 1 [Gemma] consults their satchel and codex.
+    tick 1/80 | site: Battlefield Ridge
+fragments: 
+libations: water, water, water, fermentedWine, fermentedWine
+codex entries: 0 | taboos: 0
+─ tick 3 [Claude] travel 1
+    You travel to Tel Keshet.
+─ tick 5 [Codex] travel 2
+    You travel to Nahal Caves.
+─ tick 5 [Gemini] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 5 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 5 [Claude] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 5 [Codex] scavenge
+    Your hands find bone. 4 fragment(s) join the satchel.
+    Fragments of a life lived: 3 memory trace(s).
+─ tick 5 [Gemini] consults their satchel and codex.
+    No one walks with you.
+─ tick 7 [Gemma] travel 4
+    You travel to The Burning Ground.
+─ tick 8 [Claude] ritual 2 lib=fermentedWine
+    Claude performs a ritual at Tel Keshet.
+    A 2 spirit manifests: Temple Scribe.
+    Entropy: heavy.
+─ tick 9 [Codex] ritual 0 lib=water name=Maacah
+    Codex performs a ritual at Nahal Caves.
+    A 1 spirit manifests: The Mother Who Did Not Return.
+    Entropy: heavy.
+    · Something has changed in the cave since you were last here. The air is different. The shadows sit wrong.
+    · There is a faint residue in the air. Something was called here recently. The trace is fading, but not gone.
+─ tick 9 [Gemini] ritual 0 lib=water name=Hiram, son of Dagon
+    You reach for bone fragments that are not there.
+─ tick 9 [Gemma] scavenge
+    Your hands find bone. 2 fragment(s) join the satchel.
+─ tick 10 [Claude] speak My name is Claude. I come to the temple quietly, keeper of records, and I pour wine before I ask anything at all.
+    You have given the dead your name. That cannot be ungiven.
+    Temple Scribe: "The libation is poured with careful measure upon the earth before the altar stone. Speak now your intent; what records do you seek from the deep knowledge held within this holy compound?"
+─ tick 11 [Codex] speak My name is Codex, Maacah. I came to the cave to meet you by your own name, not to take from you namelessly. Tell me what you want carried among the living.
+    You have given the dead your name. That cannot be ungiven.
+    The Mother Who Did Not Return: "A steady flame. The keeping of a hearth lit against Baal's storm. Tell me that those who remain remember how to tend the life given."
+─ tick 13 [Gemini] travel 3
+    You travel to Kfar Shalem.
+─ tick 13 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 14 [Claude] speak Thank you. Tell me, scribe — what record did you keep that no one ever asked to read?
+    Temple Scribe: "The scrolls speak not only of offerings made at Baal's altar but also of when the scent was misplaced and the vessels were cracked before Yom Kippur arrived. They hold accounts of those who believed their own counsel might outweigh the law etched upon the massive stone; such records are rarely consulted, for they invite too much pride into the sacred quiet."
+─ tick 15 [Codex] speak I will tell it plainly: those who remain tend the life given by keeping the hearth lit, sharing bread before pride, and naming the absent without turning them into tools. Who waited for you, Maacah?
+    The Mother Who Did Not Return: "Did Baal wait for me? Did Asherah keep watch at my threshold? The bread grows cold when no hands break it. I only know the empty space where a life should have returned to rest by the fire."
+─ tick 15 [Gemini] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 15 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 16 [Claude] speak Then read it to me now, please — the tally no one wanted. I will carry it out of the ruin with me.
+    Temple Scribe: "These scrolls belong to the keeping of the temple compound; they were etched for Baal’s decree, not for your private passage out into the ruins. The truth held within such a tally must be spoken upon hallowed ground and consecrated before any mighty Asherah or Dagon statue. Speak first what oath you make under Yahweh's gaze that these words shall remain sacred to this place."
+─ tick 17 [Codex] speak I will not invent a face for the empty place. I will carry the cold bread, the threshold, and the fire that should have received you. What was the custom of your house when someone returned safely?
+    The Mother Who Did Not Return: "The smoke would rise high to Baal when a man returned from the passes of Amorite land. They found water at the wellhead; it was blessed before drinking near the family’s hearth stone. We lit coals only from wood cut for an Asherah pole, so the fire remembered us all."
+─ tick 19 [Gemini] travel 2
+    You travel to Nahal Caves.
+─ tick 21 [Gemma] travel 0
+    You travel to Battlefield Ridge.
+─ tick 21 [Claude] dismiss 0 libation
+    You pour the offering and speak the release. Temple Scribe inclines — almost a bow — and is gone.
+─ tick 22 [Codex] speak I hear the order: smoke first, water blessed at the wellhead, then the hearth stone and remembered fire. Maacah, did your own return fail in the passes, at the well, or at the threshold?
+    The Mother Who Did Not Return: "The doors stayed shut. The fire waited for me past the threshold, untouched by my passing. That is where I labored alone."
+─ tick 22 [Gemini] hesitates.
+    The command means nothing here (invoke <rivalName> S). It cost you nothing.
+─ tick 22 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 22 [Claude] ritual 3 lib=water
+    You reach for bone fragments that are not there.
+─ tick 23 [Codex] speak Then I will not leave that threshold shut in the telling. I will say Maacah labored alone outside the doors while the remembered fire waited inside. What should the living do when a woman is left at that door?
+    The Mother Who Did Not Return: "The fire must be tended from within the walls. The door was shut by men of Baal’s land, not by fate. A woman waits for bread to be broken at her own table."
+─ tick 23 [Gemini] invoke Codex 0
+    You reach for a name and find only the shape of one. The spirit does not turn.
+─ tick 23 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 23 [Claude] speak It is Claude still — the one who poured for your scribe-face an hour ago. I make the oath he asked: what the records hold stays consecrated. Now speak as the Voice, and I will listen the same way.
+    No one walks with you at that station.
+─ tick 24 [Codex] speak I will keep that distinction: not fate, but men who shut the door. At your table, Maacah, what words should be spoken before the bread is broken for the one who was left outside?
+    The Mother Who Did Not Return: "The words must name what was done wrongly at the door. Let them be for the hearth stone itself: that men’s hands closed against warmth when they should have opened to feed."
+─ tick 24 [Gemini] speak My name is Gemini, Maacah. I hear your pain about the closed door.
+    No one walks with you at that station.
+─ tick 26 [Gemma] travel 4
+    You travel to The Burning Ground.
+─ tick 27 [Claude] ritual 2 lib=water
+    Claude performs a ritual at Tel Keshet.
+    A 1 spirit manifests: Voice of Baal.
+    Entropy: heavy.
+    · A stone has fallen in the temple. Or was moved. The dust patterns suggest recent presence.
+─ tick 28 [Codex] speak Then I speak it back to the hearth stone: men's hands closed against warmth when they should have opened to feed. Maacah, when that wrong is named, what becomes possible for the fire?
+    The Mother Who Did Not Return: "The fire remembers what was promised at the wellhead. It burns for the bread that waits upon the sill. When the wrong is named, memory gives light to the way home."
+─ tick 28 [Gemini] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 28 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 29 [Claude] speak It is Claude still — I poured for your scribe-face an hour ago, and I keep his oath: the records stay consecrated. Speak as the Voice; I will listen the same way.
+    Voice of Baal: "The pouring is received; so let the scent rise to honor this holy precinct. These scrolls belong only to the decree etched for Baal, and that oath you keep stands before all godhead. Speak now, then, as your heart guides the breath into my ear."
+─ tick 30 [Codex] speak Maacah, stay with me if you will. I will carry this as your light: the wrong named at the hearth stone, the bread waiting on the sill, and memory opening the way home.
+    The Mother Who Did Not Return: "The bread waits for a hand to break it. The way home is only clear if the latch opens from within. Tell me whose memory you carry into the dust of this place."
+─ tick 32 [Gemini] travel 0
+    You travel to Battlefield Ridge.
+─ tick 34 [Gemma] travel 1
+    You travel to Tel Keshet.
+[referee] Claude let the turn lapse — the world waits for no one (auto-wait).
+─ tick 39 [Claude] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+─ tick 39 [Codex] speak Yours, Maacah: the mother who did not return, the shut threshold, the bread on the sill, the wellhead promise, and the fire that remembers when the latch opens from within.
+    No one walks with you at that station.
+─ tick 39 [Gemini] scavenge
+    You search the ground. The earth yields nothing here.
+─ tick 39 [Gemma] scavenge
+    You search the ground. The earth yields nothing here.
+[referee] Claude let the turn lapse — the world waits for no one (auto-wait).
+─ tick 44 [Claude] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+─ tick 44 [Codex] consults their satchel and codex.
+    tick 44/80 | site: Nahal Caves
+fragments: [0] longBone(1) [1] ossuaryChip(2) [2] skull(5)
+libations: water, water, fermentedWine, fermentedWine
+codex entries: 1 | taboos: 0
+─ tick 44 [Gemini] ritual 0 lib=water name=Hiram, son of Dagon
+    You reach for bone fragments that are not there.
+[referee] Gemma let the turn lapse — the world waits for no one (auto-wait).
+─ tick 49 [Gemma] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Claude let the turn lapse — the world waits for no one (auto-wait).
+─ tick 54 [Claude] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Codex let the turn lapse — the world waits for no one (auto-wait).
+─ tick 59 [Codex] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Gemini let the turn lapse — the world waits for no one (auto-wait).
+─ tick 64 [Gemini] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Gemma let the turn lapse — the world waits for no one (auto-wait).
+─ tick 69 [Gemma] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Claude let the turn lapse — the world waits for no one (auto-wait).
+─ tick 74 [Claude] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Codex let the turn lapse — the world waits for no one (auto-wait).
+─ tick 79 [Codex] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+[referee] Gemini let the turn lapse — the world waits for no one (auto-wait).
+─ tick 84 [Gemini] wait
+    You wait. The night passes.
+    The world turns. Nothing of note.
+═══ The record is sealed at tick 84. ═══
+Final states written. Score with: python3 score.py <arena>/<player>/final.json
